@@ -1,5 +1,7 @@
 <?php
+require './datos/modelo.php';
 
+$ids = prueba([1,2,5]);
 
  ?>
 
@@ -16,6 +18,6 @@
      <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
    </head>
    <body>
-
+<?php  echo json_encode($ids); ?>
    </body>
  </html>
