@@ -1,7 +1,5 @@
 var titulo = '';
 
-
-
 function ponIdioma(ln){
   if (ln == 'es') {
     titulo = 'IDEArq Carbon';
@@ -9,6 +7,5 @@ function ponIdioma(ln){
   else if (ln == 'en'){
     titulo = 'Carbon IDEArq';
   }
-  $('#cabecera').html(titulo);
-
+  $('#titulo').html(titulo);
 }
