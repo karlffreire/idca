@@ -130,11 +130,25 @@ GRANT ALL on public.yacis_carbon to idearq;
 GRANT SELECT on public.yacis_carbon to visualizador;
 GRANT SELECT on public.yacis_carbon to visualizador_gis;
 
+--creación de la tabla de dataciones
 
+--DROP TABLE public.data_carbon;
 
+SELECT material_c14.id_material_c14, datacion_c14.id_datacion_c14, material_c14.id_cultural_entity as id_yaci,material_c14.id_tipo_muestra_c14,
+	c14.get_array_tipos_material(material_c14.id_material_c14)||c14.get_array_taxones(material_c14.id_material_c14) as arrtiptax,
+	array_agg(array_to_string(c14.array_jerarq_tipo_material(tipo_material_material_c14.id_tipo_material),' - ')) as mostrar_tipomat,
+	datacion_c14.edad_c14 as fecha, datacion_c14.desviacion as stdev, datacion_c14.id_metodos_medida,datacion_c14.id_laboratorio
+INTO public.data_carbon
+  FROM c14.material_c14 INNER JOIN c14.tipo_material_material_c14 on material_c14.id_material_c14 = tipo_material_material_c14.id_material_c14
+			INNER JOIN c14.datacion_c14 on material_c14.id_material_c14 = datacion_c14.id_material_c14
+  GROUP BY material_c14.id_material_c14, datacion_c14.id_datacion_c14,datacion_c14.edad_c14, datacion_c14.desviacion, datacion_c14.id_metodos_medida,datacion_c14.id_laboratorio,material_c14.id_cultural_entity,material_c14.id_tipo_muestra_c14,c14.get_array_tipos_material(material_c14.id_material_c14)||c14.get_array_taxones(material_c14.id_material_c14) ;
 
+  ALTER TABLE public.data_carbon ADD PRIMARY KEY (id_datacion_c14);
 
+  CREATE INDEX index_material ON public.data_carbon USING btree (id_material_c14 ASC NULLS LAST);
+  CREATE INDEX index_tipomat ON public.data_carbon USING gin (arrtiptax);
+  CREATE INDEX index_fecha ON public.data_carbon USING btree (fecha, stdev ASC NULLS LAST);
 
-  select array_agg(array_to_string(c14.array_jerarq_tipo_material(tipo_material_material_c14.id_tipo_material),' - ')), material_c14.id_material_c14
-  from c14.material_c14 inner join c14.tipo_material_material_c14 on material_c14.id_material_c14 = tipo_material_material_c14.id_material_c14
-  group by material_c14.id_material_c14;
+  GRANT ALL on public.data_carbon to idearq;
+  GRANT SELECT on public.data_carbon to visualizador;
+  GRANT SELECT on public.data_carbon to visualizador_gis;
