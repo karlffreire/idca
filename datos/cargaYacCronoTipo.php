@@ -1,7 +1,8 @@
 <?php
 require './modelo.php';
-$tipo = $_GET['tipo'];
-$crono = $_GET['crono'];
-$yacis = yacisCronoTipo($tipo,$crono);
+$prov = $_GET['prov'];
+$tipos = $_GET['tipo'];
+$cronos = $_GET['crono'];
+$yacis = selecPorYac($prov,$tipos,$cronos);
 header('Content-type:application/json;charset=utf-8');
 echo json_encode($yacis);
