@@ -72,3 +72,20 @@ function cargaYacTodo(prov,tipo,crono,tmuestra,tmat,edadmin,edadmax,stdevmin,std
 function ponTema(resultado){
   console.log(resultado);
 }
+
+/*==========================================
+
+      INICIALIZACION DE FORMULARIOS
+
+============================================*/
+
+function initSelect(){
+  initBuscaYaci();
+}
+
+function initBuscaYaci(){
+  $('#intro-yaci').select2({
+    placeholder: 'Busca un yacimiento',
+    allowClear: true
+  });
+}
