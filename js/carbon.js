@@ -88,24 +88,28 @@ function initSelect(){
 function initBuscaYaci(){
   $('#intro-yaci').select2({
     placeholder: 'Busca un yacimiento',
-    allowClear: true
+    allowClear: true,
+    theme: "bootstrap"
   });
 }
 
 function initSelUbic(){
   $('#selpais').select2({
     placeholder: 'Selecciona país',
-    allowClear: true
+    allowClear: true,
+    theme: "bootstrap"
   });
   $('#selprov').select2({
     placeholder: 'Selecciona región',
-    allowClear: true
+    allowClear: true,
+    theme: "bootstrap"
   });
 }
 
 function initSelTipYac(){
   $('#seltipoyac').select2({
     placeholder: 'Selecciona tipos de yacimiento',
-    allowClear: true
+    allowClear: true,
+    theme: "bootstrap"
   });
 }
