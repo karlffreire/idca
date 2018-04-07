@@ -81,11 +81,31 @@ function ponTema(resultado){
 
 function initSelect(){
   initBuscaYaci();
+  initSelUbic();
+  initSelTipYac();
 }
 
 function initBuscaYaci(){
   $('#intro-yaci').select2({
     placeholder: 'Busca un yacimiento',
+    allowClear: true
+  });
+}
+
+function initSelUbic(){
+  $('#selpais').select2({
+    placeholder: 'Selecciona país',
+    allowClear: true
+  });
+  $('#selprov').select2({
+    placeholder: 'Selecciona región',
+    allowClear: true
+  });
+}
+
+function initSelTipYac(){
+  $('#seltipoyac').select2({
+    placeholder: 'Selecciona tipos de yacimiento',
     allowClear: true
   });
 }

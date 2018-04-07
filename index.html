@@ -41,7 +41,7 @@
       <div class="container-fluid">
         <div class="row justify-content-md-center panel">
           <div class="col-md-4">
-            <select id="intro-yaci" type="text" class="form-control s2">
+            <select id="intro-yaci" type="text" class="form-control">
             </select>
           </div>
         </div>
@@ -59,8 +59,11 @@
            <div class="col-8" style="padding-left:0px;">
              <div class="tab-content" id="nav-tabContent">
                <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="carac-yaci" style="display:block;">
-                 <select class="form-control col-md-3 s2" name="pais" id="selpais"></select>
-                 <select class="form-control col-md-3 s2" name="prov" id="selprov"></select>
+                 <div class="row justify-content-md-center">
+                   <select class="form-control col-md-4" name="pais" id="selpais"></select>
+                   <select class="form-control col-md-4" name="prov" id="selprov"></select>
+                   <select class="form-control col-md-8" name="tipoyac[]" multiple="multiple" id="seltipoyac"></select>
+                 </div>
                </div>
                <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="carac-mat">
 
