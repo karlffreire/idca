@@ -10,9 +10,10 @@
      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
      <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-
      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css" rel="stylesheet" />
 
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/bootstrap-slider.min.js"></script>
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.min.css" rel="stylesheet" />
 
      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
      <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
@@ -44,36 +45,43 @@
       </div> -->
       <div class="container-fluid">
         <div class="row justify-content-md-center panel">
-          <div class="col-md-4">
-            <select id="intro-yaci" type="text" class="form-control">
-            </select>
-          </div>
+            <select id="intro-yaci" name="buscayaci" class="col-md-4"></select>
         </div>
       </div>
       <div class="container">
         <h3 id="tit-filtrar" class="row justify-content-md-center" style="margin-top:1em;margin-bottom:1em;"></h3>
         <div class="row">
           <div class="col-4" style="padding-right:0px;">
-            <div class="list-group" id="list-tab" role="tablist" style="text-align:center;">
-               <a class="list-group-item list-group-item-action active" id="carac-yaci" data-toggle="list" href="#list-home" role="tab" aria-controls="home"></a>
-               <a class="list-group-item list-group-item-action" id="carac-mat" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile"></a>
-               <a class="list-group-item list-group-item-action" id="carac-data" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages"></a>
+            <div class="list-group" id="filt-list" role="tablist">
+               <a class="list-group-item list-group-item-action active" id="carac-yaci" data-toggle="list" href="#filt-yac" role="tab" aria-controls="home"></a>
+               <a class="list-group-item list-group-item-action" id="carac-mat" data-toggle="list" href="#filt-mat" role="tab" aria-controls="profile"></a>
+               <a class="list-group-item list-group-item-action" id="carac-data" data-toggle="list" href="#filt-dat" role="tab" aria-controls="messages"></a>
              </div>
            </div>
            <div class="col-8" style="padding-left:0px;">
-             <div class="tab-content" id="nav-tabContent">
-               <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="carac-yaci" style="display:block;">
+             <div class="tab-content" id="nav-filtContent">
+               <div class="tab-pane fade show active" id="filt-yac" role="tabpanel" aria-labelledby="carac-yaci">
                  <div class="row justify-content-md-center">
-                   <select class="form-control col-md-4" name="pais" id="selpais"></select>
-                   <select class="form-control col-md-4" name="prov" id="selprov" ></select>
-                   <select class="form-control col-md-8" name="tipoyac[]" multiple="multiple" id="seltipoyac"></select>
+                   <select class="col-md-4 filt" name="pais" id="selpais"></select>
+                   <select class="col-md-4 filt" name="prov" id="selprov" ></select>
+                   <select class="col-md-8 filt" name="tipoyac[]" multiple="multiple" id="seltipoyac"></select>
+                   <select class="col-md-8 filt" name="cronoyac[]" multiple="multiple" id="selcronoyac"></select>
                  </div>
                </div>
-               <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="carac-mat">
-
+               <div class="tab-pane fade active" id="filt-mat" role="tabpanel" aria-labelledby="carac-mat">
+                  <div class="row justify-content-md-center">
+                    <select class="col-md-8 filt filt-oculto" name="tipomuest[]" multiple="multiple" id="seltipomuest"></select>
+                    <select class="col-md-8 filt filt-oculto" name="tipomat[]" multiple="multiple" id="seltipomat"></select>
+                  </div>
                </div>
-               <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="carac-data">
-
+               <div class="tab-pane fade active" id="filt-dat" role="tabpanel" aria-labelledby="carac-data">
+                 <div class="row justify-content-md-center">
+                   <div id="selec-temp" class="col-md-8 filt filt-oculto">
+                     <input id="selfecha" type="text"/>
+                   </div>
+                   <select class="col-md-4 filt filt-oculto" name="metodo[]" multiple="multiple" id="selmetodo"></select>
+                   <select class="col-md-4 filt filt-oculto" name="lab[]" multiple="multiple" id="sellab"></select>
+                 </div>
                </div>
              </div>
            </div>

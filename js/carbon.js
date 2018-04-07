@@ -83,6 +83,15 @@ function initSelect(){
   initBuscaYaci();
   initSelUbic();
   initSelTipYac();
+  initSelCronYac();
+  initSelTipMuest();
+  initSelMat();
+  initBarraBP();
+  initSelMetod();
+  initSelLab();
+
+  $('#filt-mat').removeClass('active');//Se inicializan todas las tabs con la clase active para que no se cambie el tamaño de los select2. Luego se quita de las ocultas
+  $('#filt-dat').removeClass('active');
 }
 
 function initBuscaYaci(){
@@ -109,6 +118,61 @@ function initSelUbic(){
 function initSelTipYac(){
   $('#seltipoyac').select2({
     placeholder: 'Selecciona tipos de yacimiento',
+    allowClear: true,
+    theme: "bootstrap"
+  });
+}
+
+function initSelCronYac(){
+  $('#selcronoyac').select2({
+    placeholder: 'Selecciona cronología de yacimiento',
+    allowClear: true,
+    theme: "bootstrap"
+  });
+}
+
+function initSelTipMuest(){
+  $('#seltipomuest').select2({
+    placeholder: 'Selecciona tipos de muestra',
+    allowClear: true,
+    theme: "bootstrap"
+  });
+}
+
+function initSelMat(){
+  $('#seltipomat').select2({
+    placeholder: 'Selecciona materiales',
+    allowClear: true,
+    theme: "bootstrap"
+  });
+}
+
+function initBarraBP(){
+	var slidfecha = $("#selfecha").slider({
+		id: "slider-fecha",
+		min: 100,
+		max: 8000,
+		tooltip: 'always',
+		tooltip_split: true,
+		range: true,
+		formatter: function(value) {
+			return value+' BP';
+		}
+	});
+
+}
+
+function initSelMetod(){
+  $('#selmetodo').select2({
+    placeholder: 'Selecciona métodos',
+    allowClear: true,
+    theme: "bootstrap"
+  });
+}
+
+function initSelLab(){
+  $('#sellab').select2({
+    placeholder: 'Selecciona laboratorios',
     allowClear: true,
     theme: "bootstrap"
   });
