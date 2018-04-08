@@ -11,12 +11,15 @@
      <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css" rel="stylesheet" />
-
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/bootstrap-slider.min.js"></script>
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.min.css" rel="stylesheet" />
-
      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
      <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+
+     <link rel="stylesheet" href="./css/ion.rangeSlider.css">
+     <link rel="stylesheet" href="./css/ion.rangeSlider.skinFlat.css">
+     <script src="./js/ion.rangeSlider.min.js">
+
+     </script>
+
      <link rel="stylesheet" href="./css/ppal.css">
      <script type="text/javascript" src="./js/carbon.js"></script>
      <script type="text/javascript" src="./js/ln.js"></script>
@@ -50,7 +53,7 @@
       </div>
       <div class="container">
         <h3 id="tit-filtrar" class="row justify-content-md-center" style="margin-top:1em;margin-bottom:1em;"></h3>
-        <div class="row">
+        <div class="row row-eq-height">
           <div class="col-4" style="padding-right:0px;">
             <div class="list-group" id="filt-list" role="tablist">
                <a class="list-group-item list-group-item-action active" id="carac-yaci" data-toggle="list" href="#filt-yac" role="tab" aria-controls="home"></a>
@@ -76,11 +79,18 @@
                </div>
                <div class="tab-pane fade active" id="filt-dat" role="tabpanel" aria-labelledby="carac-data">
                  <div class="row justify-content-md-center">
-                   <div id="selec-temp" class="col-md-8 filt filt-oculto">
+                   <div id="selec-temp" class="col-md-10 filt filt-oculto">
+                     <label for="selfecha" id="tag-fecha"></label>
                      <input id="selfecha" type="text"/>
                    </div>
-                   <select class="col-md-4 filt filt-oculto" name="metodo[]" multiple="multiple" id="selmetodo"></select>
-                   <select class="col-md-4 filt filt-oculto" name="lab[]" multiple="multiple" id="sellab"></select>
+                   <div id="selec-stdev" class="col-md-6 offset-1 filt filt-oculto">
+                     <div id="tag-dev"></div>
+                     <input id="seldev" type="text"/>
+                   </div>
+                   <div class="col-md-5">
+                     <select class="col-md-4 filt filt-oculto" name="metodo[]" multiple="multiple" id="selmetodo"></select>
+                     <select class="col-md-4 filt filt-oculto" name="lab[]" multiple="multiple" id="sellab"></select>
+                   </div>
                  </div>
                </div>
              </div>

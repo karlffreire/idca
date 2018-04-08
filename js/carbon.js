@@ -87,6 +87,7 @@ function initSelect(){
   initSelTipMuest();
   initSelMat();
   initBarraBP();
+  initBarraDesv();
   initSelMetod();
   initSelLab();
 
@@ -148,18 +149,29 @@ function initSelMat(){
 }
 
 function initBarraBP(){
-	var slidfecha = $("#selfecha").slider({
-		id: "slider-fecha",
-		min: 100,
-		max: 8000,
-		tooltip: 'always',
-		tooltip_split: true,
-		range: true,
-		formatter: function(value) {
-			return value+' BP';
-		}
-	});
+	$("#selfecha").ionRangeSlider({
+    type: "double",
+    grid: true,
+    min: 0,
+    max: 8000,
+    from: 1000,
+    to: 7000,
+    step: 50,
+    postfix: " BP"
+  });
+}
 
+function initBarraDesv(){
+	$("#seldev").ionRangeSlider({
+    type: "double",
+    grid: true,
+    min: 0,
+    max: 1000,
+    from: 100,
+    to: 900,
+    step: 50,
+    postfix: ""
+  });
 }
 
 function initSelMetod(){

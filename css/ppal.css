@@ -25,6 +25,7 @@
   border-right: solid 2px black;
   border-radius: 0;
 }
+
 .list-group-item.list-group-item:first-child{
   border-radius: 0;
 }
@@ -39,37 +40,4 @@
 
 .select2{
   margin: 0.5em;
-}
-
-#slider-fecha .slider-track{
-  height: 2px;
-}
-
-#slider-fecha .slider-track-high, #slider-fecha .slider-track-high {
-	background: #CCC;
-}
-
-#slider-fecha .slider-track-low, #slider-fecha .slider-track-low {
-	background: #CCC;
-}
-
-#slider-fecha .slider-selection {
-	text-shadow: 2px 2px 4px #000000 !important;
-	background: black;
-}
-
-#slider-fecha .slider-handle {
-  background: black;
-  margin-top: -1px;
-  width: 14px;
-  height: 14px;
-	cursor: pointer;
-}
-
-.slider {
-    width: 500px !important;
-}
-
-#slider-fecha .tooltip-inner{
-	background-color: #6E6E6E;
 }
