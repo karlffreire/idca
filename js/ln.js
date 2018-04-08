@@ -1,4 +1,5 @@
 var titulo = '';
+var tituloBuscaYaci = '';
 var tituloFiltrar = '';
 var caracYac = '';
 var caracMat = '';
@@ -10,6 +11,7 @@ var etiDev = '';
 function ponIdioma(ln){
   if (ln == 'es') {
     titulo = 'IDEArq Carbon';
+    tituloBuscaYaci = 'Buscar yacimiento';
     tituloFiltrar = 'Filtrar dataciones';
     caracYac = 'Elementos del yacimiento';
     caracMat = 'Elementos del material datado';
@@ -20,6 +22,7 @@ function ponIdioma(ln){
   }
   else if (ln == 'en'){
     titulo = 'Carbon IDEArq';
+    tituloBuscaYaci = 'Search for a site';
     tituloFiltrar = 'Filter datings';
     caracYac = 'Site features';
     caracMat = 'Material features';
@@ -29,6 +32,7 @@ function ponIdioma(ln){
     etiDev = 'Standard deviation';
   }
   $('#titulo').html(titulo);
+  $('#tit-buscayaci').html(tituloBuscaYaci);
   $('#tit-filtrar').html(tituloFiltrar);
   $('#carac-yaci').html(caracYac);
   $('#carac-mat').html(caracMat);

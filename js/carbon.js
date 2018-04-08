@@ -91,8 +91,29 @@ function initSelect(){
   initSelMetod();
   initSelLab();
 
-  $('#filt-mat').removeClass('active');//Se inicializan todas las tabs con la clase active para que no se cambie el tamaño de los select2. Luego se quita de las ocultas
-  $('#filt-dat').removeClass('active');
+  $('.filt').hide();
+  var mostrar = $('#carac-yaci');
+  muestraFilt(mostrar,'filt-yac');
+
+  $('#panel-filt').on('click',function(){
+    $('#intro-yaci').prop('disabled',true);
+    $('.selfilt').prop('disabled', false);
+    var rango_fechas = $('#selfecha').data("ionRangeSlider");
+  	rango_fechas.update({
+      	disable: false
+      });
+    var rango_dev = $('#seldev').data("ionRangeSlider");
+  	rango_dev.update({
+      	disable: false
+      });
+  })
+}
+
+function muestraFilt(este,selec){
+  $('.lst-filt-elem').removeClass('activo');
+  $(este).addClass('activo');
+  $('.filt').hide();
+  $('#'+selec).show();
 }
 
 function initBuscaYaci(){
@@ -101,6 +122,18 @@ function initBuscaYaci(){
     allowClear: true,
     theme: "bootstrap"
   });
+  $('#panel-yaci').on('click',function(){
+    $('#intro-yaci').prop('disabled', false);
+    $('.selfilt').prop('disabled', true);
+    var rango_fechas = $('#selfecha').data("ionRangeSlider");
+  	rango_fechas.update({
+      	disable: true
+      });
+    var rango_dev = $('#seldev').data("ionRangeSlider");
+  	rango_dev.update({
+      	disable: true
+      });
+    });
 }
 
 function initSelUbic(){
@@ -169,7 +202,7 @@ function initBarraDesv(){
     max: 1000,
     from: 100,
     to: 900,
-    step: 50,
+    step: 10,
     postfix: ""
   });
 }

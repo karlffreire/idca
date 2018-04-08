@@ -12,7 +12,7 @@
      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css" rel="stylesheet" />
      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+     <!-- <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script> -->
 
      <link rel="stylesheet" href="./css/ion.rangeSlider.css">
      <link rel="stylesheet" href="./css/ion.rangeSlider.skinFlat.css">
@@ -46,51 +46,50 @@
         <button type="button" name="button" class="btn btn-primary" onclick="cargaYaci(10002,ponTema)">Petición por yacimiento</button>
         <button type="button" name="button" class="btn btn-primary" onclick="cargaYacTodo('{42,54,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58}','{285,295,279,250,260,291,320}','{2,4,8,1,3,5,6,7}','{1,2,99999}','{1,2,3,4,5,6,7,8,9,10,158,173}',100,8000,50,500,'{1,3,4}','{24,25,26}',ponTema)">Petición por todo</button>
       </div> -->
-      <div class="container-fluid">
-        <div class="row justify-content-md-center panel">
-            <select id="intro-yaci" name="buscayaci" class="col-md-4"></select>
+      <div id="panel-yaci" class="container-fluid">
+        <h3 id="tit-buscayaci" class="row justify-content-md-center" style="margin-top:1em;margin-bottom:1em;"></h3>
+        <div id="panel-yaci" class="row justify-content-md-center panel">
+              <select id="intro-yaci" name="buscayaci" class="col-md-4"></select>
         </div>
       </div>
-      <div class="container">
+      <div id="panel-filt" class="container">
         <h3 id="tit-filtrar" class="row justify-content-md-center" style="margin-top:1em;margin-bottom:1em;"></h3>
         <div class="row row-eq-height">
           <div class="col-4" style="padding-right:0px;">
-            <div class="list-group" id="filt-list" role="tablist">
-               <a class="list-group-item list-group-item-action active" id="carac-yaci" data-toggle="list" href="#filt-yac" role="tab" aria-controls="home"></a>
-               <a class="list-group-item list-group-item-action" id="carac-mat" data-toggle="list" href="#filt-mat" role="tab" aria-controls="profile"></a>
-               <a class="list-group-item list-group-item-action" id="carac-data" data-toggle="list" href="#filt-dat" role="tab" aria-controls="messages"></a>
-             </div>
+            <ul class="lst-filt" id="filt-list">
+               <li onclick="javascript:muestraFilt(this,'filt-yac')" class="lst-filt-elem" id="carac-yaci"></li>
+               <li onclick="javascript:muestraFilt(this,'filt-mat')" class="lst-filt-elem" id="carac-mat"></li>
+               <li onclick="javascript:muestraFilt(this,'filt-dat')" class="lst-filt-elem" id="carac-data"></li>
+             </ul>
            </div>
-           <div class="col-8" style="padding-left:0px;">
-             <div class="tab-content" id="nav-filtContent">
-               <div class="tab-pane fade show active" id="filt-yac" role="tabpanel" aria-labelledby="carac-yaci">
-                 <div class="row justify-content-md-center">
-                   <select class="col-md-4 filt" name="pais" id="selpais"></select>
-                   <select class="col-md-4 filt" name="prov" id="selprov" ></select>
-                   <select class="col-md-8 filt" name="tipoyac[]" multiple="multiple" id="seltipoyac"></select>
-                   <select class="col-md-8 filt" name="cronoyac[]" multiple="multiple" id="selcronoyac"></select>
+           <div class="col-8">
+             <div class="filt" id="filt-yac" aria-labelledby="carac-yaci">
+               <div class="row justify-content-md-center">
+                 <select class="col-md-4 selfilt" name="pais" id="selpais"></select>
+                 <select class="col-md-4 selfilt" name="prov" id="selprov" ></select>
+                 <select class="col-md-8 selfilt" name="tipoyac[]" multiple="multiple" id="seltipoyac"></select>
+                 <select class="col-md-8 selfilt" name="cronoyac[]" multiple="multiple" id="selcronoyac"></select>
+               </div>
+             </div>
+             <div class="filt" id="filt-mat" aria-labelledby="carac-mat">
+                <div class="row justify-content-md-center">
+                  <select class="col-md-8 selfilt" name="tipomuest[]" multiple="multiple" id="seltipomuest"></select>
+                  <select class="col-md-8 selfilt" name="tipomat[]" multiple="multiple" id="seltipomat"></select>
+                </div>
+             </div>
+             <div class="filt" id="filt-dat"   aria-labelledby="carac-data">
+               <div class="row">
+                 <div id="selec-temp" class="col-md-12">
+                   <label for="selfecha" id="tag-fecha"></label>
+                   <input id="selfecha" class="selfilt" type="text"/>
                  </div>
-               </div>
-               <div class="tab-pane fade active" id="filt-mat" role="tabpanel" aria-labelledby="carac-mat">
-                  <div class="row justify-content-md-center">
-                    <select class="col-md-8 filt filt-oculto" name="tipomuest[]" multiple="multiple" id="seltipomuest"></select>
-                    <select class="col-md-8 filt filt-oculto" name="tipomat[]" multiple="multiple" id="seltipomat"></select>
-                  </div>
-               </div>
-               <div class="tab-pane fade active" id="filt-dat" role="tabpanel" aria-labelledby="carac-data">
-                 <div class="row justify-content-md-center">
-                   <div id="selec-temp" class="col-md-10 filt filt-oculto">
-                     <label for="selfecha" id="tag-fecha"></label>
-                     <input id="selfecha" type="text"/>
-                   </div>
-                   <div id="selec-stdev" class="col-md-6 offset-1 filt filt-oculto">
-                     <div id="tag-dev"></div>
-                     <input id="seldev" type="text"/>
-                   </div>
-                   <div class="col-md-5">
-                     <select class="col-md-4 filt filt-oculto" name="metodo[]" multiple="multiple" id="selmetodo"></select>
-                     <select class="col-md-4 filt filt-oculto" name="lab[]" multiple="multiple" id="sellab"></select>
-                   </div>
+                 <div id="selec-stdev" class="col-md-6">
+                   <div id="tag-dev"></div>
+                   <input id="seldev" class="selfilt" type="text"/>
+                 </div>
+                 <div class="col-md-6">
+                   <select class="w-100 selfilt" name="metodo[]" multiple="multiple" id="selmetodo"></select>
+                   <select class="w-100 selfilt" name="lab[]" multiple="multiple" id="sellab"></select>
                  </div>
                </div>
              </div>
