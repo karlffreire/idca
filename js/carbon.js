@@ -91,29 +91,23 @@ function initSelect(){
   initSelMetod();
   initSelLab();
 
+  $('#panel-busca-yaci').hide();
+  $('#panel-sel-filt').hide();
   $('.filt').hide();
   var mostrar = $('#carac-yaci');
   muestraFilt(mostrar,'filt-yac');
-
+  $('#panel-yaci').on('click',function(){
+    $('#panel-busca-yaci').show();
+    $('#panel-sel-filt').hide();
+    $('#tit-buscayaci').hide();
+    $('#tit-filtrar').show();
+    });
   $('#panel-filt').on('click',function(){
-    $('#intro-yaci').prop('disabled',true);
-    $('.selfilt').prop('disabled', false);
-    var rango_fechas = $('#selfecha').data("ionRangeSlider");
-  	rango_fechas.update({
-      	disable: false
-      });
-    var rango_dev = $('#seldev').data("ionRangeSlider");
-  	rango_dev.update({
-      	disable: false
-      });
+    $('#panel-busca-yaci').hide();
+    $('#panel-sel-filt').show();
+    $('#tit-buscayaci').show();
+    $('#tit-filtrar').hide();
   })
-}
-
-function muestraFilt(este,selec){
-  $('.lst-filt-elem').removeClass('activo');
-  $(este).addClass('activo');
-  $('.filt').hide();
-  $('#'+selec).show();
 }
 
 function initBuscaYaci(){
@@ -122,18 +116,13 @@ function initBuscaYaci(){
     allowClear: true,
     theme: "bootstrap"
   });
-  $('#panel-yaci').on('click',function(){
-    $('#intro-yaci').prop('disabled', false);
-    $('.selfilt').prop('disabled', true);
-    var rango_fechas = $('#selfecha').data("ionRangeSlider");
-  	rango_fechas.update({
-      	disable: true
-      });
-    var rango_dev = $('#seldev').data("ionRangeSlider");
-  	rango_dev.update({
-      	disable: true
-      });
-    });
+}
+
+function muestraFilt(este,selec){
+  $('.lst-filt-elem').removeClass('activo');
+  $(este).addClass('activo');
+  $('.filt').hide();
+  $('#'+selec).show();
 }
 
 function initSelUbic(){

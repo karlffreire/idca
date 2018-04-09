@@ -9,6 +9,29 @@
   padding-bottom:1em;
 }
 
+.panel-consultas{
+   margin-top:1em;
+   margin-bottom:1em;
+   padding-left: 1em;
+   background-color: rgba(0, 0, 0, 0.5);
+
+}
+
+.cabecera-consultas{
+  padding-top: 1em;
+  padding-bottom: 1em;
+  color: white;
+  cursor: pointer;
+}
+
+#panel-sel-filt{
+  background-color: white;
+  padding-top: 3em;
+  padding-bottom: 3em;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
 .lst-filt{
   list-style-type: none;
 }
@@ -34,5 +57,5 @@
 }
 
 .select2{
-  margin: 0.5em;
+  margin-right: 1em;
 }
