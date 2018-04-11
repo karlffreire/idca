@@ -67,6 +67,61 @@ function listaCronos(){
   return null;
 }
 
+function listaTiposMuestra(){
+  $db = conectaBD();
+ 	$prp = pg_prepare($db,"lst-muestra","SELECT id_tipo_muestra_c14 as id, tipo_muestra_c14 as text FROM c14.tipo_muestra_c14 ORDER BY id;");
+  $prp = pg_execute($db,"lst-muestra",array());
+	while ($row=pg_fetch_assoc($prp)){
+		$tipmuestra[] = $row;
+	}
+  pg_close($db);
+  if (isset($tipmuestra)) {
+    return $tipmuestra;
+  }
+  return null;
+}
+
+function listaTiposMaterial(){
+  $db = conectaBD();
+ 	$prp = pg_prepare($db,"lst-material","SELECT id_tipo_material as id, tipo_material as text, nombre_esquema as grupo from c14.tipo_material_c14 inner join c14.esquemas_material_c14 on tipo_material_c14.id_esquemas_materiales_c14 = esquemas_material_c14.id_esquemas_material_c14 WHERE tipo_primario is true ORDER BY grupo,text");
+  $prp = pg_execute($db,"lst-material",array());
+	while ($row=pg_fetch_assoc($prp)){
+		$tipmaterial[] = $row;
+	}
+  pg_close($db);
+  if (isset($tipmaterial)) {
+    return $tipmaterial;
+  }
+  return null;
+}
+
+function listaMetodos(){
+  $db = conectaBD();
+ 	$prp = pg_prepare($db,"lst-metodos","SELECT id_metodos_medida as id, metodos_medida as text FROM c14.metodos_medida ORDER BY id;");
+  $prp = pg_execute($db,"lst-metodos",array());
+	while ($row=pg_fetch_assoc($prp)){
+		$tipmaterial[] = $row;
+	}
+  pg_close($db);
+  if (isset($tipmaterial)) {
+    return $tipmaterial;
+  }
+  return null;
+}
+
+function listaLaboratorios(){
+  $db = conectaBD();
+ 	$prp = pg_prepare($db,"lst-lab","SELECT id_laboratorio as id, sigla as text, nombre_completo as detalle FROM general.laboratorio ORDER BY text;");
+  $prp = pg_execute($db,"lst-lab",array());
+	while ($row=pg_fetch_assoc($prp)){
+		$tipmaterial[] = $row;
+	}
+  pg_close($db);
+  if (isset($tipmaterial)) {
+    return $tipmaterial;
+  }
+  return null;
+}
 /*
 ======================================
 

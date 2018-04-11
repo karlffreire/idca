@@ -5,4 +5,6 @@ basedatos/lista-tablas
 basedatos/permisos_idearq.sql
 basedatos/permisos-carbon.sql
 
+datos/conecta.php
+
 fpdf/

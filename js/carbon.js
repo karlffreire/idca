@@ -36,6 +36,34 @@ function cargaLstCrono(callback){
   });
 }
 
+function cargaLstTipMuest(callback){
+  $.ajax({
+    url: './datos/cargaTiposMuestra.php',
+    success: callback
+  });
+}
+
+function cargaLstTipMat(callback){
+  $.ajax({
+    url: './datos/cargaTiposMaterial.php',
+    success: callback
+  });
+}
+
+function cargaLstMetodos(callback){
+  $.ajax({
+    url: './datos/cargaMetodos.php',
+    success: callback
+  });
+}
+
+function cargaLstLabos(callback){
+  $.ajax({
+    url: './datos/cargaLabos.php',
+    success: callback
+  });
+}
+
 /*=========================================
 
        LLAMADAS A BASE DE datos
@@ -141,33 +169,49 @@ function organizaOpciones(arrObjt){
   return gruposOpciones;
 }
 
-function colPorGrupo (o) {
-  // if (!o.disabled) {
-  //   if (!o.id) {console.log(o);
-  //     var bloque = document.createElement('div');
-  //     $(bloque).addClass('varcol');
-  //     var encabeza = document.createElement('p');
-  //     $(encabeza).html(o.text);
-  //     bloque.appendChild(encabeza);
-  //     for (var i = 0; i < o.children.length; i++) {
-  //       var item = document.createElement('p');
-  //       $(item).html(o.children[i].text);
-  //       bloque.appendChild(item);
-  //       console.log(o.children[i]);
-  //     }
-  //   }
-  // return $(bloque);
-  // }
-  if (!o.id) {
-    return $('<span style="color:#8A0808">'+o.text+'</span>');
+function colPorGrupo (data) {
+  if (!data.id) {
+    return $('<span style="color:#8A0808;font-size:1rem;">'+data.text+'</span>');
   }
   return $(
-      '<span>'+o.text+'</span>'
+      '<span>'+data.text+'</span>'
   );
-
-  // return o.text;
-
 };
+
+function detalles (data) {
+  if (data.detalle){
+    return $(
+      '<span>'+data.text+'</span><br><span style="color:#FF7542;font-size:0.8rem">'+data.detalle+'</span>'
+    );
+  }
+  return $(
+      '<span>'+data.text+'</span>'
+  );
+};
+
+function selecConDetalle(params, data) {
+    // If there are no search terms, return all of the data
+    if ($.trim(params.term) === '') {
+      return data;
+    }
+    // Do not display the item if there is no 'text' property
+    if (typeof data.text === 'undefined') {
+      return null;
+    }
+    if (data.detalle) {
+      if (data.detalle.indexOf(params.term) > -1) {console.log('casa detalle');
+        return data;
+      }
+      else if (data.text.indexOf(params.term) > -1){console.log('casa texto con detalle');
+        return data;
+      }
+    }
+    else if (data.text.indexOf(params.term) > -1){console.log('casa texto sin detalle');
+      return data;
+    }
+    // Return `null` if the term should not be displayed
+    return null;
+}
 
 /*==========================================
 
@@ -187,20 +231,20 @@ function ponTema(resultado){
 
 function initSelFiltYac(){
   cargaLstReg(initSelReg);
-  initSelTipYac();
-  initSelCronYac();
+  cargaLstTipYac(initSelTipYac);
+  cargaLstCrono(initSelCronYac);
 }
 
 function initSelFiltMat(){
-  initSelTipMuest();
-  initSelMat();
+  cargaLstTipMuest(initSelTipMuest);
+  cargaLstTipMat(initSelMat);
 }
 
 function initSelFiltDat(){
   initBarraBP();
   initBarraDesv();
-  initSelMetod();
-  initSelLab();
+  cargaLstMetodos(initSelMetod);
+  cargaLstLabos(initSelLab);
 }
 
 function initPaneles(){
@@ -272,40 +316,55 @@ function initSelReg(resultado){
     data:data,
     placeholder: 'Selecciona región',
     allowClear: true,
+    closeOnSelect: false,
     theme: "bootstrap",
     templateResult: colPorGrupo
   });
 }
 
-function initSelTipYac(){
+function initSelTipYac(resultado){
+  var data = organizaOpciones(resultado);
   $('#seltipoyac').select2({
+    data:data,
     placeholder: 'Selecciona tipos de yacimiento',
     allowClear: true,
-    theme: "bootstrap"
+    closeOnSelect: false,
+    theme: "bootstrap",
+    templateResult: colPorGrupo
   });
 }
 
-function initSelCronYac(){
+function initSelCronYac(resultado){
+  var data = resultado;
   $('#selcronoyac').select2({
+    data:data,
     placeholder: 'Selecciona cronología de yacimiento',
+    theme: "bootstrap",
     allowClear: true,
-    theme: "bootstrap"
+    closeOnSelect: false
   });
 }
 
-function initSelTipMuest(){
+function initSelTipMuest(resultado){
+  var data = resultado;
   $('#seltipomuest').select2({
+    data:data,
     placeholder: 'Selecciona tipos de muestra',
     allowClear: true,
-    theme: "bootstrap"
+    theme: "bootstrap",
+    closeOnSelect:false
   });
 }
 
-function initSelMat(){
+function initSelMat(resultado){
+  var data = organizaOpciones(resultado);
   $('#seltipomat').select2({
+    data:data,
     placeholder: 'Selecciona materiales',
     allowClear: true,
-    theme: "bootstrap"
+    theme: "bootstrap",
+    closeOnSelect:false,
+    templateResult: colPorGrupo
   });
 }
 
@@ -335,18 +394,26 @@ function initBarraDesv(){
   });
 }
 
-function initSelMetod(){
+function initSelMetod(resultado){
+  var data = resultado;
   $('#selmetodo').select2({
+    data:data,
     placeholder: 'Selecciona métodos',
     allowClear: true,
-    theme: "bootstrap"
+    theme: "bootstrap",
+    closeOnSelect:false
   });
 }
 
-function initSelLab(){
+function initSelLab(resultado){
+  var data = resultado;
   $('#sellab').select2({
+    data:data,
     placeholder: 'Selecciona laboratorios',
     allowClear: true,
-    theme: "bootstrap"
+    theme: "bootstrap",
+    closeOnSelect:false,
+    templateResult:detalles,
+    matcher: selecConDetalle
   });
 }

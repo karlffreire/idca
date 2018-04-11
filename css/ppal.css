@@ -13,8 +13,7 @@
    margin-top:1em;
    margin-bottom:1em;
    padding-left: 1em;
-   background-color: rgba(0, 0, 0, 0.5);
-
+   background-color: #808080;
 }
 
 .cabecera-consultas{
@@ -22,6 +21,9 @@
   padding-bottom: 1em;
   color: white;
   cursor: pointer;
+}
+.cabecera-consultas:hover{
+  color: #FF7542;
 }
 
 #panel-sel-filt{
@@ -66,8 +68,8 @@
 } */
 
 .select2-results__options--nested{
-float: left;
-  width: 33%;
+  float: left;
+  width: 50%;
 }
 /*
 .select2-results__option{
