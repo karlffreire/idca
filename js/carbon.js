@@ -1,3 +1,12 @@
+
+
+function cargaLstYacis(callback){
+  $.ajax({
+    url: "./datos/cargaYacis.php",
+    success: callback
+  });
+}
+
 /*=========================================
 
        LLAMADAS A BASE DE datos
@@ -6,7 +15,7 @@
 
 function cargaYacCronoTipo(prov,tipo,crono,callback){
   $.ajax({
-    url: "./datos/cargaYacCronoTipo.php",
+    url: "./datos/selecYacCronoTipo.php",
     data:{
       prov : prov,
       tipo : tipo,
@@ -18,7 +27,7 @@ function cargaYacCronoTipo(prov,tipo,crono,callback){
 
 function cargaYacDat(tmuestra,tmat,edadmin,edadmax,stdevmin,stdevmax,metod,lab,callback){
   $.ajax({
-    url: "./datos/cargaYacDat.php",
+    url: "./datos/selecYacDat.php",
     data:{
       tmuestra : tmuestra,
       tmat : tmat,
@@ -35,7 +44,7 @@ function cargaYacDat(tmuestra,tmat,edadmin,edadmax,stdevmin,stdevmax,metod,lab,c
 
 function cargaYaci(yaci,callback){
   $.ajax({
-    url: "./datos/cargaYaci.php",
+    url: "./datos/selecYaci.php",
     data:{
       yaci : yaci
     },
@@ -45,7 +54,7 @@ function cargaYaci(yaci,callback){
 
 function cargaYacTodo(prov,tipo,crono,tmuestra,tmat,edadmin,edadmax,stdevmin,stdevmax,metod,lab,callback){
   $.ajax({
-    url: "./datos/cargaYacTodo.php",
+    url: "./datos/selecYacTodo.php",
     data:{
       prov : prov,
       tipo : tipo,
@@ -80,7 +89,7 @@ function ponTema(resultado){
 ============================================*/
 
 function initSelect(){
-  initBuscaYaci();
+  cargaLstYacis(initBuscaYaci);
   initSelUbic();
   initSelTipYac();
   initSelCronYac();
@@ -110,19 +119,19 @@ function initSelect(){
   })
 }
 
+function muestraFilt(este,selec){
+  $('.lst-filt-elem').removeClass('activo');
+  $(este).addClass('activo');
+  $('.filt').hide();
+  $('#'+selec).show();
+}
+
 function initBuscaYaci(){
   $('#intro-yaci').select2({
     placeholder: 'Busca un yacimiento',
     allowClear: true,
     theme: "bootstrap"
   });
-}
-
-function muestraFilt(este,selec){
-  $('.lst-filt-elem').removeClass('activo');
-  $(este).addClass('activo');
-  $('.filt').hide();
-  $('#'+selec).show();
 }
 
 function initSelUbic(){
