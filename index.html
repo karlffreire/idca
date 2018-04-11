@@ -10,9 +10,15 @@
      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
      <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+     <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /> -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2.min.css" rel="stylesheet" />
+
      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css" rel="stylesheet" />
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script> -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2.min.js"></script>
+
+
+
      <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
 
      <link rel="stylesheet" href="./css/ion.rangeSlider.css">
@@ -25,7 +31,7 @@
      <script type="text/javascript" src="./js/carbon.js"></script>
      <script type="text/javascript" src="./js/ln.js"></script>
    </head>
-   <body onload="javascript:ponIdioma('es');initSelect();">
+   <body onload="javascript:ponIdioma('es');initSelect();initPaneles();">
      <div class="container-fluid">
        <div id="cabecera" class="row">
          <h1 id="titulo" class=""></h1>
@@ -39,10 +45,10 @@
       </div>
 
       <!-- <div class="row">
-        <button type="button" name="button" class="btn btn-primary" onclick="cargaYacCronoTipo('{42,54,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27}','{250,260,291,320}','{2,4,8}',ponTema)">Petición por tipo de yacimiento</button>
-        <button type="button" name="button" class="btn btn-primary" onclick="cargaYacDat('{1,2}','{1,2,3,4,5,6,7,8,9,10,158,173}',100,8000,50,500,'{1,3,4}','{24,25,26}',ponTema)">Petición por tipo de datacion</button>
+        <button type="button" name="button" class="btn btn-primary" onclick="selYacCronoTipo('{42,54,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27}','{250,260,291,320}','{2,4,8}',ponTema)">Petición por tipo de yacimiento</button>
+        <button type="button" name="button" class="btn btn-primary" onclick="selYacDat('{1,2}','{1,2,3,4,5,6,7,8,9,10,158,173}',100,8000,50,500,'{1,3,4}','{24,25,26}',ponTema)">Petición por tipo de datacion</button>
         <button type="button" name="button" class="btn btn-primary" onclick="cargaYaci(10002,ponTema)">Petición por yacimiento</button>
-        <button type="button" name="button" class="btn btn-primary" onclick="cargaYacTodo('{42,54,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58}','{285,295,279,250,260,291,320}','{2,4,8,1,3,5,6,7}','{1,2,99999}','{1,2,3,4,5,6,7,8,9,10,158,173}',100,8000,50,500,'{1,3,4}','{24,25,26}',ponTema)">Petición por todo</button>
+        <button type="button" name="button" class="btn btn-primary" onclick="selYacTodo('{42,54,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58}','{285,295,279,250,260,291,320}','{2,4,8,1,3,5,6,7}','{1,2,99999}','{1,2,3,4,5,6,7,8,9,10,158,173}',100,8000,50,500,'{1,3,4}','{24,25,26}',ponTema)">Petición por todo</button>
       </div> -->
       <div id="panel-yaci" class="row justify-content-md-center panel-consultas">
         <div class="cabecera-consultas">
@@ -53,9 +59,7 @@
         </div>
         <div id="panel-busca-yaci" class="col-md-10">
           <div class="row justify-content-md-center" style="margin-top:1.5em;">
-            <div class="col-md-4">
-              <select id="intro-yaci" name="buscayaci" style="width:400px;"></select>
-            </div>
+            <input class="col-md-4" id="intro-yaci" name="buscayaci" />
           </div>
         </div>
       </div>
@@ -78,26 +82,23 @@
            <div class="col-md-8 filt" id="filt-yac" aria-labelledby="carac-yaci">
              <form>
                <div class="form-group">
-                 <div class="form-row">
-                   <select class="form-control col-md-3 selfilt" name="pais" id="selpais"></select>
-                   <select class="form-control col-md-4 selfilt" name="prov" id="selprov" ></select>
-                 </div>
+                   <input class="col-md-8 selfilt" name="prov[]" id="selprov"/>
                </div>
                <div class="form-group">
-                 <select class="col-md-8 form-control selfilt" name="tipoyac[]" multiple="multiple" id="seltipoyac"></select>
+                 <input class="col-md-8 selfilt" name="tipoyac[]" multiple="multiple" id="seltipoyac"/>
                </div>
                <div class="form-group">
-                 <select class="col-md-8 form-control selfilt" name="cronoyac[]" multiple="multiple" id="selcronoyac"></select>
+                 <input class="col-md-8 selfilt" name="cronoyac[]" multiple="multiple" id="selcronoyac"/>
                </div>
              </form>
            </div>
            <div class="col-md-8 filt" id="filt-mat" aria-labelledby="carac-mat">
              <form>
                <div class="form-group">
-                 <select class="col-md-8 form-control selfilt" name="tipomuest[]" multiple="multiple" id="seltipomuest"></select>
+                 <select class="col-md-8 selfilt" name="tipomuest[]" multiple="multiple" id="seltipomuest"></select>
                </div>
                <div class="form-group">
-                 <select class="col-md-8 form-control selfilt" name="tipomat[]" multiple="multiple" id="seltipomat"></select>
+                 <select class="col-md-8 selfilt" name="tipomat[]" multiple="multiple" id="seltipomat"></select>
                </div>
              </form>
            </div>
@@ -112,14 +113,14 @@
                <div class="form-row">
                  <div id="selec-stdev" class="col-md-4">
                    <div id="tag-dev"></div>
-                   <input id="seldev" class="form-control selfilt" type="text"/>
+                   <input id="seldev" class="selfilt" type="text"/>
                  </div>
                  <div class="col-md-4 offset-2">
                    <div class="form-group">
-                     <select class="form-control selfilt" name="metodo[]" multiple="multiple" id="selmetodo"></select>
+                     <select class="selfilt" name="metodo[]" multiple="multiple" id="selmetodo"></select>
                    </div>
                    <div class="form-group">
-                     <select class="form-control selfilt" name="lab[]" multiple="multiple" id="sellab"></select>
+                     <select class="selfilt" name="lab[]" multiple="multiple" id="sellab"></select>
                    </div>
                  </div>
                </div>
