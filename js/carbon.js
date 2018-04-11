@@ -1,6 +1,6 @@
 
 
-function cargaLstYacis(callback){
+function cargaLstYac(callback){
   $.ajax({
     url: "./datos/cargaYacis.php",
     success: callback
@@ -89,7 +89,7 @@ function ponTema(resultado){
 ============================================*/
 
 function initSelect(){
-  cargaLstYacis(initBuscaYaci);
+  cargaLstYac(initBuscaYaci);
   initSelUbic();
   initSelTipYac();
   initSelCronYac();
@@ -126,8 +126,10 @@ function muestraFilt(este,selec){
   $('#'+selec).show();
 }
 
-function initBuscaYaci(){
+function initBuscaYaci(resultado){
+  var data = resultado;
   $('#intro-yaci').select2({
+    data : data,
     placeholder: 'Busca un yacimiento',
     allowClear: true,
     theme: "bootstrap"
