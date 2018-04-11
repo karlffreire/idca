@@ -56,6 +56,21 @@
   cursor: pointer;
 }
 
-.select2{
-  margin-right: 1em;
+ /* .select2-results__options{
+  float:left;
+  width: 30%;
+} */
+/* .select2-results__group{
+  float:left;
+  width: 30%;
+} */
+
+.select2-results__options--nested{
+float: left;
+  width: 33%;
 }
+/*
+.select2-results__option{
+  float:left;
+  width: 30%;
+} */

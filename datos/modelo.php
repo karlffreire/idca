@@ -2,6 +2,15 @@
 require '../datos/conecta.php';
 //la siguiente función es una prueba
 
+
+/*
+======================================
+
+            LISTADOS
+
+======================================
+*/
+
 function listaYacis(){
   $db = conectaBD();
  	$prp = pg_prepare($db,"lst-yac","SELECT id_cultural_entity as id,entity_name as text FROM general.cultural_entity WHERE id_cultural_entity IN (SELECT id_yaci FROM public.yacis_carbon) ORDER BY entity_name;");
@@ -15,6 +24,56 @@ function listaYacis(){
   }
   return null;
 }
+
+function listaRegiones(){
+  $db = conectaBD();
+ 	$prp = pg_prepare($db,"lst-reg","SELECT gid as id, prov_dist as text, paises as grupo FROM general.nut3 ORDER BY cod_pais,prov_dist;");
+  $prp = pg_execute($db,"lst-reg",array());
+	while ($row=pg_fetch_assoc($prp)){
+		$regiones[] = $row;
+	}
+  pg_close($db);
+  if (isset($regiones)) {
+    return $regiones;
+  }
+  return null;
+}
+
+function listaTiposYac(){
+  $db = conectaBD();
+ 	$prp = pg_prepare($db,"lst-tipyac","SELECT id_cultural_entity_type as id, cultural_entity_type_value as text, entity_type_schema as grupo FROM general.cultural_entity_type inner join general.cultural_entity_type_schema on cultural_entity_type.id_cultural_entity_type_schema = cultural_entity_type_schema.id_cultural_entity_type_schema WHERE (cultural_entity_type_schema.id_cultural_entity_type_schema = 3 and cultural_entity_type.tipo_primario = true) or cultural_entity_type_schema.id_cultural_entity_type_schema = 4 ORDER BY grupo,text;");
+  $prp = pg_execute($db,"lst-tipyac",array());
+	while ($row=pg_fetch_assoc($prp)){
+		$tiposyac[] = $row;
+	}
+  pg_close($db);
+  if (isset($tiposyac)) {
+    return $tiposyac;
+  }
+  return null;
+}
+
+function listaCronos(){
+  $db = conectaBD();
+ 	$prp = pg_prepare($db,"lst-cronos","SELECT id_chronology as id, tm_ordinal_era as text FROM general.chronology WHERE crono_primaria = true;");
+  $prp = pg_execute($db,"lst-cronos",array());
+	while ($row=pg_fetch_assoc($prp)){
+		$cronos[] = $row;
+	}
+  pg_close($db);
+  if (isset($cronos)) {
+    return $cronos;
+  }
+  return null;
+}
+
+/*
+======================================
+
+            CONSULTAS
+
+======================================
+*/
 
 function selecPorYac($prov,$tipo,$cronos){
   $db = conectaBD();
