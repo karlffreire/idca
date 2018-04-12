@@ -34,7 +34,7 @@
         <div class="col"></div>
         <div class="col"></div>
         <div class="col" style="text-align:right">
-          <a href="javascript:ponIdioma('es')">Español</a> | <a href="javascript:ponIdioma('en')">English</a>
+          <strong class="p-idearq"><a href="javascript:ponIdioma('es')">Español</a> | <a href="javascript:ponIdioma('en')">English</a></strong>
         </div>
       </div>
 
@@ -73,13 +73,11 @@
         </div>
       <div id="panel-sel-filt" class="col-md-10">
         <div class="row">
-          <div class="col-md-4" style="padding-right:0px;">
-            <ul class="lst-filt" id="filt-list">
-               <li onclick="javascript:muestraFilt(this,'filt-yac')" class="lst-filt-elem" id="carac-yaci"></li>
-               <li onclick="javascript:muestraFilt(this,'filt-mat')" class="lst-filt-elem" id="carac-mat"></li>
-               <li onclick="javascript:muestraFilt(this,'filt-dat')" class="lst-filt-elem" id="carac-data"></li>
-             </ul>
-           </div>
+          <ul class="col-md-3 lst-filt" id="filt-list" style="padding-right:0;">
+             <li onclick="javascript:muestraFilt(this,'filt-yac')" class="lst-filt-elem float-right" id="carac-yaci"></li>
+             <li onclick="javascript:muestraFilt(this,'filt-mat')" class="lst-filt-elem float-right" id="carac-mat"></li>
+             <li onclick="javascript:muestraFilt(this,'filt-dat')" class="lst-filt-elem float-right" id="carac-data"></li>
+           </ul>
            <div class="col-md-8 filt" id="filt-yac" aria-labelledby="carac-yaci">
              <form>
                <div class="form-group">
