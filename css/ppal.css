@@ -1,3 +1,7 @@
+h5{
+  margin: 0;
+}
+
 .p-idearq{
   color:#454545;
 }
@@ -20,65 +24,31 @@
   padding-bottom: 1em;
 }
 
-.panel{
-  border-bottom: solid 1px #6e6e6e;
-  padding-top:1em;
-  padding-bottom:1em;
-}
-
 .panel-consultas{
    margin-top:1em;
    margin-bottom:1em;
    padding-left: 1em;
-   background-color: #808080;
+   background-color: #454545;
 }
 
 .cabecera-consultas{
   padding-top: 1em;
   padding-bottom: 1em;
   color: white;
-  cursor: pointer;
 }
-.cabecera-consultas:hover{
-  color: #FF7542;
-}
-/*
-#panel-sel-filt{
-  background-color: white;
-  padding-top: 3em;
-  padding-bottom: 3em;
+
+.boton-inic{
+  border-radius: 0.25em;
+  background-color: #FF7542;
   padding-left: 1em;
   padding-right: 1em;
-}
-
-.lst-filt{
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.filt{
-  box-shadow: 0 0 5px #888;
-  padding: 1em;
-  border-radius: 0.25em;
-  background-color: #FFF;
-}
-
-.activo{
-  padding: 1em !important;
-  font-size: 1.1em !important;
-  display: inline-block;
-  background-color: #FFF !important;
-  box-shadow: 5px 0 5px #FFF, 0 0 5px #888;
-}
-
-.lst-filt-elem{
-  border-top-left-radius: 0.25em;
-  border-bottom-left-radius: 0.25em;
-  padding: 1em;
-  font-size: 1em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
   cursor: pointer;
-} */
+}
+.boton-inic:hover{
+  background-color: #a74b29;
+}
 
  /* .select2-results__options{
   float:left;
@@ -99,38 +69,33 @@
   width: 30%;
 } */
 
-
-
-
 /* Tabs*/
 section {
-    padding: 60px 0;
+    padding: 1em;
 }
 
-section .section-title {
-    text-align: center;
-    color: #007b5e;
-    margin-bottom: 50px;
-    text-transform: uppercase;
-}
-#tabs{
-	background: #808080;
+#panel-sel-filt{
     color: #eee;
 }
 
-
-#tabs .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+#panel-sel-filt .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
     color: #f3f3f3;
     background-color: transparent;
     border-color: transparent transparent #f3f3f3;
     border-bottom: 4px solid !important;
-    font-size: 20px;
+    font-size: 1.4em;
     font-weight: bold;
 }
-#tabs .nav-tabs .nav-link {
+
+#panel-sel-filt .nav-tabs .nav-link {
     border: 1px solid transparent;
     border-top-left-radius: .25rem;
     border-top-right-radius: .25rem;
     color: #eee;
-    font-size: 20px;
+    font-size: 1.2em;
+}
+
+#panel-sel-filt .tab-content{
+  margin-top: 1em;
+  margin-bottom: 1em;
 }

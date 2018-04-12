@@ -260,33 +260,19 @@ function initPaneles(){
     $('#tit-filtrar').hide();
   });
   $('#panel-filt').one('click',function(){
-    var mostrar = $('#carac-yaci');
-    muestraFilt(mostrar,'filt-yac');
+     initSelFiltYac();
   });
-}
 
-function muestraFilt(este,selec){
-  $('.lst-filt-elem').removeClass('activo');
-  $(este).addClass('activo');
-  $('.filt').hide();
-  $('#'+selec).show(0,'start',function(){
-    if (selec == 'filt-yac') {
-      var init = $('#selprov').hasClass("select2-hidden-accessible");
-      if (!init) {
-        initSelFiltYac();
-      }
+  $('#carac-mat').on('shown.bs.tab', function (e) {//el evento shown.bs.tab se dispara después de activar la tab. Si se inicializan los select antes de mostrarlos no cogen bien el tamaño
+    var init = $('#seltipomuest').hasClass("select2-hidden-accessible");
+    if (!init) {
+      initSelFiltMat();
     }
-    else if (selec == 'filt-mat') {
-      var init = $('#seltipomuest').hasClass("select2-hidden-accessible");
-      if (!init) {
-        initSelFiltMat();
-      }
-    }
-    else if (selec == 'filt-dat') {
-      var init = $('#selmetodo').hasClass("select2-hidden-accessible");
-      if (!init) {
-        initSelFiltDat();
-      }
+  });
+  $('#carac-data').on('shown.bs.tab', function(){
+    var init = $('#selmetodo').hasClass("select2-hidden-accessible");
+    if (!init) {
+      initSelFiltDat();
     }
   });
 }
