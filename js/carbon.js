@@ -70,13 +70,8 @@ function cargaLstLabos(callback){
 
 ===========================================*/
 
-function cargaLstYac(callback){
-  $.ajax({
-===========================================*/
-
 function selYacCronoTipo(prov,tipo,crono,callback){
   $.ajax({
-=======
     url: "./datos/selecYacCronoTipo.php",
     data:{
       prov : prov,
@@ -218,49 +213,6 @@ function selecConDetalle(params, data) {
     return null;
 }
 
-/*==========================================
-
-      COLOCACION DE datos
-
-============================================*/
-
-function unique(list) {
-    var result = [];
-    $.each(list, function(i, e) {
-        if ($.inArray(e, result) == -1) result.push(e);
-    });
-    return result;
-}
-
-function organizaOpciones(arrObjt){
-  var grupos = [];
-  var grup = [];
-  var gruposOpciones = [];
-  for (var i = 0; i < arrObjt.length; i++) {
-    grupos.push(arrObjt[i].grupo);
-  }
-  grup = unique(grupos);
-  for (var i = 0; i < grup.length; i++) {
-    var objgrup = {};
-    objgrup.text = grup[i];
-    var opcionesGrupo = jQuery.grep(arrObjt, function( opcion ) {
-      return ( opcion.grupo == grup[i]);
-    });
-    objgrup.children = opcionesGrupo;
-    gruposOpciones.push(objgrup);
-  }
-  for (var i = 0; i < gruposOpciones.length; i++) {
-    var hijos = gruposOpciones[i].children;
-    for (var j = 0; j < hijos.length; j++) {
-      delete hijos[j].grupo;
-    }
-  }
-  return gruposOpciones;
-}
-
-function ponTema(resultado){
-  console.log(resultado);
-}
 
 /*==========================================
 
