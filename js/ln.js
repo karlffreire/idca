@@ -11,7 +11,7 @@ var etiDev = '';
 function ponIdioma(ln){
   if (ln == 'es') {
     titulo = 'IDEArq Carbon';
-    tituloBuscaYaci = 'Buscar yacimiento';
+    tituloBuscaYaci = 'Buscar un yacimiento';
     tituloFiltrar = 'Filtrar dataciones';
     caracYac = 'Elementos del yacimiento';
     caracMat = 'Elementos del material datado';
@@ -33,6 +33,11 @@ function ponIdioma(ln){
   }
   $('#titulo').html(titulo);
   $('#tit-buscayaci').html(tituloBuscaYaci);
+  $('#intro-yaci').select2({//esto crea una nueva instancia, habría que cambiarlo
+      placeholder: tituloBuscaYaci,
+      allowClear: true,//
+      theme:'bootstrap'
+    });
   $('#tit-filtrar').html(tituloFiltrar);
   $('#carac-yaci').html(caracYac);
   $('#carac-mat').html(caracMat);
