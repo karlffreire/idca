@@ -1,5 +1,5 @@
 <?php
-require '../datos/conecta.php';
+require '../datos/conexion.php';
 
 /*
 ======================================

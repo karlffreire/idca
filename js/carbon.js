@@ -406,6 +406,6 @@ function initSelLab(resultado){
     theme: "bootstrap",
     closeOnSelect:false,
     templateResult:detalles,
-    matcher: selecConDetalle
+    //matcher: selecConDetalle
   });
 }
