@@ -6,5 +6,6 @@ basedatos/permisos_idearq.sql
 basedatos/permisos-carbon.sql
 
 datos/conecta.php
+datos/conexion.php
 
 fpdf/
