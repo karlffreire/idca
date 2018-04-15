@@ -17,9 +17,7 @@
 
      <link rel="stylesheet" href="./css/ion.rangeSlider.css">
      <link rel="stylesheet" href="./css/ion.rangeSlider.skinFlat.css">
-     <script src="./js/ion.rangeSlider.min.js">
-
-     </script>
+     <script src="./js/ion.rangeSlider.min.js"></script>
 
      <link rel="stylesheet" href="./css/ppal.css">
      <script type="text/javascript" src="./js/carbon.js"></script>
@@ -37,22 +35,15 @@
           <span class="p-idearq"><a href="javascript:ponIdioma('es')">Español</a> | <a href="javascript:ponIdioma('en')">English</a></span>
         </div>
       </div>
-
-      <!-- <div class="row">
-        <button type="button" name="button" class="btn btn-primary" onclick="selYacCronoTipo('{42,54,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27}','{250,260,291,320}','{2,4,8}',ponTema)">Petición por tipo de yacimiento</button>
-        <button type="button" name="button" class="btn btn-primary" onclick="selYacDat('{1,2}','{1,2,3,4,5,6,7,8,9,10,158,173}',100,8000,50,500,'{1,3,4}','{24,25,26}',ponTema)">Petición por tipo de datacion</button>
-        <button type="button" name="button" class="btn btn-primary" onclick="cargaYaci(10002,ponTema)">Petición por yacimiento</button>
-        <button type="button" name="button" class="btn btn-primary" onclick="selYacTodo('{42,54,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58}','{285,295,279,250,260,291,320}','{2,4,8,1,3,5,6,7}','{1,2,99999}','{1,2,3,4,5,6,7,8,9,10,158,173}',100,8000,50,500,'{1,3,4}','{24,25,26}',ponTema)">Petición por todo</button>
-      </div> -->
       <div class="row justify-content-md-center" style="color:#454545;text-align:center;">
-        <h4 class="col-md-8">Dadme un texto introductorio de un párrafo para poner aquí, explicando la página.<br>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque</h4>
+        <h4 class="col-md-8">Dadme un texto introductorio de un párrafo para poner aquí, explicando el proyecto.<br>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque</h4>
       </div>
       <div id="panel-yaci" class="row justify-content-md-center panel-consultas">
         <div class="cabecera-consultas">
-          <div class="row boton-inic">
-            <i class="fas fa-search fa-2x"></i>
-            <h5 id="tit-buscayaci" style="margin-left:1em;"></h5>
-          </div>
+          <button class="btn btn-lg boton-flujo">
+            <i class="fas fa-search"></i>
+            <span id="tit-buscayaci" style="margin-left:1em;"></button>
+          </button>
         </div>
         <div id="panel-busca-yaci" class="col-md-10">
           <div class="row justify-content-md-center" style="margin-top:1.5em;">
@@ -66,10 +57,10 @@
       </div>
       <div id="panel-filt" class="row justify-content-md-center panel-consultas">
         <div class="cabecera-consultas">
-          <div class="row boton-inic">
-            <i class="fas fa-filter fa-2x"></i>
-            <h5 id="tit-filtrar" style="margin-left:1em;"></h5>
-          </div>
+          <button class="btn btn-lg boton-flujo">
+            <i class="fas fa-filter"></i>
+            <span id="tit-filtrar" style="margin-left:1em;"></span>
+          </button>
         </div>
         <section id="panel-sel-filt" class="col-md-10">
         	<div class="container">
@@ -86,23 +77,28 @@
         					<div class="w-100 tab-pane fade show active" id="nav-yac" role="tabpanel" aria-labelledby="nav-home-tab">
                     <form>
                       <div class="form-group">
-                        <select class="form-control w-100 selfilt" name="prov[]" multiple="multiple" id="selprov" ></select>
+                        <label for="selprov" id="tag-selprov"></label>
+                        <select class="form-control w-100 selfilt-yac" name="prov[]" multiple="multiple" id="selprov" ></select>
                       </div>
                       <div class="form-group">
-                        <select class="w-100 selfilt" name="tipoyac[]" multiple="multiple" id="seltipoyac"></select>
+                        <label for="seltipoyac" id="tag-seltipoyac"></label>
+                        <select class="w-100 selfilt-yac" name="tipoyac[]" multiple="multiple" id="seltipoyac"></select>
                       </div>
                       <div class="form-group">
-                        <select class="w-100 selfilt" name="cronoyac[]" multiple="multiple" id="selcronoyac"></select>
+                        <label for="selcronoyac" id="tag-selcronoyac"></label>
+                        <select class="w-100 selfilt-yac" name="cronoyac[]" multiple="multiple" id="selcronoyac"></select>
                       </div>
                     </form>
         					</div>
         					<div class="w-100 tab-pane fade " id="nav-mat" role="tabpanel" aria-labelledby="nav-mat-tab">
                     <form>
                       <div class="form-group">
-                        <select class="w-100 selfilt filt" name="tipomuest[]" multiple="multiple" id="seltipomuest"></select>
+                        <label for="seltipomuest" id="tag-seltipomuest"></label>
+                        <select class="w-100 selfilt-mat filt" name="tipomuest[]" multiple="multiple" id="seltipomuest"></select>
                       </div>
                       <div class="form-group">
-                        <select class="w-100 selfilt filt" name="tipomat[]" multiple="multiple" id="seltipomat"></select>
+                        <label for="seltipomat" id="tag-seltipomat"></label>
+                        <select class="w-100 selfilt-mat filt" name="tipomat[]" multiple="multiple" id="seltipomat"></select>
                       </div>
                     </form>
         					</div>
@@ -111,30 +107,46 @@
                       <div id="selec-temp" class="form-row">
                         <div class="w-100 form-group">
                           <label for="selfecha" id="tag-fecha"></label>
-                          <input id="selfecha" class="form-control selfilt" type="text"/>
+                          <input id="selfecha" class="form-control rango-dat" type="text"/>
                         </div>
                       </div>
                       <div class="form-row">
                         <div id="selec-stdev" class="col-md-6">
                           <div id="tag-dev"></div>
-                          <input id="seldev" class="selfilt" type="text"/>
+                          <input id="seldev" class="rango-dat" type="text"/>
                         </div>
                         <div class="col-md-5 offset-1">
                           <div class="form-group">
-                            <select class="col-md-12 selfilt filt" name="metodo[]" multiple="multiple" id="selmetodo"></select>
+                            <label for="selmetodo" id="tag-selmetodo"></label>
+                            <select class="col-md-12 selfilt-dat filt" name="metodo[]" multiple="multiple" id="selmetodo"></select>
                           </div>
                           <div class="form-group">
-                            <select class="col-md-12 selfilt filt" name="lab[]" multiple="multiple" id="sellab"></select>
+                            <label for="sellab" id="tag-sellab"></label>
+                            <select class="col-md-12 selfilt-dat filt" name="lab[]" multiple="multiple" id="sellab"></select>
                           </div>
                         </div>
                       </div>
                     </form>
         					</div>
         				</div>
+                <div class="row justify-content-md-center">
+                  <button class="btn btn-lg boton-flujo" onclick="javascript:ejecutaFiltros();">
+                    <i class="fas fa-cogs"></i>
+                    <span id="filtra-ya" style="margin-left:1em;"></span>
+                  </button>
+                </div>
         			</div>
         		</div>
         	</div>
         </section>
+      </div>
+      <div class="row justify-content-md-center panel-resultados">
+        <h4 id="tit-resultado" class="w-100" style="text-align:center;">Resultado</h4>
+        <div class="collapse" id="piensa">
+          <i class="fas fa-cog fa-2x fa-spin"></i>
+        </div>
+        <pre class="col-md-12 collapse" id="salida">
+        </pre>
       </div>
     </div>
    </body>

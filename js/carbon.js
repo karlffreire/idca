@@ -50,6 +50,13 @@ function cargaLstTipMat(callback){
   });
 }
 
+function cargaLstRang(callback){
+  $.ajax({
+    url: './datos/cargaRangos.php',
+    success: callback
+  });
+}
+
 function cargaLstMetodos(callback){
   $.ajax({
     url: './datos/cargaMetodos.php',
@@ -64,74 +71,9 @@ function cargaLstLabos(callback){
   });
 }
 
-/*=========================================
-
-           CARGA DE LISTADOS
-
-===========================================*/
-
-function selYacCronoTipo(prov,tipo,crono,callback){
-  $.ajax({
-    url: "./datos/selecYacCronoTipo.php",
-    data:{
-      prov : prov,
-      tipo : tipo,
-      crono : crono
-    },
-    success: callback
-  });
-}
-
-function selYacDat(tmuestra,tmat,edadmin,edadmax,stdevmin,stdevmax,metod,lab,callback){
-  $.ajax({
-    url: "./datos/selecYacDat.php",
-    data:{
-      tmuestra : tmuestra,
-      tmat : tmat,
-      edadmin : edadmin,
-      edadmax : edadmax,
-      stdevmin : stdevmin,
-      stdevmax : stdevmax,
-      metod : metod,
-      lab : lab
-    },
-    success: callback
-  });
-}
-
-function selYaci(yaci,callback){
-  $.ajax({
-    url: "./datos/selecYaci.php",
-    data:{
-      yaci : yaci
-    },
-    success: callback
-  });
-}
-
-function selYacTodo(prov,tipo,crono,tmuestra,tmat,edadmin,edadmax,stdevmin,stdevmax,metod,lab,callback){
-  $.ajax({
-    url: "./datos/selecYacTodo.php",
-    data:{
-      prov : prov,
-      tipo : tipo,
-      crono : crono,
-      tmuestra : tmuestra,
-      tmat : tmat,
-      edadmin : edadmin,
-      edadmax : edadmax,
-      stdevmin : stdevmin,
-      stdevmax : stdevmax,
-      metod : metod,
-      lab : lab
-    },
-    success: callback
-  });
-}
-
 /*==========================================
 
-         ORGANIZACIÓN DE DATOS
+        ORGANIZACIÓN DE DESPLEGABLES
 
 ============================================*/
 
@@ -170,7 +112,7 @@ function organizaOpciones(arrObjt){
 }
 
 function colPorGrupo (data) {
-  if (!data.id) {
+ if (!data.id) {
     return $('<span style="color:#8A0808;font-size:1rem;">'+data.text+'</span>');
   }
   return $(
@@ -188,54 +130,84 @@ function detalles (data) {
       '<span>'+data.text+'</span>'
   );
 };
-
-function selecConDetalle(params, data) {
-    // If there are no search terms, return all of the data
-    if ($.trim(params.term) === '') {
-      return data;
-    }
-    // Do not display the item if there is no 'text' property
-    if (typeof data.text === 'undefined') {
-      return null;
-    }
-    if (data.detalle) {
-      if (data.detalle.indexOf(params.term) > -1) {console.log('casa detalle');
-        return data;
-      }
-      else if (data.text.indexOf(params.term) > -1){console.log('casa texto con detalle');
-        return data;
-      }
-    }
-    else if (data.text.indexOf(params.term) > -1){console.log('casa texto sin detalle');
-      return data;
-    }
-    // Return `null` if the term should not be displayed
-    return null;
-}
+//
+// function selecConDetalle(params, data) {//no funcina bien
+//     // If there are no search terms, return all of the data
+//     if ($.trim(params.term) === '') {
+//       return data;
+//     }
+//     // Do not display the item if there is no 'text' property
+//     if (typeof data.text === 'undefined') {
+//       return null;
+//     }
+//     if (data.detalle) {
+//       if (data.detalle.indexOf(params.term) > -1) {console.log('casa detalle');
+//         return data;
+//       }
+//       else if (data.text.indexOf(params.term) > -1){console.log('casa texto con detalle');
+//         return data;
+//       }
+//     }
+//     else if (data.text.indexOf(params.term) > -1){console.log('casa texto sin detalle');
+//       return data;
+//     }
+//     // Return `null` if the term should not be displayed
+//     return null;
+// }
 
 
 /*==========================================
 
-      INICIALIZACION DE FORMULARIOS
+      INICIALIZACION DE DESPLEGABLES
 
 ============================================*/
+
+var tipoFilSelec = {"filtyac":false,"filtmat":false,"filtdat":false};
 
 function initSelFiltYac(){
   cargaLstReg(initSelReg);
   cargaLstTipYac(initSelTipYac);
   cargaLstCrono(initSelCronYac);
+  $('.selfilt-yac').on('select2:select',function(){//si se selecciona alguna tipo de yacimiento
+    tipoFilSelec.filtyac = true;
+  });
+  $('.selfilt-yac').on('select2:unselect',function(e){//si se borran las selecciones
+    var selecyac = $('.selfilt-yac').find(':selected');
+    if (selecyac.length == 0) {
+      tipoFilSelec.filtyac = false;
+    }
+  });
 }
 
 function initSelFiltMat(){
   cargaLstTipMuest(initSelTipMuest);
   cargaLstTipMat(initSelMat);
+  $('.selfilt-mat').on('select2:select',function(){
+    tipoFilSelec.filtmat = true;
+  });
+  $('.selfilt-mat').on('select2:unselect',function(e){//si se borran las selecciones
+    var selecmat = $('.selfilt-mat').find(':selected');
+    if (selecmat.length == 0) {
+      tipoFilSelec.filtmat = false;
+    }
+  });
 }
 
 function initSelFiltDat(){
-  initBarraBP();
-  initBarraDesv();
+  // initBarraBP();
+  // initBarraDesv();
+  cargaLstRang(initBarras);
   cargaLstMetodos(initSelMetod);
   cargaLstLabos(initSelLab);
+  $('.selfilt-dat').on('select2:select',function(){
+    tipoFilSelec.filtdat = true;
+  });
+  $('.selfilt-dat').on('select2:unselect',function(e){//si se borran las selecciones
+    var selecdat = $('.selfilt-dat').find(':selected');
+    if (selecdat.length == 0) {
+      tipoFilSelec.filtdat = false;
+    }
+  });
 }
 
 function initPaneles(){
@@ -286,15 +258,17 @@ function initBuscaYaci(resultado){
     theme: "bootstrap",
     width: 'copy'
   });
+  $('#intro-yaci').on('select2:select',function(e){
+    buscaDatYaci(e.params.data.id);
+  })
 }
 
 function initSelReg(resultado){
   var data = organizaOpciones(resultado);
   $('#selprov').select2({
     data:data,
-    placeholder: 'Selecciona región',
+    placeholder: '*',
     allowClear: true,
-    closeOnSelect: false,
     theme: "bootstrap",
     templateResult: colPorGrupo
   });
@@ -304,9 +278,8 @@ function initSelTipYac(resultado){
   var data = organizaOpciones(resultado);
   $('#seltipoyac').select2({
     data:data,
-    placeholder: 'Selecciona tipos de yacimiento',
+    placeholder: '*',
     allowClear: true,
-    closeOnSelect: false,
     theme: "bootstrap",
     templateResult: colPorGrupo
   });
@@ -316,10 +289,9 @@ function initSelCronYac(resultado){
   var data = resultado;
   $('#selcronoyac').select2({
     data:data,
-    placeholder: 'Selecciona cronología de yacimiento',
+    placeholder: '*',
     theme: "bootstrap",
-    allowClear: true,
-    closeOnSelect: false
+    allowClear: true
   });
 }
 
@@ -327,10 +299,9 @@ function initSelTipMuest(resultado){
   var data = resultado;
   $('#seltipomuest').select2({
     data:data,
-    placeholder: 'Selecciona tipos de muestra',
+    placeholder: '*',
     allowClear: true,
-    theme: "bootstrap",
-    closeOnSelect:false
+    theme: "bootstrap"
   });
 }
 
@@ -338,37 +309,46 @@ function initSelMat(resultado){
   var data = organizaOpciones(resultado);
   $('#seltipomat').select2({
     data:data,
-    placeholder: 'Selecciona materiales',
+    placeholder: '*',
     allowClear: true,
     theme: "bootstrap",
-    closeOnSelect:false,
+    maximumSelectionLength:3,
     templateResult: colPorGrupo
   });
 }
 
-function initBarraBP(){
+function initBarras(resultado){
+  var initfechmin = Math.floor(resultado.fechamininit/100)*100;
+  var initfechmax = Math.ceil(resultado.fechamaxinit/100)*100;
+  var initdesvmin = Math.floor(resultado.desvmininit/100)*100;
+  var initdesvmax = Math.ceil(resultado.desvmaxinit/100)*100;
 	$("#selfecha").ionRangeSlider({
     type: "double",
     grid: true,
-    min: 0,
-    max: 8000,
-    from: 1000,
-    to: 7000,
-    step: 50,
-    postfix: " BP"
+    min: initfechmin,
+    max: initfechmax,
+    from: 2000,
+    to: 45000,
+    step: 100,
+    postfix: " BP",
+    onFinish:function(data){
+      tipoFilSelec.filtmatdat = true;
+      salvarFecha(data);
+    }
   });
-}
-
-function initBarraDesv(){
 	$("#seldev").ionRangeSlider({
     type: "double",
     grid: true,
-    min: 0,
-    max: 1000,
-    from: 100,
-    to: 900,
-    step: 10,
-    postfix: ""
+    min: initdesvmin,
+    max: initdesvmax,
+    from: 200,
+    to: 4500,
+    step: 50,
+    postfix: "",
+    onFinish:function(data){
+      tipoFilSelec.filtmatdat = true;
+      salvarDesv(data);
+    }
   });
 }
 
@@ -376,10 +356,9 @@ function initSelMetod(resultado){
   var data = resultado;
   $('#selmetodo').select2({
     data:data,
-    placeholder: 'Selecciona métodos',
+    placeholder: '*',
     allowClear: true,
-    theme: "bootstrap",
-    closeOnSelect:false
+    theme: "bootstrap"
   });
 }
 
@@ -387,11 +366,210 @@ function initSelLab(resultado){
   var data = resultado;
   $('#sellab').select2({
     data:data,
-    placeholder: 'Selecciona laboratorios',
+    placeholder: '*',
     allowClear: true,
     theme: "bootstrap",
-    closeOnSelect:false,
-    templateResult:detalles,
+    templateResult:detalles
     //matcher: selecConDetalle
   });
+}
+
+function salvarFecha(data){
+  fechamin = data.from;
+  fechamax = data.to;
+}
+
+function salvarDesv(data){
+  desvmin = data.from;
+  desvmax = data.to;
+}
+
+/*==========================================
+
+        CONSULTAS A BASE DE DATOS
+
+============================================*/
+
+function buscaDatYaci(idyaci){
+  selYaci(idyaci,ponDatos);
+}
+
+function ejecutaFiltros(){
+  $('#salida').html('');
+  $('#piensa').removeClass('collapse');
+  if (!tipoFilSelec.filtyac && !tipoFilSelec.filtmat && !tipoFilSelec.filtdat) {
+    alert(noSelec);
+  }
+  else if (tipoFilSelec.filtyac && !tipoFilSelec.filtmat && !tipoFilSelec.filtdat){
+    var datosreg = $('#selprov').select2('data');
+    var datostipo = $('#seltipoyac').select2('data');
+    var datoscrono = $('#selcronoyac').select2('data');
+    var pidereg = '';
+    var pidetipo = '';
+    var pidecrono = '';
+    for (var i = 0; i < datosreg.length; i++) {
+      pidereg += datosreg[i].id+',';
+    }
+    pidereg = '{'+pidereg.substring(',', pidereg.length - 1)+'}';
+    for (var i = 0; i < datostipo.length; i++) {
+      pidetipo += datostipo[i].id+',';
+    }
+    pidetipo = '{'+pidetipo.substring(',', pidetipo.length - 1)+'}';
+    for (var i = 0; i < datoscrono.length; i++) {
+      pidecrono += datoscrono[i].id+',';
+    }
+    pidecrono = '{'+pidecrono.substring(',', pidecrono.length - 1)+'}';
+    selYacCronoTipo(pidereg,pidetipo,pidecrono,ponDatos);
+  }
+  else if (!tipoFilSelec.filtyac && tipoFilSelec.filtmat && !tipoFilSelec.filtdat){
+    var datosmuest = $('#seltipomuest').select2('data');
+    var datosmat = $('#seltipomat').select2('data');
+    var pidemuest = '';
+    var pidemat = '';
+    var fechamin = '';
+    var fechamax = '';
+    var desvmin = '';
+    var desvmax = '';
+    var pidemetodo = '{}';
+    var pidelab = '{}';
+    for (var i = 0; i < datosmuest.length; i++) {
+      pidemuest += datosmuest[i].id+',';
+    }
+    pidemuest = '{'+pidemuest.substring(',', pidemuest.length - 1)+'}';
+    for (var i = 0; i < datosmat.length; i++) {
+      pidemat += datosmat[i].id+',';
+    }
+    pidemat = '{'+pidemat.substring(',', pidemat.length - 1)+'}';
+    selYacDat(pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatos);
+  }
+  else if (!tipoFilSelec.filtyac && !tipoFilSelec.filtmat && tipoFilSelec.filtdat){
+    var datosmetodo = $('#selmetodo').select2('data');
+    var datoslab = $('#sellab').select2('data');
+    var pidemuest = '{}';
+    var pidemat = '{}';
+    var fechamin = '';
+    var fechamax = '';
+    var desvmin = '';
+    var desvmax = '';
+    var pidemetodo = '';
+    var pidelab = '';
+    for (var i = 0; i < datosmetodo.length; i++) {
+      pidemetodo += datosmetodo[i].id+',';
+    }
+    pidemetodo = '{'+pidemetodo.substring(',', pidemetodo.length - 1)+'}';
+    for (var i = 0; i < datoslab.length; i++) {
+      pidelab += datoslab[i].id+',';
+    }
+    pidelab = '{'+pidelab.substring(',', pidelab.length - 1)+'}';
+    selYacDat(pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatos);
+  }
+  else if (tipoFilSelec.filtyac && tipoFilSelec.filtmat && tipoFilSelec.filtdat){
+    var datosmuest = $('#seltipomuest').select2('data');
+    var datosmat = $('#seltipomat').select2('data');
+    var datosmetodo = $('#selmetodo').select2('data');
+    var datoslab = $('#sellab').select2('data');
+    var pidemuest = '';
+    var pidemat = '';
+    var fechamin = '';
+    var fechamax = '';
+    var desvmin = '';
+    var desvmax = '';
+    var pidemetodo = '';
+    var pidelab = '';
+    for (var i = 0; i < datosmuest.length; i++) {
+      pidemuest += datosmuest[i].id+',';
+    }
+    pidemuest = '{'+pidemuest.substring(',', pidemuest.length - 1)+'}';
+    for (var i = 0; i < datosmat.length; i++) {
+      pidemat += datosmat[i].id+',';
+    }
+    pidemat = '{'+pidemat.substring(',', pidemat.length - 1)+'}';
+    for (var i = 0; i < datosmetodo.length; i++) {
+      pidemetodo += datosmetodo[i].id+',';
+    }
+    pidemetodo = '{'+pidemetodo.substring(',', pidemetodo.length - 1)+'}';
+    for (var i = 0; i < datoslab.length; i++) {
+      pidelab += datoslab[i].id+',';
+    }
+    pidelab = '{'+pidelab.substring(',', pidelab.length - 1)+'}';
+    selYacDat(pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatos);
+  }
+}
+
+/*=========================================
+
+           LLAMADAS A DATOS
+
+===========================================*/
+
+function selYaci(yaci,callback){
+  $.ajax({
+    url: "./datos/selecYaci.php",
+    data:{
+      yaci : yaci
+    },
+    success: callback
+  });
+}
+
+function selYacCronoTipo(prov,tipo,crono,callback){
+  $.ajax({
+    url: "./datos/selecYacCronoTipo.php",
+    data:{
+      prov : prov,
+      tipo : tipo,
+      crono : crono
+    },
+    success: callback
+  });
+}
+
+function selYacDat(tmuestra,tmat,edadmin,edadmax,stdevmin,stdevmax,metod,lab,callback){
+  $.ajax({
+    url: "./datos/selecYacDat.php",
+    data:{
+      tmuestra : tmuestra,
+      tmat : tmat,
+      edadmin : edadmin,
+      edadmax : edadmax,
+      stdevmin : stdevmin,
+      stdevmax : stdevmax,
+      metod : metod,
+      lab : lab
+    },
+    success: callback
+  });
+}
+
+function selYacTodo(prov,tipo,crono,tmuestra,tmat,edadmin,edadmax,stdevmin,stdevmax,metod,lab,callback){
+  $.ajax({
+    url: "./datos/selecYacTodo.php",
+    data:{
+      prov : prov,
+      tipo : tipo,
+      crono : crono,
+      tmuestra : tmuestra,
+      tmat : tmat,
+      edadmin : edadmin,
+      edadmax : edadmax,
+      stdevmin : stdevmin,
+      stdevmax : stdevmax,
+      metod : metod,
+      lab : lab
+    },
+    success: callback
+  });
+}
+
+/*=========================================
+
+           COLOCACIÓN DE DATOS
+
+===========================================*/
+
+  function ponDatos(resultado){
+  $('#tit-resultado').html('Resultado'+'<br>'+resultado.data.length+' dataciones');
+  $('#salida').html(JSON.stringify(resultado, undefined, 2));
+  $('#salida').removeClass('collapse');
+  $('#piensa').addClass('collapse');
 }

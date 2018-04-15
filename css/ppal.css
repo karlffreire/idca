@@ -36,7 +36,10 @@ h5{
   color: white;
 }
 
-.boton-inic{
+.boton-flujo{
+  font-size: 1.5em;
+  color: white;
+  border-width: 0px;
   border-radius: 0.25em;
   background-color: #FF7542;
   padding-left: 1em;
@@ -45,10 +48,22 @@ h5{
   padding-bottom: 0.5em;
   cursor: pointer;
 }
-.boton-inic:hover{
+.boton-flujo:hover{
   background-color: #a74b29;
 }
 
+.panel-resultados{
+  background-color: #F78181;
+  padding: 1em;
+}
+.panel-resultados h4{
+  color: #FF0000;
+}
+#salida{
+  columns: 2;
+  -webkit-columns: 2;
+  -moz-columns: 2;
+}
 /* Tabs*/
 section {
   padding: 1em;
@@ -80,26 +95,21 @@ section {
   margin-bottom: 1em;
 }
 
- /* .select2-results__options{
-  float:left;
-  width: 30%;
-} */
-/* .select2-results__group{
-  float:left;
-  width: 30%;
-} */
-
-.select2-results__options--nested{
-  float: left;
-  width: 50%;
+.select2-results__option ul {
+  columns: 2;
+  -webkit-columns: 2;
+  -moz-columns: 2;
 }
-/*
-.select2-results__option{
-  float:left;
-  width: 30%;
-} */
+
+.select2-results__option--highlighted {
+  background-color: #FF7542 !important;
+}
 
 /*rangeSlider:*/
 .irs-from, .irs-to, .irs-single{
   background-color:#FF7542;
+}
+
+.irs-bar, .irs-line-left,.irs-line-mid,.irs-line-right, .irs-slider.to, .irs-slider.from{
+  cursor:pointer;
 }

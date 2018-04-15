@@ -93,6 +93,18 @@ function listaTiposMaterial(){
   return null;
 }
 
+function listaRangos(){
+  $db = conectaBD();
+  $prp = pg_prepare($db,"lst-rangos","select min(edad_c14) as fechamininit, max(edad_c14) as fechamaxinit, min(desviacion) as desvmininit, max(desviacion) as desvmaxinit from c14.datacion_c14;");
+  $prp = pg_execute($db,"lst-rangos",array());
+  $rangos=pg_fetch_assoc($prp);
+  pg_close($db);
+  if (isset($rangos)) {
+    return $rangos;
+  }
+  return null;
+}
+
 function listaMetodos(){
   $db = conectaBD();
  	$prp = pg_prepare($db,"lst-metodos","SELECT id_metodos_medida as id, metodos_medida as text FROM c14.metodos_medida ORDER BY id;");
@@ -128,58 +140,229 @@ function listaLaboratorios(){
 ======================================
 */
 
-function selecPorYac($prov,$tipo,$cronos){
+function selecYac($yaci){
+  $db = conectaBD();
+  $prp = pg_prepare($db,"yaci","SELECT yacis_carbon.id_yaci, id_prov, cronotipo, ubicacion,x,y, id_material_c14, id_datacion_c14, id_tipo_muestra_c14, mostrar_tipomat, fecha, stdev, id_metodos_medida,id_laboratorio FROM public.yacis_carbon INNER JOIN public.data_carbon ON yacis_carbon.id_yaci = data_carbon.id_yaci WHERE yacis_carbon.id_yaci = $1;");
+  $prp = pg_execute($db,"yaci",array($yaci));
+  while ($row=pg_fetch_assoc($prp)){
+    $dataciones[] = $row;
+  }
+  pg_close($db);
+  if (isset($dataciones)) {
+    return $dataciones;
+  }
+    return 'nodatos';
+}
+
+function selecPorYac($pideprov,$pidetipo,$pidecronos){
+  $prov='';
+  $tipo='';
+  $cronos='';
+  if ($pideprov == '{}') {
+    $regiones = listaRegiones();
+    foreach ($regiones as $key => $region) {
+      $prov .= $region['id'].',';
+    }
+    $prov = '{'.rtrim($prov,',').'}';
+  }
+  else {
+    $prov = $pideprov;
+  }
+  if ($pidetipo == '{}') {
+    $tiposyac = listaTiposYac();
+    foreach ($tiposyac as $key => $tipoyac) {
+      $tipo .= $tipoyac['id'].',';
+    }
+    $tipo = '{'.rtrim($tipo,',').'}';
+  }
+  else {
+    $tipo = $pidetipo;
+  }
+  if ($pidecronos == '{}') {
+    $cronosyac = listaCronos();
+    foreach ($cronosyac as $key => $cronoyac) {
+      $cronos .= $cronoyac['id'].',';
+    }
+    $cronos = '{'.rtrim($cronos,',').'}';
+  }
+  else {
+    $cronos = $pidecronos;
+  }
   $db = conectaBD();
  	$prp = pg_prepare($db,"poryac","SELECT yacis_carbon.id_yaci, id_prov, cronotipo, ubicacion,x,y, id_material_c14, id_datacion_c14, id_tipo_muestra_c14, mostrar_tipomat, fecha, stdev, id_metodos_medida,id_laboratorio FROM public.yacis_carbon INNER JOIN public.data_carbon ON yacis_carbon.id_yaci = data_carbon.id_yaci WHERE id_prov = any ($1) and arrtipo && $2 and arrcrono && $3;");
   $prp = pg_execute($db,"poryac",array($prov,$tipo,$cronos));
 	while ($row=pg_fetch_assoc($prp)){
-		$yacis[] = $row;
+		$dataciones[] = $row;
 	}
   pg_close($db);
-  if (isset($yacis)) {
-    return $yacis;
+  if (isset($dataciones)) {
+    return $dataciones;
   }
   return null;
 }
 
-function selecPorDat($tmuestra,$tmat,$edadmin,$edadmax,$stdevmin,$stdevmax,$metod,$lab){
+function selecPorDat($pidetmuestra,$pidetmat,$pideedadmin,$pideedadmax,$pidestdevmin,$pidestdevmax,$pidemetod,$pidelab){
+  $tmuestra='';
+  $tmat='';
+  $edadmin='';
+  $edadmax='';
+  $stdevmin='';
+  $stdevmax='';
+  $metod='';
+  $lab='';
+  if ($pidetmuestra == '{}') {
+    $tmuestras = listaTiposMuestra();
+    foreach ($tmuestras as $key => $muest) {
+      $tmuestra .= $muest['id'].',';
+    }
+    $tmuestra = '{'.rtrim($tmuestra,',').'}';
+  }
+  else {
+    $tmuestra = $pidetmuestra;
+  }
+  if ($pidetmat == '{}') {
+    $tiposmat = listaTiposMaterial();
+    foreach ($tiposmat as $key => $tipomat) {
+      $tmat .= $tipomat['id'].',';
+    }
+    $tmat = '{'.rtrim($tmat,',').'}';
+  }
+  else {
+    $tmat = $pidetmat;
+  }
+  if ($pideedadmin == '') {
+    $rangos = listaRangos();
+    $edadmin=$rangos['fechamininit'];
+    $edadmax=$rangos['fechamaxinit'];
+    $stdevmin=$rangos['desvmininit'];
+    $stdevmax=$rangos['desvmaxinit'];
+  }
+  else {
+    $edadmin=$pideedadmin;
+    $edadmax=$pideedadmax;
+    $stdevmin=$pidestdevmin;
+    $stdevmax=$pidestdevmax;
+  }
+  if ($pidemetod == '{}') {
+    $tiposmetodos = listaMetodos();
+    foreach ($tiposmetodos as $key => $tipometodo) {
+      $metod .= $tipometodo['id'].',';
+    }
+    $metod = '{'.rtrim($metod,',').'}';
+  }
+  else {
+    $metod = $pidemetod;
+  }
+  if ($pidelab == '{}') {
+    $listalabs = listaLaboratorios();
+    foreach ($listalabs as $key => $listalab) {
+      $lab .= $listalab['id'].',';
+    }
+    $lab = '{'.rtrim($lab,',').'}';
+  }
+  else {
+    $lab = $pidelab;
+  }
   $db = conectaBD();
  	$prp = pg_prepare($db,"pordat","SELECT yacis_carbon.id_yaci, id_prov, cronotipo, ubicacion,x,y, id_material_c14, id_datacion_c14, id_tipo_muestra_c14, mostrar_tipomat, fecha, stdev, id_metodos_medida,id_laboratorio FROM public.yacis_carbon INNER JOIN public.data_carbon ON yacis_carbon.id_yaci = data_carbon.id_yaci WHERE id_tipo_muestra_c14 = any ($1) and arrtiptax && $2 and fecha > $3 and fecha < $4 and stdev > $5 and stdev < $6 and id_metodos_medida = any ($7) and id_laboratorio = any ($8);");
   $prp = pg_execute($db,"pordat",array($tmuestra,$tmat,$edadmin,$edadmax,$stdevmin,$stdevmax,$metod,$lab));
 	while ($row=pg_fetch_assoc($prp)){
-		$yacis[] = $row;
+		$dataciones[] = $row;
 	}
   pg_close($db);
-  if (isset($yacis)) {
-    return $yacis;
-  }
-  return null;
-}
-
-function selecYac($yaci){
-  $db = conectaBD();
- 	$prp = pg_prepare($db,"yaci","SELECT yacis_carbon.id_yaci, id_prov, cronotipo, ubicacion,x,y, id_material_c14, id_datacion_c14, id_tipo_muestra_c14, mostrar_tipomat, fecha, stdev, id_metodos_medida,id_laboratorio FROM public.yacis_carbon INNER JOIN public.data_carbon ON yacis_carbon.id_yaci = data_carbon.id_yaci WHERE yacis_carbon.id_yaci = $1;");
-  $prp = pg_execute($db,"yaci",array($yaci));
-	while ($row=pg_fetch_assoc($prp)){
-		$yacis[] = $row;
-	}
-  pg_close($db);
-  if (isset($yacis)) {
-    return $yacis;
+  if (isset($dataciones)) {
+    return $dataciones;
   }
   return null;
 }
 
 function selecPorTodo($prov,$tipo,$cronos,$tmuestra,$tmat,$edadmin,$edadmax,$stdevmin,$stdevmax,$metod,$lab){
+  $prov='';
+  $tipo='';
+  $cronos='';
+  $tmuestra='';
+  $tmat='';
+  $metod='';
+  $lab='';
+  if ($pideprov == '{}') {
+    $regiones = listaRegiones();
+    foreach ($regiones as $key => $region) {
+      $prov .= $region['id'].',';
+    }
+    $prov = '{'.rtrim($prov,',').'}';
+  }
+  else {
+    $prov = $pideprov;
+  }
+  if ($pidetipo == '{}') {
+    $tiposyac = listaTiposYac();
+    foreach ($tiposyac as $key => $tipoyac) {
+      $tipo .= $tipoyac['id'].',';
+    }
+    $tipo = '{'.rtrim($tipo,',').'}';
+  }
+  else {
+    $tipo = $pidetipo;
+  }
+  if ($pidecronos == '{}') {
+    $cronosyac = listaCronos();
+    foreach ($cronosyac as $key => $cronoyac) {
+      $cronos .= $cronoyac['id'].',';
+    }
+    $cronos = '{'.rtrim($cronos,',').'}';
+  }
+  else {
+    $cronos = $pidecronos;
+  }
+  if ($pidetmuestra == '{}') {
+    $tmuestras = listaTiposMuestra();
+    foreach ($tmuestras as $key => $muest) {
+      $tmuestra .= $muest['id'].',';
+    }
+    $tmuestra = '{'.rtrim($tmuestra,',').'}';
+  }
+  else {
+    $tmuestra = $pidetmuestra;
+  }
+  if ($pidetmat == '{}') {
+    $tiposmat = listaTiposMaterial();
+    foreach ($tiposmat as $key => $tipomat) {
+      $tmat .= $tipomat['id'].',';
+    }
+    $tmat = '{'.rtrim($tmat,',').'}';
+  }
+  else {
+    $tmat = $pidetmat;
+  }
+  if ($pidemetod == '{}') {
+    $tiposmetodos = listaMetodos();
+    foreach ($tiposmetodos as $key => $tipometodo) {
+      $metod .= $tipometodo['id'].',';
+    }
+    $metod = '{'.rtrim($metod,',').'}';
+  }
+  else {
+    $metod = $pidemetod;
+  }
+  if ($pidelab == '{}') {
+    $listalabs = listaLaboratorios();
+    foreach ($listalabs as $key => $listalab) {
+      $lab .= $listalab['id'].',';
+    }
+    $lab = '{'.rtrim($lab,',').'}';
+  }
+  else {
+    $lab = $pidelab;
+  }
   $db = conectaBD();
  	$prp = pg_prepare($db,"portodo","SELECT yacis_carbon.id_yaci, id_prov, cronotipo, ubicacion,x,y, id_material_c14, id_datacion_c14, id_tipo_muestra_c14, mostrar_tipomat, fecha, stdev, id_metodos_medida,id_laboratorio FROM public.yacis_carbon INNER JOIN public.data_carbon ON yacis_carbon.id_yaci = data_carbon.id_yaci WHERE id_prov = any ($1) and arrtipo && $2 and arrcrono && $3 and id_tipo_muestra_c14 = any ($4) and arrtiptax && $5 and fecha > $6 and fecha < $7 and stdev > $8 and stdev < $9 and id_metodos_medida = any ($10) and id_laboratorio = any ($11);");
   $prp = pg_execute($db,"portodo",array($prov,$tipo,$cronos,$tmuestra,$tmat,$edadmin,$edadmax,$stdevmin,$stdevmax,$metod,$lab));
 	while ($row=pg_fetch_assoc($prp)){
-		$yacis[] = $row;
+		$dataciones[] = $row;
 	}
   pg_close($db);
-  if (isset($yacis)) {
-    return $yacis;
+  if (isset($dataciones)) {
+    return $dataciones;
   }
   return null;
 }

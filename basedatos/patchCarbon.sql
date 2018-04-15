@@ -147,6 +147,7 @@ SELECT material_c14.id_material_c14, datacion_c14.id_datacion_c14, material_c14.
 INTO public.data_carbon
   FROM c14.material_c14 INNER JOIN c14.tipo_material_material_c14 on material_c14.id_material_c14 = tipo_material_material_c14.id_material_c14
 			INNER JOIN c14.datacion_c14 on material_c14.id_material_c14 = datacion_c14.id_material_c14
+  WHERE edad_c14 is not null
   GROUP BY material_c14.id_material_c14, datacion_c14.id_datacion_c14,datacion_c14.edad_c14, datacion_c14.desviacion, datacion_c14.id_metodos_medida,datacion_c14.id_laboratorio,material_c14.id_cultural_entity,material_c14.id_tipo_muestra_c14,c14.get_array_tipos_material(material_c14.id_material_c14)||c14.get_array_taxones(material_c14.id_material_c14) ;
 
   ALTER TABLE public.data_carbon ADD PRIMARY KEY (id_datacion_c14);
