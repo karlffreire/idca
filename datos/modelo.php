@@ -367,4 +367,99 @@ function selecPorTodo($pideprov,$pidetipo,$pidecronos,$pidetmuestra,$pidetmat,$e
   return null;
 }
 
+function selecDataciones($pideprov,$pidetipo,$pidecronos,$pidetmuestra,$pidetmat,$pideedadmin,$pideedadmax,$pidestdevmin,$pidestdevmax,$pidemetod,$pidelab){
+  $select ="SELECT yacis_carbon.id_yaci, id_prov, cronotipo, ubicacion,x,y, id_material_c14, id_datacion_c14, id_tipo_muestra_c14, mostrar_tipomat, fecha, stdev, id_metodos_medida,id_laboratorio FROM public.yacis_carbon INNER JOIN public.data_carbon ON yacis_carbon.id_yaci = data_carbon.id_yaci WHERE ";
+  $where = '';
+  if ($pideprov != '') {
+    $provs = explode('-',$pideprov);
+    $txtfilt = '';
+    foreach ($provs as $key => $value) {
+      if (filter_var($value,FILTER_VALIDATE_INT)) {
+        $txtfilt .= $value.',';
+      }
+    }
+    $where .= 'AND id_prov in ('.rtrim($txtfilt,',').')';
+  }
+  if ($pidetipo != '') {
+    $tipos = explode('-',$pidetipo);
+    $txtfilt = '';
+    foreach ($tipos as $key => $value) {
+      if (filter_var($value,FILTER_VALIDATE_INT)) {
+        $txtfilt .= $value.',';
+      }
+    }
+    $where .= ' AND arrtipo && ARRAY['.rtrim($txtfilt,',').']';
+  }
+  if ($pidecronos != '') {
+    $cronos = explode('-',$pidecronos);
+    $txtfilt = '';
+    foreach ($cronos as $key => $value) {
+      if (filter_var($value,FILTER_VALIDATE_INT)) {
+        $txtfilt .= $value.',';
+      }
+    }
+    $where .= ' AND arrcrono && ARRAY['.rtrim($txtfilt,',').']';
+  }
+  if ($pidetmuestra != '') {
+    $tmuestra = explode('-',$pidetmuestra);
+    $txtfilt = '';
+    foreach ($tmuestra as $key => $value) {
+      if (filter_var($value,FILTER_VALIDATE_INT)) {
+        $txtfilt .= $value.',';
+      }
+    }
+    $where .= ' AND id_tipo_muestra_c14 IN ('.rtrim($txtfilt,',').')';
+  }
+  if ($pidetmat != '') {
+    $tmat = explode('-',$pidetmat);
+    $txtfilt = '';
+    foreach ($tmat as $key => $value) {
+      if (filter_var($value,FILTER_VALIDATE_INT)) {
+        $txtfilt .= $value.',';
+      }
+    }
+    $where .= ' AND arrtiptax && ARRAY['.rtrim($txtfilt,',').']';
+  }
+  if ($pideedadmin != '') {//Estas van en bloque porque si se inicializan las barras ya tenemos todos los valores
+    $edadmin  = filter_var($pideedadmin,FILTER_VALIDATE_INT);
+    $edadmax = filter_var($pideedadmax,FILTER_VALIDATE_INT);
+    $stdevmin = filter_var($pidestdevmin,FILTER_VALIDATE_INT);
+    $stdevmax = filter_var($pidestdevmax,FILTER_VALIDATE_INT);
+    $where .= " AND fecha > $edadmin AND fecha < $edadmax AND stdev > $stdevmin AND stdev < $stdevmax";
+  }
+  if ($pidemetod != '') {
+    $metodos = explode('-',$pidemetod);
+    $txtfilt = '';
+    foreach ($metodos as $key => $value) {
+      if (filter_var($value,FILTER_VALIDATE_INT)) {
+        $txtfilt .= $value.',';
+      }
+    }
+    $where .= ' AND id_metodos_medida IN ('.rtrim($txtfilt,',').')';
+  }
+  if ($pidelab != '') {
+    $labs = explode('-',$pidelab);
+    $txtfilt = '';
+    foreach ($labs as $key => $value) {
+      if (filter_var($value,FILTER_VALIDATE_INT)) {
+        $txtfilt .= $value.',';
+      }
+    }
+    $where .= ' AND id_laboratorio IN ('.rtrim($txtfilt,',').')';
+  }
+  $db = conectaBD();
+  $resultado = pg_query($db,$select.ltrim(pg_escape_string($where),' AND'));//revisar pg_send_query y pg_connection_busy
+  if (!$resultado) {
+    return pg_last_error($db);//ver manejo errores
+  }
+  while ($row=pg_fetch_assoc($resultado)){
+		$dataciones[] = $row;
+	}
+  pg_close($db);
+  if (isset($dataciones)) {
+    return $dataciones;
+  }
+  return null;
+}
+
  ?>
