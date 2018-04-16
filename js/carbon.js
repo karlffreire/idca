@@ -312,7 +312,7 @@ function initSelMat(resultado){
     placeholder: '*',
     allowClear: true,
     theme: "bootstrap",
-    maximumSelectionLength:3,
+    //maximumSelectionLength:3,
     templateResult: colPorGrupo
   });
 }
@@ -332,7 +332,7 @@ function initBarras(resultado){
     step: 100,
     postfix: " BP",
     onFinish:function(data){
-      tipoFilSelec.filtmatdat = true;
+      tipoFilSelec.filtdat = true;
       salvarFecha(data);
     }
   });
@@ -346,7 +346,7 @@ function initBarras(resultado){
     step: 50,
     postfix: "",
     onFinish:function(data){
-      tipoFilSelec.filtmatdat = true;
+      tipoFilSelec.filtdat = true;
       salvarDesv(data);
     }
   });
@@ -397,6 +397,7 @@ function buscaDatYaci(idyaci){
 function ejecutaFiltros(){
   $('#salida').html('');
   $('#piensa').removeClass('collapse');
+  console.log(tipoFilSelec);
   if (!tipoFilSelec.filtyac && !tipoFilSelec.filtmat && !tipoFilSelec.filtdat) {
     alert(noSelec);
   }
@@ -426,10 +427,7 @@ function ejecutaFiltros(){
     var datosmat = $('#seltipomat').select2('data');
     var pidemuest = '';
     var pidemat = '';
-    var fechamin = '';
-    var fechamax = '';
-    var desvmin = '';
-    var desvmax = '';
+
     var pidemetodo = '{}';
     var pidelab = '{}';
     for (var i = 0; i < datosmuest.length; i++) {
@@ -442,15 +440,30 @@ function ejecutaFiltros(){
     pidemat = '{'+pidemat.substring(',', pidemat.length - 1)+'}';
     selYacDat(pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatos);
   }
-  else if (!tipoFilSelec.filtyac && !tipoFilSelec.filtmat && tipoFilSelec.filtdat){
+  else if (!tipoFilSelec.filtyac && !tipoFilSelec.filtmat && tipoFilSelec.filtdat){//este falla
     var datosmetodo = $('#selmetodo').select2('data');
     var datoslab = $('#sellab').select2('data');
     var pidemuest = '{}';
     var pidemat = '{}';
-    var fechamin = '';
-    var fechamax = '';
-    var desvmin = '';
-    var desvmax = '';
+
+    var pidemetodo = '';
+    var pidelab = '';
+    for (var i = 0; i < datosmetodo.length; i++) {
+      pidemetodo += datosmetodo[i].id+',';
+    }
+    pidemetodo = '{'+pidemetodo.substring(',', pidemetodo.length - 1)+'}';
+    for (var i = 0; i < datoslab.length; i++) {
+      pidelab += datoslab[i].id+',';
+    }
+    pidelab = '{'+pidelab.substring(',', pidelab.length - 1)+'}';
+    selYacDat(pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatos);
+  }
+  else if (!tipoFilSelec.filtyac && tipoFilSelec.filtmat && tipoFilSelec.filtdat){
+    var datosmetodo = $('#selmetodo').select2('data');
+    var datoslab = $('#sellab').select2('data');
+    var pidemuest = '{}';
+    var pidemat = '{}';
+
     var pidemetodo = '';
     var pidelab = '';
     for (var i = 0; i < datosmetodo.length; i++) {
@@ -464,18 +477,33 @@ function ejecutaFiltros(){
     selYacDat(pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatos);
   }
   else if (tipoFilSelec.filtyac && tipoFilSelec.filtmat && tipoFilSelec.filtdat){
+    var datosreg = $('#selprov').select2('data');
+    var datostipo = $('#seltipoyac').select2('data');
+    var datoscrono = $('#selcronoyac').select2('data');
     var datosmuest = $('#seltipomuest').select2('data');
     var datosmat = $('#seltipomat').select2('data');
     var datosmetodo = $('#selmetodo').select2('data');
     var datoslab = $('#sellab').select2('data');
+    var pidereg = '';
+    var pidetipo = '';
+    var pidecrono = '';
     var pidemuest = '';
     var pidemat = '';
-    var fechamin = '';
-    var fechamax = '';
-    var desvmin = '';
-    var desvmax = '';
+
     var pidemetodo = '';
     var pidelab = '';
+    for (var i = 0; i < datosreg.length; i++) {
+      pidereg += datosreg[i].id+',';
+    }
+    pidereg = '{'+pidereg.substring(',', pidereg.length - 1)+'}';
+    for (var i = 0; i < datostipo.length; i++) {
+      pidetipo += datostipo[i].id+',';
+    }
+    pidetipo = '{'+pidetipo.substring(',', pidetipo.length - 1)+'}';
+    for (var i = 0; i < datoscrono.length; i++) {
+      pidecrono += datoscrono[i].id+',';
+    }
+    pidecrono = '{'+pidecrono.substring(',', pidecrono.length - 1)+'}';
     for (var i = 0; i < datosmuest.length; i++) {
       pidemuest += datosmuest[i].id+',';
     }
@@ -492,7 +520,7 @@ function ejecutaFiltros(){
       pidelab += datoslab[i].id+',';
     }
     pidelab = '{'+pidelab.substring(',', pidelab.length - 1)+'}';
-    selYacDat(pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatos);
+    selYacTodo(pidereg,pidetipo,pidecrono,pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatos);
   }
 }
 

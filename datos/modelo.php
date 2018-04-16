@@ -276,7 +276,7 @@ function selecPorDat($pidetmuestra,$pidetmat,$pideedadmin,$pideedadmax,$pidestde
   return null;
 }
 
-function selecPorTodo($prov,$tipo,$cronos,$tmuestra,$tmat,$edadmin,$edadmax,$stdevmin,$stdevmax,$metod,$lab){
+function selecPorTodo($pideprov,$pidetipo,$pidecronos,$pidetmuestra,$pidetmat,$edadmin,$edadmax,$stdevmin,$stdevmax,$pidemetod,$pidelab){
   $prov='';
   $tipo='';
   $cronos='';
@@ -284,7 +284,7 @@ function selecPorTodo($prov,$tipo,$cronos,$tmuestra,$tmat,$edadmin,$edadmax,$std
   $tmat='';
   $metod='';
   $lab='';
-  if ($pideprov == '{}') {
+  if ($pideprov == '{}') {//ARREGLAR ESTO
     $regiones = listaRegiones();
     foreach ($regiones as $key => $region) {
       $prov .= $region['id'].',';
