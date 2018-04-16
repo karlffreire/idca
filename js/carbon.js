@@ -331,6 +331,9 @@ function initBarras(resultado){
     to: 45000,
     step: 100,
     postfix: " BP",
+    onStart:function(data){
+      salvarFecha(data);
+    },
     onFinish:function(data){
       tipoFilSelec.filtdat = true;
       salvarFecha(data);
@@ -345,6 +348,9 @@ function initBarras(resultado){
     to: 4500,
     step: 50,
     postfix: "",
+    onStart:function(data){
+      salvarDesv(data);
+    },
     onFinish:function(data){
       tipoFilSelec.filtdat = true;
       salvarDesv(data);
@@ -401,7 +407,7 @@ function ejecutaFiltros(){
   if (!tipoFilSelec.filtyac && !tipoFilSelec.filtmat && !tipoFilSelec.filtdat) {
     alert(noSelec);
   }
-  else if (tipoFilSelec.filtyac && !tipoFilSelec.filtmat && !tipoFilSelec.filtdat){
+  else if ((tipoFilSelec.filtyac && !tipoFilSelec.filtmat && !tipoFilSelec.filtdat)){
     var datosreg = $('#selprov').select2('data');
     var datostipo = $('#seltipoyac').select2('data');
     var datoscrono = $('#selcronoyac').select2('data');
@@ -427,7 +433,7 @@ function ejecutaFiltros(){
     var datosmat = $('#seltipomat').select2('data');
     var pidemuest = '';
     var pidemat = '';
-
+    var rangos = {"fechamin":1000,"fechamax":40000,"desvmin":100,"desvmax":4000};//esto habrá que cambiarlo por una llamada ajax
     var pidemetodo = '{}';
     var pidelab = '{}';
     for (var i = 0; i < datosmuest.length; i++) {
@@ -438,14 +444,13 @@ function ejecutaFiltros(){
       pidemat += datosmat[i].id+',';
     }
     pidemat = '{'+pidemat.substring(',', pidemat.length - 1)+'}';
-    selYacDat(pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatos);
+    selYacDat(pidemuest,pidemat,rangos.fechamin,rangos.fechamax,rangos.desvmin,rangos.desvmax,pidemetodo,pidelab,ponDatos);
   }
-  else if (!tipoFilSelec.filtyac && !tipoFilSelec.filtmat && tipoFilSelec.filtdat){//este falla
+  else if (!tipoFilSelec.filtyac && !tipoFilSelec.filtmat && tipoFilSelec.filtdat){
     var datosmetodo = $('#selmetodo').select2('data');
     var datoslab = $('#sellab').select2('data');
     var pidemuest = '{}';
     var pidemat = '{}';
-
     var pidemetodo = '';
     var pidelab = '';
     for (var i = 0; i < datosmetodo.length; i++) {
@@ -476,7 +481,7 @@ function ejecutaFiltros(){
     pidelab = '{'+pidelab.substring(',', pidelab.length - 1)+'}';
     selYacDat(pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatos);
   }
-  else if (tipoFilSelec.filtyac && tipoFilSelec.filtmat && tipoFilSelec.filtdat){
+  else if ((tipoFilSelec.filtyac && tipoFilSelec.filtmat && tipoFilSelec.filtdat)||(tipoFilSelec.filtyac && !tipoFilSelec.filtmat && tipoFilSelec.filtdat)||(tipoFilSelec.filtyac && tipoFilSelec.filtmat && !tipoFilSelec.filtdat)){//No funcionan las dos últimas porque pueden no haberse inicializado los combos 
     var datosreg = $('#selprov').select2('data');
     var datostipo = $('#seltipoyac').select2('data');
     var datoscrono = $('#selcronoyac').select2('data');
@@ -489,7 +494,6 @@ function ejecutaFiltros(){
     var pidecrono = '';
     var pidemuest = '';
     var pidemat = '';
-
     var pidemetodo = '';
     var pidelab = '';
     for (var i = 0; i < datosreg.length; i++) {
@@ -595,9 +599,15 @@ function selYacTodo(prov,tipo,crono,tmuestra,tmat,edadmin,edadmax,stdevmin,stdev
 
 ===========================================*/
 
-  function ponDatos(resultado){
-  $('#tit-resultado').html('Resultado'+'<br>'+resultado.data.length+' dataciones');
-  $('#salida').html(JSON.stringify(resultado, undefined, 2));
+function ponDatos(resultado){
+  if (resultado.data) {
+    $('#tit-resultado').html('Resultado'+'<br>'+resultado.data.length+' dataciones');
+    $('#salida').html(JSON.stringify(resultado, undefined, 2));
+  }
+  else {
+    $('#tit-resultado').html('Resultado<br>0 dataciones');
+    $('#salida').html('No hay ninguna datación con esas características');
+  }
   $('#salida').removeClass('collapse');
   $('#piensa').addClass('collapse');
 }
