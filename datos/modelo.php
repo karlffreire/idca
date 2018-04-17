@@ -451,7 +451,7 @@ function selecDataciones($pideprov,$pidetipo,$pidecronos,$pidetmuestra,$pidetmat
   $db = conectaBD();
   $resultado = pg_query($db,$select.ltrim(pg_escape_string($where),' AND'));//revisar pg_send_query y pg_connection_busy
   if (!$resultado) {
-    return pg_last_error($db);//ver manejo errores
+    return pg_last_error($db);
   }
   while ($row=pg_fetch_assoc($resultado)){
 		$dataciones[] = $row;
