@@ -367,6 +367,7 @@ function selecPorTodo($pideprov,$pidetipo,$pidecronos,$pidetmuestra,$pidetmat,$e
   return null;
 }
 
+//SI SE ESTABLECEN LÍMITES EN LA INTERFAZ TAMBIÉN HAY QUE REPRODUCIRLOS AQUÍ ANTES DE LANZAR LA CONSULTA
 function selecDataciones($pideprov,$pidetipo,$pidecronos,$pidetmuestra,$pidetmat,$pideedadmin,$pideedadmax,$pidestdevmin,$pidestdevmax,$pidemetod,$pidelab){
   $select ="SELECT yacis_carbon.id_yaci, id_prov, cronotipo, ubicacion,x,y, id_material_c14, id_datacion_c14, id_tipo_muestra_c14, mostrar_tipomat, fecha, stdev, id_metodos_medida,id_laboratorio FROM public.yacis_carbon INNER JOIN public.data_carbon ON yacis_carbon.id_yaci = data_carbon.id_yaci WHERE ";
   $where = '';

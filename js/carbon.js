@@ -325,10 +325,17 @@ function initBarras(resultado){
     grid: true,
     min: initfechmin,
     max: initfechmax,
-    from: 2000,
-    to: 45000,
+    max_interval: 5000,
+    drag_interval:true,
+    from: 5000,
+    to: 10000,
     step: 100,
     postfix: " BP",
+    // prettify: function (n) {
+    // 	var lg = Math.log(n);
+    //     var rLg = +lg.toFixed(2);
+    // 	return rLg;
+    // },
     onStart:function(data){
       salvarFecha(data);
     },
@@ -527,93 +534,98 @@ function ejecutaFiltros(){
 }
 
 function ejecutaQuery(){
-  $('#salida').html('');
-  $('#piensa').removeClass('collapse');
-  var inityac = $('#selprov').hasClass("select2-hidden-accessible");
-  var initmat = $('#seltipomuest').hasClass("select2-hidden-accessible");
-  var initdat = $('#selmetodo').hasClass("select2-hidden-accessible");
-  var pidereg = '';
-  var pidetipo = '';
-  var pidecrono = '';
-  var pidemuest = '';
-  var pidemat = '';
-  var pidemetodo = '';
-  var pidelab = '';
-  //Recogemos los datos, y si no hay, false
-  if (inityac) {
-    var datosreg = ($('#selprov').find(':selected').length > 0) ? $('#selprov').select2('data') : false;
-    var datostipo = ($('#seltipoyac').find(':selected').length > 0) ? $('#seltipoyac').select2('data') : false;
-    var datoscrono = ($('#selcronoyac').find(':selected').length > 0) ? $('#selcronoyac').select2('data') : false;
+  if (!tipoFilSelec.filtyac&&!tipoFilSelec.filtmat&&!tipoFilSelec.filtdat) {
+    alert(noSelec);
   }
-  else if (!inityac) {
-    var datosreg = false;
-    var datostipo = false;
-    var datoscrono = false;
-  }
-  if (initmat) {
-    var datosmuest = ($('#seltipomuest').find(':selected').length > 0) ? $('#seltipomuest').select2('data') : false;
-    var datosmat = ($('#seltipomat').find(':selected').length > 0) ? $('#seltipomat').select2('data') : false;
-  }
-  else if (!initmat) {
-    var datosmuest = false;
-    var datosmat = false;
-  }
-  if (initdat) {
-    var datosmetodo = ($('#selmetodo').find(':selected').length > 0) ? $('#selmetodo').select2('data') : false;
-    var datoslab = ($('#sellab').find(':selected').length > 0) ? $('#sellab').select2('data') : false;
-  }
-  else if (!initdat) {
-    fechamin = '';
-    fechamax = '';
-    desvmin = '';
-    desvmax = '';
-    var datosmetodo = false;
-    var datoslab = false;
-  }
-  //rellenamos las variables para pasar al controlador:
-  if (datosreg) {
-    for (var i = 0; i < datosreg.length; i++) {
-      pidereg += datosreg[i].id+'-';
+  else{
+    $('#salida').html('');
+    $('#piensa').removeClass('collapse');
+    var inityac = $('#selprov').hasClass("select2-hidden-accessible");
+    var initmat = $('#seltipomuest').hasClass("select2-hidden-accessible");
+    var initdat = $('#selmetodo').hasClass("select2-hidden-accessible");
+    var pidereg = '';
+    var pidetipo = '';
+    var pidecrono = '';
+    var pidemuest = '';
+    var pidemat = '';
+    var pidemetodo = '';
+    var pidelab = '';
+    //Recogemos los datos, y si no hay, false
+    if (inityac) {
+      var datosreg = ($('#selprov').find(':selected').length > 0) ? $('#selprov').select2('data') : false;
+      var datostipo = ($('#seltipoyac').find(':selected').length > 0) ? $('#seltipoyac').select2('data') : false;
+      var datoscrono = ($('#selcronoyac').find(':selected').length > 0) ? $('#selcronoyac').select2('data') : false;
     }
-    pidereg = pidereg.substring('-',pidereg.length - 1);
-  }
-  if (datostipo) {
-    for (var i = 0; i < datostipo.length; i++) {
-      pidetipo += datostipo[i].id+'-';
+    else if (!inityac) {
+      var datosreg = false;
+      var datostipo = false;
+      var datoscrono = false;
     }
-    pidetipo = pidetipo.substring('-',pidetipo.length - 1);
-  }
-  if (datoscrono) {
-    for (var i = 0; i < datoscrono.length; i++) {
-      pidecrono += datoscrono[i].id+'-';
+    if (initmat) {
+      var datosmuest = ($('#seltipomuest').find(':selected').length > 0) ? $('#seltipomuest').select2('data') : false;
+      var datosmat = ($('#seltipomat').find(':selected').length > 0) ? $('#seltipomat').select2('data') : false;
     }
-    pidecrono = pidecrono.substring('-',pidecrono.length - 1);
-  }
-  if (datosmuest) {
-    for (var i = 0; i < datosmuest.length; i++) {
-      pidemuest += datosmuest[i].id+'-';
+    else if (!initmat) {
+      var datosmuest = false;
+      var datosmat = false;
     }
-    pidemuest = pidemuest.substring('-',pidemuest.length - 1);
-  }
-  if (datosmat) {
-    for (var i = 0; i < datosmat.length; i++) {
-      pidemat += datosmat[i].id+'-';
+    if (initdat) {
+      var datosmetodo = ($('#selmetodo').find(':selected').length > 0) ? $('#selmetodo').select2('data') : false;
+      var datoslab = ($('#sellab').find(':selected').length > 0) ? $('#sellab').select2('data') : false;
     }
-    pidemat = pidemat.substring('-',pidemat.length - 1);
-  }
-  if (datosmetodo) {
-    for (var i = 0; i < datosmetodo.length; i++) {
-      pidemetodo += datosmetodo[i].id+'-';
+    else if (!initdat) {
+      fechamin = '';
+      fechamax = '';
+      desvmin = '';
+      desvmax = '';
+      var datosmetodo = false;
+      var datoslab = false;
     }
-    pidemetodo = pidemetodo.substring('-',pidemetodo.length - 1);
-  }
-  if (datoslab) {
-    for (var i = 0; i < datoslab.length; i++) {
-      pidelab += datoslab[i].id+'-';
+    //rellenamos las variables para pasar al controlador:
+    if (datosreg) {
+      for (var i = 0; i < datosreg.length; i++) {
+        pidereg += datosreg[i].id+'-';
+      }
+      pidereg = pidereg.substring('-',pidereg.length - 1);
     }
-    pidelab = pidelab.substring('-',pidelab.length - 1);
+    if (datostipo) {
+      for (var i = 0; i < datostipo.length; i++) {
+        pidetipo += datostipo[i].id+'-';
+      }
+      pidetipo = pidetipo.substring('-',pidetipo.length - 1);
+    }
+    if (datoscrono) {
+      for (var i = 0; i < datoscrono.length; i++) {
+        pidecrono += datoscrono[i].id+'-';
+      }
+      pidecrono = pidecrono.substring('-',pidecrono.length - 1);
+    }
+    if (datosmuest) {
+      for (var i = 0; i < datosmuest.length; i++) {
+        pidemuest += datosmuest[i].id+'-';
+      }
+      pidemuest = pidemuest.substring('-',pidemuest.length - 1);
+    }
+    if (datosmat) {
+      for (var i = 0; i < datosmat.length; i++) {
+        pidemat += datosmat[i].id+'-';
+      }
+      pidemat = pidemat.substring('-',pidemat.length - 1);
+    }
+    if (datosmetodo) {
+      for (var i = 0; i < datosmetodo.length; i++) {
+        pidemetodo += datosmetodo[i].id+'-';
+      }
+      pidemetodo = pidemetodo.substring('-',pidemetodo.length - 1);
+    }
+    if (datoslab) {
+      for (var i = 0; i < datoslab.length; i++) {
+        pidelab += datoslab[i].id+'-';
+      }
+      pidelab = pidelab.substring('-',pidelab.length - 1);
+    }
+    selecDataciones(pidereg,pidetipo,pidecrono,pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatos);
   }
-  selecDataciones(pidereg,pidetipo,pidecrono,pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatos);
 }
 
 /*=========================================
