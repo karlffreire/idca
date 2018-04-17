@@ -16,6 +16,7 @@ var etiMetodo = '';
 var etiLab = '';
 var filtraYa = '';
 var noSelec = '';
+var pocoSelec = '';
 
 function ponIdioma(ln){
   if (ln == 'es') {
@@ -37,6 +38,7 @@ function ponIdioma(ln){
     etiLab = 'Laboratorios';
     filtraYa = 'Filtra dataciones';
     noSelec = 'Es necesario seleccionar algún filtro';
+    pocoSelec = 'Te has olvidado de completar algún filtro';
   }
   else if (ln == 'en'){
     titulo = 'Carbon IDEArq';
@@ -57,6 +59,7 @@ function ponIdioma(ln){
     etiLab = 'Laboratories';
     filtraYa = 'Filter datings';
     noSelec = 'Some filtering options required';
+    pocoSelec = 'You have forgotten to choose a filter';
   }
   $('#titulo').html(titulo);
   $('#tit-buscayaci').html(tituloBuscaYaci);

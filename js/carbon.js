@@ -268,6 +268,7 @@ function initSelReg(resultado){
     placeholder: '*',
     allowClear: true,
     theme: "bootstrap",
+    maximumSelectionLength:12,
     templateResult: colPorGrupo
   });
 }
@@ -279,6 +280,7 @@ function initSelTipYac(resultado){
     placeholder: '*',
     allowClear: true,
     theme: "bootstrap",
+    maximumSelectionLength:4,
     templateResult: colPorGrupo
   });
 }
@@ -289,6 +291,7 @@ function initSelCronYac(resultado){
     data:data,
     placeholder: '*',
     theme: "bootstrap",
+    maximumSelectionLength:3,
     allowClear: true
   });
 }
@@ -299,7 +302,9 @@ function initSelTipMuest(resultado){
     data:data,
     placeholder: '*',
     allowClear: true,
-    theme: "bootstrap"
+    theme: "bootstrap",
+    maximumSelectionLength:3,
+    allowClear: true
   });
 }
 
@@ -310,7 +315,7 @@ function initSelMat(resultado){
     placeholder: '*',
     allowClear: true,
     theme: "bootstrap",
-    //maximumSelectionLength:3,
+    maximumSelectionLength:4,
     templateResult: colPorGrupo
   });
 }
@@ -325,8 +330,8 @@ function initBarras(resultado){
     grid: true,
     min: initfechmin,
     max: initfechmax,
-    //max_interval: 5000,
-    //drag_interval:true,
+    max_interval: 5000,
+    drag_interval:true,
     from: 5000,
     to: 10000,
     step: 100,
@@ -349,7 +354,7 @@ function initBarras(resultado){
     grid: true,
     min: initdesvmin,
     max: initdesvmax,
-    from: 200,
+    from: initdesvmin,
     to: 4500,
     step: 50,
     postfix: "",
@@ -369,7 +374,9 @@ function initSelMetod(resultado){
     data:data,
     placeholder: '*',
     allowClear: true,
-    theme: "bootstrap"
+    theme: "bootstrap",
+    maximumSelectionLength:2,
+    allowClear: true
   });
 }
 
@@ -624,7 +631,12 @@ function ejecutaQuery(){
       }
       pidelab = pidelab.substring('-',pidelab.length - 1);
     }
-    selecDataciones(pidereg,pidetipo,pidecrono,pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatos);
+    if (!datosreg||!datostipo||!datoscrono||!datosmuest||!datosmat||!datosmetodo) {
+      alert(pocoSelec);
+    }
+    else {
+      selecDataciones(pidereg,pidetipo,pidecrono,pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatos);
+    }
   }
 }
 
