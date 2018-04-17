@@ -265,7 +265,7 @@ function initSelReg(resultado){
   var data = organizaOpciones(resultado);
   $('#selprov').select2({
     data:data,
-    placeholder: '*',
+    placeholder: '12 items max',
     allowClear: true,
     theme: "bootstrap",
     maximumSelectionLength:12,
@@ -277,7 +277,7 @@ function initSelTipYac(resultado){
   var data = organizaOpciones(resultado);
   $('#seltipoyac').select2({
     data:data,
-    placeholder: '*',
+    placeholder: '4 items max',
     allowClear: true,
     theme: "bootstrap",
     maximumSelectionLength:4,
@@ -289,7 +289,7 @@ function initSelCronYac(resultado){
   var data = resultado;
   $('#selcronoyac').select2({
     data:data,
-    placeholder: '*',
+    placeholder: '3 items max',
     theme: "bootstrap",
     maximumSelectionLength:3,
     allowClear: true
@@ -300,7 +300,7 @@ function initSelTipMuest(resultado){
   var data = resultado;
   $('#seltipomuest').select2({
     data:data,
-    placeholder: '*',
+    placeholder: '3 items max',
     allowClear: true,
     theme: "bootstrap",
     maximumSelectionLength:3,
@@ -312,7 +312,7 @@ function initSelMat(resultado){
   var data = organizaOpciones(resultado);
   $('#seltipomat').select2({
     data:data,
-    placeholder: '*',
+    placeholder: '4 items max',
     allowClear: true,
     theme: "bootstrap",
     maximumSelectionLength:4,
@@ -330,7 +330,7 @@ function initBarras(resultado){
     grid: true,
     min: initfechmin,
     max: initfechmax,
-    max_interval: 5000,
+    max_interval: 8000,
     drag_interval:true,
     from: 5000,
     to: 10000,
@@ -372,7 +372,7 @@ function initSelMetod(resultado){
   var data = resultado;
   $('#selmetodo').select2({
     data:data,
-    placeholder: '*',
+    placeholder: '2 items max',
     allowClear: true,
     theme: "bootstrap",
     maximumSelectionLength:2,
@@ -633,6 +633,8 @@ function ejecutaQuery(){
     }
     if (!datosreg||!datostipo||!datoscrono||!datosmuest||!datosmat||!datosmetodo) {
       alert(pocoSelec);
+      $('#salida').removeClass('collapse');
+      $('#piensa').addClass('collapse');
     }
     else {
       selecDataciones(pidereg,pidetipo,pidecrono,pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatos);
