@@ -426,7 +426,7 @@ function selecDataciones($pideprov,$pidetipo,$pidecronos,$pidetmuestra,$pidetmat
     $edadmax = filter_var($pideedadmax,FILTER_VALIDATE_INT);
     $stdevmin = filter_var($pidestdevmin,FILTER_VALIDATE_INT);
     $stdevmax = filter_var($pidestdevmax,FILTER_VALIDATE_INT);
-    $where .= " AND fecha > $edadmin AND fecha < $edadmax AND stdev > $stdevmin AND stdev < $stdevmax";
+    $where .= " AND fecha >= $edadmin AND fecha <= $edadmax AND stdev >= $stdevmin AND stdev <= $stdevmax";
   }
   if ($pidemetod != '') {
     $metodos = explode('-',$pidemetod);
