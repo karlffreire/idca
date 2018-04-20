@@ -114,7 +114,7 @@ $BODY$
 
 --DROP TABLE public.yacis_carbon;
 
-DROP TABLE public.yacis_carbon;
+
 WITH geoprep as (
   SELECT id_cultural_entity, st_transform(st_geometryfromtext('POINT('||round((st_x(st_transform(st_centroid(cultural_entity.the_geom),25830))/1000)::numeric,0)*1000||' '||round((st_y(st_transform(st_centroid(cultural_entity.the_geom),25830))/1000)::numeric,0)*1000||')',25830),3857) as the_geom, nut3.gid, nut3.cod_pais
   FROM general.cultural_entity, general.nut3

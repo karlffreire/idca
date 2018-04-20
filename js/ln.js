@@ -16,6 +16,14 @@ var etiMetodo = '';
 var etiLab = '';
 var filtraYa = '';
 var noSelec = '';
+var thYac = '';
+var thUbi = '';
+var thTmuest = '';
+var thTmat = '';
+var thEdad = '';
+var thDsv = '';
+var thMed = '';
+var thLab = '';
 
 function ponIdioma(ln){
   if (ln == 'es') {
@@ -37,6 +45,14 @@ function ponIdioma(ln){
     etiLab = 'Laboratorios';
     filtraYa = 'Filtra dataciones';
     noSelec = 'Es necesario seleccionar algún filtro';
+    thYac = 'Yacimiento';
+    thUbi = 'Ubicación';
+    thTmuest = 'Muestra';
+    thTmat = 'Material';
+    thEdad = 'Fecha';
+    thDsv = 'σ';
+    thMed = 'Método';
+    thLab = 'Laboratorio';
   }
   else if (ln == 'en'){
     titulo = 'Carbon IDEArq';
@@ -57,6 +73,14 @@ function ponIdioma(ln){
     etiLab = 'Laboratories';
     filtraYa = 'Filter datings';
     noSelec = 'Some filtering options required';
+    thYac = 'Site';
+    thUbi = 'Location';
+    thTmuest = 'Sample';
+    thTmat = 'Material';
+    thEdad = 'Date';
+    thDsv = 'σ';
+    thMed = 'Method';
+    thLab = 'Laboratory';
   }
   $('#titulo').html(titulo);
   $('#tit-buscayaci').html(tituloBuscaYaci);
@@ -79,4 +103,12 @@ function ponIdioma(ln){
   $('#tag-selmetodo').html(etiMetodo);
   $('#tag-sellab').html(etiLab);
   $('#filtra-ya').html(filtraYa);
+  $('#th-yac').html(thYac);
+  $('#th-ubi').html(thUbi);
+  $('#th-tmuest').html(thTmuest);
+  $('#th-tmat').html(thTmat);
+  $('#th-edad').html(thEdad);
+  $('#th-dsv').html(thDsv);
+  $('#th-med').html(thMed);
+  $('#th-lab').html(thLab);
 }
