@@ -113,3 +113,27 @@ section {
 .irs-bar, .irs-line-left,.irs-line-mid,.irs-line-right, .irs-slider.to, .irs-slider.from{
   cursor:pointer;
 }
+
+/*tabla*/
+.tabla-dataciones {
+  color:#454545;
+}
+
+.tabla-dataciones td{
+
+  margin:0px;
+}
+
+.tabla-dataciones.table-hover tbody tr:hover td, .tabla-dataciones.table-hover tbody tr:hover th {
+  background-color: rgba(255,177,66,0.6);
+}
+
+.lst-dataciones .page-link{
+  color: #454545;
+}
+
+.lst-dataciones .page-item.active .page-link{
+  background-color: #FF7542;
+  border-color: #FF7542;
+  color: white;
+}

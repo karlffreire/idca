@@ -142,7 +142,7 @@ function listaLaboratorios(){
 
 function selecYac($yaci){
   $db = conectaBD();
-  $prp = pg_prepare($db,"yaci","SELECT yacis_carbon.id_yaci, id_prov, cronotipo, ubicacion,x,y, id_material_c14, id_datacion_c14, id_tipo_muestra_c14, mostrar_tipomat, fecha, stdev, id_metodos_medida,id_laboratorio FROM public.yacis_carbon INNER JOIN public.data_carbon ON yacis_carbon.id_yaci = data_carbon.id_yaci WHERE yacis_carbon.id_yaci = $1;");
+  $prp = pg_prepare($db,"yaci","SELECT yacis_carbon.id_yaci,nombre_yaci, id_prov, cronotipo, ubicacion, id_material_c14, id_datacion_c14, id_tipo_muestra_c14, array_to_string(mostrar_tipomat,'#') as mostrar_tipomat, fecha, stdev, id_metodos_medida,id_laboratorio, sigla, nombre_completo, metodos_medida,tipo_muestra_c14 FROM public.yacis_carbon INNER JOIN public.data_carbon ON yacis_carbon.id_yaci = data_carbon.id_yaci WHERE yacis_carbon.id_yaci = $1;");
   $prp = pg_execute($db,"yaci",array($yaci));
   while ($row=pg_fetch_assoc($prp)){
     $dataciones[] = $row;
@@ -156,7 +156,7 @@ function selecYac($yaci){
 
 //SI SE ESTABLECEN LÍMITES EN LA INTERFAZ TAMBIÉN HAY QUE REPRODUCIRLOS AQUÍ ANTES DE LANZAR LA CONSULTA
 function selecDataciones($pideprov,$pidetipo,$pidecronos,$pidetmuestra,$pidetmat,$pideedadmin,$pideedadmax,$pidestdevmin,$pidestdevmax,$pidemetod,$pidelab){
-  $select ="SELECT yacis_carbon.id_yaci, id_prov, cronotipo, ubicacion,x,y, id_material_c14, id_datacion_c14, id_tipo_muestra_c14, mostrar_tipomat, fecha, stdev, id_metodos_medida,id_laboratorio FROM public.yacis_carbon INNER JOIN public.data_carbon ON yacis_carbon.id_yaci = data_carbon.id_yaci WHERE ";
+  $select ="SELECT yacis_carbon.id_yaci,nombre_yaci, id_prov, cronotipo, ubicacion, id_material_c14, id_datacion_c14, id_tipo_muestra_c14, array_to_string(mostrar_tipomat,'#') as mostrar_tipomat, fecha, stdev, id_metodos_medida,id_laboratorio, sigla, nombre_completo, metodos_medida,tipo_muestra_c14 FROM public.yacis_carbon INNER JOIN public.data_carbon ON yacis_carbon.id_yaci = data_carbon.id_yaci WHERE ";
   $where = '';
   if ($pideprov != '') {
     $provs = explode('-',$pideprov);
@@ -248,6 +248,25 @@ function selecDataciones($pideprov,$pidetipo,$pidecronos,$pidetmuestra,$pidetmat
     return $dataciones;
   }
   return null;
+}
+
+function selecDataExt($datacion){
+  $db = conectaBD();
+  $prp = pg_prepare($db,"biblio","SELECT material_c14.contexto_estratigrafico,evaluacion_asociacion.evaluacion_asociacion,material_c14.observaciones,datacion_c14.fecha_analisis,datacion_c14.num_datacion,datacion_c14.c_n,datacion_c14.d13c,datacion_c14.d15n,datacion_c14.cor_frac_isotopo,array_to_string(array_agg(referencia_completa),'#') as bibliografia
+  FROM c14.material_c14
+  	LEFT JOIN c14.datacion_c14 on material_c14.id_material_c14 = datacion_c14.id_material_c14
+  	LEFT JOIN c14.evaluacion_asociacion on material_c14.id_evaluacion_asociacion = evaluacion_asociacion.id_evaluacion_asociacion
+  	LEFT JOIN c14.datacion_c14_bibliografia_idearq on datacion_c14.id_datacion_c14 = datacion_c14_bibliografia_idearq.id_datacion_c14
+  	LEFT JOIN general.bibliografia_idearq on datacion_c14_bibliografia_idearq.id_bibliografia_idearq = bibliografia_idearq.id_bibliografia_idearq
+  WHERE datacion_c14.id_datacion_c14 = $1
+  GROUP BY material_c14.id_material_c14,datacion_c14.id_datacion_c14,material_c14.contexto_estratigrafico,evaluacion_asociacion.evaluacion_asociacion,material_c14.observaciones,datacion_c14.fecha_analisis,datacion_c14.num_datacion,datacion_c14.c_n,datacion_c14.d13c,datacion_c14.d15n,datacion_c14.cor_frac_isotopo;");
+  $prp = pg_execute($db,"biblio",array($datacion));
+  $datosext=pg_fetch_assoc($prp);
+  pg_close($db);
+  if (isset($datosext)) {
+    return $datosext;
+  }
+    return 'nodatos';
 }
 
  ?>

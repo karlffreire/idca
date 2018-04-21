@@ -116,12 +116,12 @@ $BODY$
 
 
 WITH geoprep as (
-  SELECT id_cultural_entity, st_transform(st_geometryfromtext('POINT('||round((st_x(st_transform(st_centroid(cultural_entity.the_geom),25830))/1000)::numeric,0)*1000||' '||round((st_y(st_transform(st_centroid(cultural_entity.the_geom),25830))/1000)::numeric,0)*1000||')',25830),3857) as the_geom, nut3.gid, nut3.cod_pais
+  SELECT id_cultural_entity,entity_name, st_transform(st_geometryfromtext('POINT('||round((st_x(st_transform(st_centroid(cultural_entity.the_geom),25830))/1000)::numeric,0)*1000||' '||round((st_y(st_transform(st_centroid(cultural_entity.the_geom),25830))/1000)::numeric,0)*1000||')',25830),3857) as the_geom, nut3.gid, nut3.cod_pais
   FROM general.cultural_entity, general.nut3
   WHERE st_intersects(st_centroid(cultural_entity.the_geom),nut3.the_geom)
 )
 --geoprep sirve para asegurar que la provincia se evalúa en función del centroide
-SELECT cultural_entity.id_cultural_entity as id_yaci, geoprep.cod_pais as pais, geoprep.gid as id_prov, general.array_tipo(cultural_entity.id_cultural_entity) as arrtipo, general.array_crono(cultural_entity.id_cultural_entity) as arrcrono, general.get_crono_tipo(cultural_entity.id_cultural_entity) as cronotipo, general.get_unidad_territorial(cultural_entity.id_cultural_entity) as ubicacion, st_x(geoprep.the_geom) as x, st_y(geoprep.the_geom) as y
+SELECT cultural_entity.id_cultural_entity as id_yaci, geoprep.entity_name as nombre_yaci, geoprep.cod_pais as pais, geoprep.gid as id_prov, general.array_tipo(cultural_entity.id_cultural_entity) as arrtipo, general.array_crono(cultural_entity.id_cultural_entity) as arrcrono, general.get_crono_tipo(cultural_entity.id_cultural_entity) as cronotipo, general.get_unidad_territorial(cultural_entity.id_cultural_entity) as ubicacion, st_x(geoprep.the_geom) as x, st_y(geoprep.the_geom) as y
 INTO public.yacis_carbon
 FROM general.cultural_entity inner join geoprep on cultural_entity.id_cultural_entity = geoprep.id_cultural_entity
 WHERE general.cuenta_dataciones(cultural_entity.id_cultural_entity) is not null	and (array_length(general.array_tipo(cultural_entity.id_cultural_entity),1) > 0 or array_length(general.array_crono(cultural_entity.id_cultural_entity),1) > 0) and cultural_entity.the_geom is not null;
@@ -140,15 +140,18 @@ GRANT SELECT on public.yacis_carbon to visualizador_gis;
 
 --DROP TABLE public.data_carbon;
 
-SELECT material_c14.id_material_c14, datacion_c14.id_datacion_c14, material_c14.id_cultural_entity as id_yaci,material_c14.id_tipo_muestra_c14,
-	c14.get_array_tipos_material(material_c14.id_material_c14)||c14.get_array_taxones(material_c14.id_material_c14) as arrtiptax,
+SELECT material_c14.id_material_c14, datacion_c14.id_datacion_c14, material_c14.id_cultural_entity as id_yaci, material_c14.id_tipo_muestra_c14, c14.get_array_tipos_material(material_c14.id_material_c14)||c14.get_array_taxones(material_c14.id_material_c14) as arrtiptax,
 	array_agg(array_to_string(c14.array_jerarq_tipo_material(tipo_material_material_c14.id_tipo_material),' - ')) as mostrar_tipomat,
-	datacion_c14.edad_c14 as fecha, datacion_c14.desviacion as stdev, datacion_c14.id_metodos_medida,datacion_c14.id_laboratorio
+	datacion_c14.edad_c14 as fecha, datacion_c14.desviacion as stdev,metodos_medida.id_metodos_medida, metodos_medida.metodos_medida, laboratorio.sigla, laboratorio.nombre_completo, laboratorio.id_laboratorio, initcap(tipo_muestra_c14.tipo_muestra_c14) as tipo_muestra_c14
 INTO public.data_carbon
   FROM c14.material_c14 INNER JOIN c14.tipo_material_material_c14 on material_c14.id_material_c14 = tipo_material_material_c14.id_material_c14
 			INNER JOIN c14.datacion_c14 on material_c14.id_material_c14 = datacion_c14.id_material_c14
+      INNER JOIN c14.metodos_medida on datacion_c14.id_metodos_medida = metodos_medida.id_metodos_medida
+      INNER JOIN general.laboratorio on datacion_c14.id_laboratorio = laboratorio.id_laboratorio
+      INNER JOIN c14.tipo_muestra_c14 on material_c14.id_tipo_muestra_c14 = tipo_muestra_c14.id_tipo_muestra_c14
   WHERE edad_c14 is not null
-  GROUP BY material_c14.id_material_c14, datacion_c14.id_datacion_c14,datacion_c14.edad_c14, datacion_c14.desviacion, datacion_c14.id_metodos_medida,datacion_c14.id_laboratorio,material_c14.id_cultural_entity,material_c14.id_tipo_muestra_c14,c14.get_array_tipos_material(material_c14.id_material_c14)||c14.get_array_taxones(material_c14.id_material_c14) ;
+  GROUP BY material_c14.id_material_c14, datacion_c14.id_datacion_c14,datacion_c14.edad_c14, datacion_c14.desviacion, material_c14.id_cultural_entity,material_c14.id_tipo_muestra_c14,c14.get_array_tipos_material(material_c14.id_material_c14)||c14.get_array_taxones(material_c14.id_material_c14),
+  metodos_medida.id_metodos_medida, metodos_medida.metodos_medida, laboratorio.sigla, laboratorio.nombre_completo, laboratorio.id_laboratorio,tipo_muestra_c14.tipo_muestra_c14;
 
   ALTER TABLE public.data_carbon ADD PRIMARY KEY (id_datacion_c14);
 

@@ -8,8 +8,9 @@
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
      <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+     <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css" rel="stylesheet" />
      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.full.min.js"></script>
@@ -23,7 +24,7 @@
      <script type="text/javascript" src="./js/carbon.js"></script>
      <script type="text/javascript" src="./js/ln.js"></script>
    </head>
-   <body onload="javascript:ponIdioma('es');initPaneles();">
+   <body onload="javascript:ponIdioma('es');initPaneles();initTabla();">
      <div class="container-fluid">
        <div id="cabecera" class="row">
          <h1 id="titulo" class=""></h1>
@@ -131,7 +132,7 @@
         				</div>
                 <div class="row justify-content-md-center">
                   <button class="btn btn-lg boton-flujo" onclick="javascript:recogePeticion();">
-                    <i class="fas fa-cogs"></i>
+                    <i id="piensa" class="fas fa-cog"></i>
                     <span id="filtra-ya" style="margin-left:1em;"></span>
                   </button>
                 </div>
@@ -141,18 +142,16 @@
         </section>
       </div>
       <div class="row justify-content-md-center panel-resultados">
-        <div class="collapse" id="piensa">
-          <i class="fas fa-cog fa-2x fa-spin"></i>
-        </div>
-        <div class="panel-tabla">
-          <table id="tab-data" class="table table-hover">
+        <div class="panel-tabla w-100 collapse">
+          <table id="tab-data" class="table table-hover tabla-dataciones w-100" cellspacing="0">
             <thead>
               <tr>
+                <th id="th-ext"><i class="fas fa-cog"></i></th>
                 <th id="th-yac"></th>
                 <th id="th-ubi"></th>
                 <th id="th-tmuest"></th>
                 <th id="th-tmat"></th>
-                <th id="th-edad"></th>
+                <th id="th-edad" style="width:30px;"></th>
                 <th id="th-dsv"></th>
                 <th id="th-med"></th>
                 <th id="th-lab"></th>

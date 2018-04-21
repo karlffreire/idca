@@ -47,7 +47,7 @@ function ponIdioma(ln){
     noSelec = 'Es necesario seleccionar algún filtro';
     thYac = 'Yacimiento';
     thUbi = 'Ubicación';
-    thTmuest = 'Muestra';
+    thTmuest = 'Tipo de muestra';
     thTmat = 'Material';
     thEdad = 'Fecha';
     thDsv = 'σ';
@@ -75,7 +75,7 @@ function ponIdioma(ln){
     noSelec = 'Some filtering options required';
     thYac = 'Site';
     thUbi = 'Location';
-    thTmuest = 'Sample';
+    thTmuest = 'Sample type';
     thTmat = 'Material';
     thEdad = 'Date';
     thDsv = 'σ';

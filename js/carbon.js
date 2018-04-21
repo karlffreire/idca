@@ -395,14 +395,67 @@ function salvarDesv(data){
   desvmax = data.to;
 }
 
+function initTabla(){
+    var tabla = $('#tab-data').DataTable({
+      dataSrc: 'data',
+      order: [[1, 'desc']],
+      columns: [
+        {
+            "className": 'detalles-data',
+            "orderable": false,
+            "data": null,
+            "defaultContent": '<i class="fas fa-plus-circle" aria-hidden="true" style="cursor:pointer;"></i>'
+        },
+        {data:'nombre_yaci'},
+        {data:'ubicacion'},
+        {data:'tipo_muestra_c14'},
+        {data:'mostrar_tipomat',"render":function(data){
+            var tipos = data.split('#');
+            var txt = '';
+            for (var i = 0; i < tipos.length; i++) {
+              txt += tipos[i] +'<br>';
+            }
+            return txt;
+          }
+        },
+        {data: 'fecha',"render":function(data){return '<strong>'+data+' BP</strong>';}},
+        {data:'stdev'},
+        {data:'metodos_medida'},
+        {data:'sigla'}
+      ],
+      pageLength: 10,
+      dom: "<'row'<'col-md-5'i><'col-md-7 pull-right'f>>" +"<'row'<'col-md-12'tr>>" +"<'row'<'col-md-12 lst-dataciones'p>>",
+      renderer: "bootstrap",
+      language: {
+      "search": "_INPUT_",
+      "searchPlaceholder": "Search...",
+      "info": "Showing _START_ to _END_ out of _TOTAL_ datings"
+    }
+    });
+    tabla.on('click', 'td.detalles-data', function () {
+        var tr = $(this).closest('tr');
+        var row = tabla.row( tr );
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child(extiendeData( row.data()) ).show();
+            tr.addClass('shown');
+        }
+    } );
+}
+
 /*==========================================
 
-        CONSULTAS A BASE DE DATOS
+        PETICIONES DE DATOS
 
 ============================================*/
 
 function buscaDatYaci(idyaci){
-  selYaci(idyaci,ponDatos);
+  selYaci(idyaci,ponDatosTabla);
 }
 
 function recogePeticion(){
@@ -410,7 +463,7 @@ function recogePeticion(){
     alert(noSelec);
   }
   else{
-    $('#piensa').removeClass('collapse');
+    $('#piensa').addClass('fa-spin');
     var inityac = $('#selprov').hasClass("select2-hidden-accessible");
     var initmat = $('#seltipomuest').hasClass("select2-hidden-accessible");
     var initdat = $('#selmetodo').hasClass("select2-hidden-accessible");
@@ -495,47 +548,14 @@ function recogePeticion(){
       }
       pidelab = pidelab.substring('-',pidelab.length - 1);
     }
-
-    consulta(pidereg,pidetipo,pidecrono,pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab);
-
+    selecDataciones(pidereg,pidetipo,pidecrono,pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatosTabla);
   }
 }
 
-function consulta(pidereg,pidetipo,pidecrono,pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab){
-  $('#tab-data').DataTable({
-    ajax: {
-      url: "./datos/selecDataciones.php",
-      data:{
-        prov : pidereg,
-        tipo : pidetipo,
-        crono : pidecrono,
-        tmuestra : pidemuest,
-        tmat : pidemat,
-        edadmin : fechamin,
-        edadmax : fechamax,
-        stdevmin : desvmin,
-        stdevmax : desvmax,
-        metod : pidemetodo,
-        lab : pidelab
-      }
-      //dataSrc: 'data'
-    },
-    columns: [
-      {data:'id_yaci'},
-      {data:'id_prov'},
-      {data:'cronotipo'},
-      {data:'ubicacion'},
-      {data:'mostrar_tipomat'},
-      {data:'fecha'},
-      {data:'stdev'},
-      {data:'lab'}
-    ]
-  });
-}
 
 /*=========================================
 
-           LLAMADAS A DATOS
+            LLAMADAS A DATOS
 
 ===========================================*/
 
@@ -570,18 +590,109 @@ function selYaci(yaci,callback){
   });
 }
 
+
 /*=========================================
 
            COLOCACIÓN DE DATOS
 
 ===========================================*/
 
-function ponDatos(resultado){
-  if (resultado.data) {
-    $('#tit-resultado').html('Resultado'+'<br>'+resultado.data.length+' dataciones');
-  }
-  else {
-    $('#tit-resultado').html('Resultado<br>0 dataciones');
-  }
-  $('#piensa').addClass('collapse');
+
+function ponDatosTabla(resultado){
+  var tabla = $('#tab-data').DataTable();
+  tabla.clear().draw();
+  tabla.rows.add(resultado.data ); // Add new data
+  tabla.columns.adjust().draw(); // Redraw the DataTable
+  $('#piensa').removeClass('fa-spin');
+  $('.panel-tabla').removeClass('collapse');
+  $('#panel-busca-yaci').hide();
+  $('#panel-sel-filt').hide();
+  $('#tit-buscayaci').show();
+  $('#tit-filtrar').show();
+}
+
+function extiendeData(datacion){
+  var tr = document.createElement('tr');
+   var td0 = tr.insertCell(0);
+   var td1 = tr.insertCell(1);
+       td1.colSpan = 8;
+   var div0 = document.createElement('div');
+       $(div0).addClass( 'w-100' );
+     var div1 = document.createElement('div');
+       $(div1).addClass('col-md-12');
+       div1.setAttribute("style","padding:0");
+       $(div1).addClass( 'loading' );
+       $(div1).text( 'loading' );
+
+     div0.appendChild(div1);
+   $(td1).html(div0);
+   $.ajax( {
+       url: './datos/selecDataExt.php',
+       data: {
+           datacion: datacion.id_datacion_c14
+       },
+       dataType: 'json',
+       success: function ( json ) {
+         if (!json.data) {
+           $(div1).text( '' );
+           var divext = document.createElement('div');
+               $(divext).addClass('col-md-12');
+               divext.innerHTML = 'No more data available';
+               div1.appendChild(divext);
+         }
+         else{
+           $(div1).text( '' );
+           var divmat = document.createElement('div');
+             $(divmat).addClass('col-md-12');
+           var txtmat = '';
+           if (json.data.contexto_estratigrafico) {
+             txtmat += 'Contexto estratigráfico: '+json.data.contexto_estratigrafico+' | ';
+           }
+           if (json.data.evaluacion_asociacion) {
+             txtmat += 'Evaluación asociación: '+json.data.evaluacion_asociacion+' | ';
+           }
+           if (json.data.observaciones) {
+             txtmat += 'Observaciones: '+json.data.observaciones+' | ';
+           }
+           $(divmat).html(txtmat);
+           var divdat = document.createElement('div');
+             $(divdat).addClass('col-md-12');
+           var txtdat = '';
+           if (json.data.num_datacion) {
+             txtdat += 'Datación número: '+json.data.num_datacion+' | ';
+           }
+           if (json.data.fecha_analisis) {
+             txtdat += 'Fecha análisis: '+json.data.fecha_analisis+' | ';
+           }
+           if (json.data.d13c) {
+             txtdat += 'δ13C: '+json.data.d13c+' | ';
+           }
+           if (json.data.d15n) {
+             txtdat += 'δ15N: '+json.data.d15n+' | ';
+           }
+           if (json.data.c_n) {
+             txtdat += 'C/N: '+json.data.c_n+' | ';
+           }
+           if (json.data.cor_frac_isotopo) {
+             txtdat += 'Corrección por fracción de isótopo: '+json.data.cor_frac_isotopo+' | ';
+           }
+           $(divdat).html(txtdat);
+           div1.appendChild(divmat);
+           div1.appendChild(divdat);
+           if (json.data.bibliografia) {
+             var divbib = document.createElement('div');
+               $(divbib).addClass('col-md-12');
+             var txtrefs = '';
+             var refs = json.data.bibliografia.split('#');
+             for (var i = 0; i < refs.length; i++) {
+               txtrefs += refs[i]+'<br>'
+             }
+             $(divbib).html(txtrefs);
+             div1.appendChild(divbib);
+           }
+         }
+         $(div1).removeClass( 'loading' );
+       }
+   } );
+   return tr;
 }

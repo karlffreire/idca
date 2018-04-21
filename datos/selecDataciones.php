@@ -13,9 +13,13 @@ $metod = filter_var($_GET['metod'],FILTER_SANITIZE_STRING);
 $lab = filter_var($_GET['lab'],FILTER_SANITIZE_STRING);
 
 $yacis = selecDataciones($prov,$tipos,$cronos,$tmuestra,$tmat,$edadmin,$edadmax,$stdevmin,$stdevmax,$metod,$lab);
-
-
+$objyacis;
+if (!$yacis) {
+  $objyacis = '{"copyright":"CC-BY","attribution":"A. Gilman and friends","data":[]}' ;
+}
+else {
+  $objyacis = '{"copyright":"CC-BY","attribution":"A. Gilman and friends","data":'.json_encode($yacis).'}' ;
+}
 header('Content-type:application/json;charset=utf-8');
-//$objyacis = '{"copyright":"CC-BY","attribution":"A. Gilman and friends","data":'.json_encode($yacis).'}' ;
-$objyacis = json_encode($yacis);
+
 echo $objyacis;
