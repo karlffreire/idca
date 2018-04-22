@@ -121,13 +121,14 @@ WITH geoprep as (
   WHERE st_intersects(st_centroid(cultural_entity.the_geom),nut3.the_geom)
 )
 --geoprep sirve para asegurar que la provincia se evalúa en función del centroide
-SELECT cultural_entity.id_cultural_entity as id_yaci, geoprep.entity_name as nombre_yaci, geoprep.cod_pais as pais, geoprep.gid as id_prov, general.array_tipo(cultural_entity.id_cultural_entity) as arrtipo, general.array_crono(cultural_entity.id_cultural_entity) as arrcrono, general.get_crono_tipo(cultural_entity.id_cultural_entity) as cronotipo, general.get_unidad_territorial(cultural_entity.id_cultural_entity) as ubicacion, st_x(geoprep.the_geom) as x, st_y(geoprep.the_geom) as y
+SELECT cultural_entity.id_cultural_entity as id_yaci, geoprep.entity_name as nombre_yaci, geoprep.cod_pais as pais, geoprep.gid as id_prov, general.array_tipo(cultural_entity.id_cultural_entity) as arrtipo, general.array_crono(cultural_entity.id_cultural_entity) as arrcrono, general.get_crono_tipo(cultural_entity.id_cultural_entity) as cronotipo, general.get_unidad_territorial(cultural_entity.id_cultural_entity) as ubicacion,
+st_asgeojson(geoprep.the_geom) as geojson
 INTO public.yacis_carbon
 FROM general.cultural_entity inner join geoprep on cultural_entity.id_cultural_entity = geoprep.id_cultural_entity
 WHERE general.cuenta_dataciones(cultural_entity.id_cultural_entity) is not null	and (array_length(general.array_tipo(cultural_entity.id_cultural_entity),1) > 0 or array_length(general.array_crono(cultural_entity.id_cultural_entity),1) > 0) and cultural_entity.the_geom is not null;
 
 ALTER TABLE public.yacis_carbon ADD PRIMARY KEY (id_yaci);
-
+    
 CREATE INDEX index_prov ON public.yacis_carbon USING btree (id_prov ASC NULLS LAST);
 CREATE INDEX index_tipo ON public.yacis_carbon USING gin (arrtipo);
 CREATE INDEX index_crono ON public.yacis_carbon USING gin (arrcrono);

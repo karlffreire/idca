@@ -53,7 +53,7 @@ h5{
 }
 
 .panel-resultados{
-  margin-top: 5em;
+  margin-bottom: 2em;
   padding: 1em;
 }
 .panel-resultados h4{
@@ -155,17 +155,12 @@ section {
 }
 
 /*Mapa*/
-#mapa{
-  height: 420px;
-}
-
 .map{
-  position: absolute;
+  /*position: absolute;*/
   width: 100%;
-  height: 400px;
+  height: 700px;
   padding: 0;
 }
-
 
 .attribution-container {
   background-color: rgba(250,250,250,0.5);

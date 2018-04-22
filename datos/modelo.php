@@ -9,18 +9,40 @@ require '../datos/conexion.php';
 ======================================
 */
 
-function listaYacis(){
+function escapeJsonString($value) { # list from www.json.org: (\b backspace, \f formfeed)
+	$escapers = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
+	$replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
+	$result = str_replace($escapers, $replacements, $value);
+	return $result;
+}
+
+function cargaYacis(){
   $db = conectaBD();
- 	$prp = pg_prepare($db,"lst-yac","SELECT id_cultural_entity as id,entity_name as text FROM general.cultural_entity WHERE id_cultural_entity IN (SELECT id_yaci FROM public.yacis_carbon) ORDER BY entity_name;");
-  $prp = pg_execute($db,"lst-yac",array());
-	while ($row=pg_fetch_assoc($prp)){
-		$yacis[] = $row;
-	}
-  pg_close($db);
-  if (isset($yacis)) {
-    return $yacis;
+ 	$prp = pg_prepare($db,"carga-yac","SELECT id_yaci as id,nombre_yaci as text, cronotipo,geojson FROM public.yacis_carbon ORDER BY nombre_yaci;");
+  $prp = pg_execute($db,"carga-yac",array());
+  # Build GeoJSON
+  $output    = '';
+  $rowOutput = '';
+  while ($row = pg_fetch_assoc($prp)) {
+      $rowOutput = (strlen($rowOutput) > 0 ? ',' : '') . '{"type": "Feature", "geometry": ' . $row['geojson'] . ', "properties": {';
+      $props = '';
+      $id    = '';
+      foreach ($row as $key => $val) {//FALLA CUANDO HAY VALORES NULL
+          if ($key != "geojson") {
+              $props .= (strlen($props) > 0 ? ',' : '') . '"' . $key . '":"' . escapeJsonString($val) . '"';
+          }
+          if ($key == "id") {
+              $id .= ',"id":"' . escapeJsonString($val) . '"';
+          }
+      }
+      $rowOutput .= $props . '}';
+      $rowOutput .= $id;
+      $rowOutput .= '}';
+      $output .= $rowOutput;
   }
-  return null;
+  $output = '{"type": "FeatureCollection", "features": [ ' . $output . ' ]}';
+  pg_close($db);
+  return $output;
 }
 
 function listaRegiones(){

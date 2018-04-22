@@ -8,7 +8,7 @@
 
 ===========================================*/
 
-function cargaLstYac(callback){
+function cargaYacis(callback){
   $.ajax({
     url: './datos/cargaYacis.php',
     success: callback
@@ -76,6 +76,14 @@ function cargaLstLabos(callback){
         ORGANIZACIÓN DE DESPLEGABLES
 
 ============================================*/
+
+function compare(a,b) {
+  if (a.text < b.text)
+    return -1;
+  if (a.text > b.text)
+    return 1;
+  return 0;
+}
 
 function unique(list) {
     var result = [];
@@ -195,7 +203,7 @@ function initPaneles(){
     $('#tit-filtrar').show();
   });
   $('#panel-yaci').one('click',function(){
-    cargaLstYac(initBuscaYaci);
+    initBuscaYaci();
   });
 
   $('#panel-filt').on('click',function(){
@@ -222,8 +230,25 @@ function initPaneles(){
   });
 }
 
-function initBuscaYaci(resultado){
-  var data = resultado;
+function initBuscaYaci(){
+  var data = [];
+  var capas = mapa.getLayers().getArray();
+  var capayac;
+  for (var i = 0; i < capas.length; i++) {
+    var nomcapa = capas[i].get('name');
+    if (nomcapa == 'yacis') {capayac = capas[i];}
+  }
+  var featcluster = capayac.getSource().features;
+  for (var i = 0; i < featcluster.length; i++) {
+    var features = featcluster[i].getProperties().features;
+    for (var j = 0; j < features.length; j++) {
+      var obj = {};
+      obj.id = features[j].get('id');
+      obj.text = features[j].get('text');
+      data.push(obj);
+    }
+  }
+  data.sort(compare);
   $('#intro-yaci').select2({
     data : data,
     placeholder: 'Busca un yacimiento',
@@ -285,7 +310,6 @@ function initSelMat(resultado){
     placeholder: '*',
     allowClear: true,
     theme: "bootstrap",
-    //maximumSelectionLength:3,
     templateResult: colPorGrupo
   });
 }
@@ -306,11 +330,6 @@ function initBarras(resultado){
     to: 10000,
     step: 100,
     postfix: " BP",
-    // prettify: function (n) {
-    // 	var lg = Math.log(n);
-    //     var rLg = +lg.toFixed(2);
-    // 	return rLg;
-    // },
     onStart:function(data){
       salvarFecha(data);
     },
@@ -422,8 +441,77 @@ function initTabla(){
     } );
 }
 
+function isCluster(feature) {
+  if (!feature || !feature.get('features')) {
+        return false;
+  }
+  return feature.get('features').length > 1;
+}
+
+function ponEstiloYacis(feature) {
+	if (isCluster(feature)) {
+		var radio = Math.min(feature.get('features').length, 6) + 5;
+	}
+	else{
+		var radio = 5;
+	}
+    var circulo = new ol.style.Circle({
+      radius: radio,
+      stroke: new ol.style.Stroke({
+        width: 2,
+        color: '#454545'
+      }),
+      fill: new ol.style.Fill({
+        color: '#FF7542',
+      }),
+      rotateWithView: true
+    });
+	var estilo_yacis = new ol.style.Style({
+        image: circulo
+    });
+    return [estilo_yacis];
+}
+
+function ponCapa(resultado){
+  var geojsonArq = resultado;
+	featsArqueo = (new ol.format.GeoJSON()).readFeatures(geojsonArq);
+  var capayac = new ol.layer.Vector({
+    style: ponEstiloYacis
+  });
+  capayac.set('name', 'yacis');
+	if (featsArqueo.length > 0) {
+		var arqueoSource = new ol.source.Vector({
+	        features: featsArqueo
+	      });
+		var agrupaArqueo = new ol.source.Cluster({
+	        distance: 20,
+	        source: arqueoSource
+	      });
+		capayac.setSource(agrupaArqueo);
+    mapa.addLayer(capayac);//al añadir cuando el mapa aún está oculto hay veces que da problemas
+	}
+  else{
+    alert('Error loading archaeological sites. Map functionality not available.');
+  }
+
+}
+
 function initMapa(resultado){
-  console.log(resultado);
+  var osm = new ol.layer.Tile({
+            source: new ol.source.OSM()
+          });
+  mapa = new ol.Map({
+	    layers: [osm],
+	    view: new ol.View({
+	      projection: 'EPSG:3857',
+	      center: [-4159000, 3920500],
+        maxZoom : 12,//revisar a qué escala corresponde
+	      zoom: 4
+	    }),
+	    controls:[],
+	    target: 'map'
+  	});
+    $('#panel-mapa').addClass('collapse');//Es necesario inicializar el mapa en un div que no esté oculto, y luego ocultarlo
 }
 
 /*==========================================
@@ -581,7 +669,7 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
   $('#ficha-selec').empty();
   var divficha = document.createElement('div');
   var tit = document.createElement('p');
-    tit.setAttribute('style','margin-bottom: 1.5em;')
+    tit.setAttribute('style','margin-bottom: 1.5em;border-bottom: solid 1px white;')
     tit.innerHTML = '<strong>'+titFichaSel+'</strong>';
   divficha.appendChild(tit);
   if (datosreg) {
