@@ -105,6 +105,10 @@ section {
   background-color: #FF7542 !important;
 }
 
+.labo-completo{
+  font-size:0.8rem;
+}
+
 /*rangeSlider:*/
 .irs-from, .irs-to, .irs-single{
   background-color:#FF7542;
@@ -114,13 +118,21 @@ section {
   cursor:pointer;
 }
 
+.lst-flt-selec{
+  background-color: #454545;
+  color: white;
+  padding: 1em;
+  margin-top: 5em;
+  margin-bottom: 5em;
+  border-radius: 0.25em;
+}
+
 /*tabla*/
 .tabla-dataciones {
   color:#454545;
 }
 
 .tabla-dataciones td{
-
   margin:0px;
 }
 
@@ -136,4 +148,31 @@ section {
   background-color: #FF7542;
   border-color: #FF7542;
   color: white;
+}
+
+.data-ext{
+  padding: 0.25em;
+}
+
+/*Mapa*/
+#mapa{
+  height: 420px;
+}
+
+.map{
+  position: absolute;
+  width: 100%;
+  height: 400px;
+  padding: 0;
+}
+
+
+.attribution-container {
+  background-color: rgba(250,250,250,0.5);
+  padding: 0 5px;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  display: block;
+  margin: 0 10 5;
 }

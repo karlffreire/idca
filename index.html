@@ -15,10 +15,12 @@
      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css" rel="stylesheet" />
      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.full.min.js"></script>
      <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
-
      <link rel="stylesheet" href="./css/ion.rangeSlider.css">
      <link rel="stylesheet" href="./css/ion.rangeSlider.skinFlat.css">
      <script src="./js/ion.rangeSlider.min.js"></script>
+     <!--  Polyfill es necesario para que OL funcione con IE: -->
+     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList"></script>
+     <script src="https://openlayers.org/en/v4.6.5/build/ol.js" type="text/javascript"></script>
 
      <link rel="stylesheet" href="./css/ppal.css">
      <script type="text/javascript" src="./js/carbon.js"></script>
@@ -36,7 +38,7 @@
           <span class="p-idearq"><a href="javascript:ponIdioma('es')">Español</a> | <a href="javascript:ponIdioma('en')">English</a></span>
         </div>
       </div>
-      <div class="row justify-content-md-center" style="color:#454545;text-align:center;">
+      <div class="row justify-content-md-center" style="color:#454545;text-align:center;margin-bottom:2em;margin-top:2em;">
         <h4 class="col-md-8">Dadme un texto introductorio de un párrafo para poner aquí, explicando el objetivo de este buscador.<br>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque</h4>
       </div>
       <div id="panel-yaci" class="row justify-content-md-center panel-consultas">
@@ -141,23 +143,30 @@
         	</div>
         </section>
       </div>
-      <div class="row justify-content-md-center panel-resultados">
-        <div class="panel-tabla w-100 collapse">
+      <div class="row justify-content-md-center panel-resultados collapse">
+        <div id="ficha-selec" class="col-md-2 lst-flt-selec">
+        </div>
+        <div class="panel-tabla col-md-10 ">
           <table id="tab-data" class="table table-hover tabla-dataciones w-100" cellspacing="0">
             <thead>
               <tr>
                 <th id="th-ext"><i class="fas fa-cog"></i></th>
-                <th id="th-yac"></th>
-                <th id="th-ubi"></th>
+                <th id="th-edad"></th>
                 <th id="th-tmuest"></th>
                 <th id="th-tmat"></th>
-                <th id="th-edad" style="width:30px;"></th>
-                <th id="th-dsv"></th>
                 <th id="th-med"></th>
                 <th id="th-lab"></th>
+                <th id="th-yac"></th>
+                <th id="th-ubi"></th>
               </tr>
             </thead>
           </table>
+        </div>
+        <div id="mapa" class="col-md-10">
+         <div id="map" class="map">
+            <div id="popup"></div>
+            <div id="creditos-base" class="attribution-container"></div>
+          </div>
         </div>
       </div>
     </div>

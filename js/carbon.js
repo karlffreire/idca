@@ -123,42 +123,17 @@ function colPorGrupo (data) {
 function detalles (data) {
   if (data.detalle){
     return $(
-      '<span>'+data.text+'</span><br><span style="color:#FF7542;font-size:0.8rem">'+data.detalle+'</span>'
+      '<span>'+data.text+'</span><br><span class="labo-completo">'+data.detalle+'</span>'
     );
   }
   return $(
       '<span>'+data.text+'</span>'
   );
 };
-//
-// function selecConDetalle(params, data) {//no funcina bien
-//     // If there are no search terms, return all of the data
-//     if ($.trim(params.term) === '') {
-//       return data;
-//     }
-//     // Do not display the item if there is no 'text' property
-//     if (typeof data.text === 'undefined') {
-//       return null;
-//     }
-//     if (data.detalle) {
-//       if (data.detalle.indexOf(params.term) > -1) {console.log('casa detalle');
-//         return data;
-//       }
-//       else if (data.text.indexOf(params.term) > -1){console.log('casa texto con detalle');
-//         return data;
-//       }
-//     }
-//     else if (data.text.indexOf(params.term) > -1){console.log('casa texto sin detalle');
-//       return data;
-//     }
-//     // Return `null` if the term should not be displayed
-//     return null;
-// }
-
 
 /*==========================================
 
-      INICIALIZACION DE DESPLEGABLES
+      INICIALIZACION DE ELEMENTOS
 
 ============================================*/
 
@@ -406,8 +381,7 @@ function initTabla(){
             "data": null,
             "defaultContent": '<i class="fas fa-plus-circle" aria-hidden="true" style="cursor:pointer;"></i>'
         },
-        {data:'nombre_yaci'},
-        {data:'ubicacion'},
+        {data: null,"render":function(data){return '<strong>'+data.fecha+' ±  '+data.stdev+' BP</strong>';}},
         {data:'tipo_muestra_c14'},
         {data:'mostrar_tipomat',"render":function(data){
             var tipos = data.split('#');
@@ -418,10 +392,10 @@ function initTabla(){
             return txt;
           }
         },
-        {data: 'fecha',"render":function(data){return '<strong>'+data+' BP</strong>';}},
-        {data:'stdev'},
         {data:'metodos_medida'},
-        {data:'sigla'}
+        {data:'sigla'},
+        {data:'nombre_yaci'},
+        {data:'ubicacion'}
       ],
       pageLength: 10,
       dom: "<'row'<'col-md-5'i><'col-md-7 pull-right'f>>" +"<'row'<'col-md-12'tr>>" +"<'row'<'col-md-12 lst-dataciones'p>>",
@@ -429,7 +403,7 @@ function initTabla(){
       language: {
       "search": "_INPUT_",
       "searchPlaceholder": "Search...",
-      "info": "Showing _START_ to _END_ out of _TOTAL_ datings"
+      "info": "Showing _START_ to _END_ out of <strong> _TOTAL_ </strong> datings"
     }
     });
     tabla.on('click', 'td.detalles-data', function () {
@@ -448,6 +422,10 @@ function initTabla(){
     } );
 }
 
+function initMapa(resultado){
+  console.log(resultado);
+}
+
 /*==========================================
 
         PETICIONES DE DATOS
@@ -456,6 +434,7 @@ function initTabla(){
 
 function buscaDatYaci(idyaci){
   selYaci(idyaci,ponDatosTabla);
+  $('#ficha-selec').addClass('collapse');
 }
 
 function recogePeticion(){
@@ -548,6 +527,7 @@ function recogePeticion(){
       }
       pidelab = pidelab.substring('-',pidelab.length - 1);
     }
+    fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fechamin,fechamax,desvmin,desvmax, datosmetodo, datoslab);
     selecDataciones(pidereg,pidetipo,pidecrono,pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatosTabla);
   }
 }
@@ -555,7 +535,7 @@ function recogePeticion(){
 
 /*=========================================
 
-            LLAMADAS A DATOS
+        LLAMADAS PARA CONSULTAS
 
 ===========================================*/
 
@@ -597,14 +577,93 @@ function selYaci(yaci,callback){
 
 ===========================================*/
 
+function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fechamin,fechamax,desvmin,desvmax,datosmetodo, datoslab){
+  $('#ficha-selec').empty();
+  var divficha = document.createElement('div');
+  var tit = document.createElement('p');
+    tit.setAttribute('style','margin-bottom: 1.5em;')
+    tit.innerHTML = '<strong>'+titFichaSel+'</strong>';
+  divficha.appendChild(tit);
+  if (datosreg) {
+    var p = document.createElement('p');
+    var txt = '';
+    for (var i = 0; i < datosreg.length; i++) {
+      txt += datosreg[i].text+', ';
+    }
+    p.innerHTML = etiProv+':<br>' + txt.replace(/,\s*$/, "");
+    divficha.appendChild(p);
+  }
+  if (datostipo) {
+    var p = document.createElement('p');
+    var txt = '';
+    for (var i = 0; i < datostipo.length; i++) {
+      txt += datostipo[i].text+', ';
+    }
+    p.innerHTML = etiTipoYac+':<br>' + txt.replace(/,\s*$/, "");
+    divficha.appendChild(p);
+  }
+  if (datoscrono) {
+    var p = document.createElement('p');
+    var txt = '';
+    for (var i = 0; i < datoscrono.length; i++) {
+      txt += datoscrono[i].text+', ';
+    }
+    p.innerHTML = etiCronoYac+':<br>' + txt.replace(/,\s*$/, "");
+    divficha.appendChild(p);
+  }
+  if (datosmuest) {
+    var p = document.createElement('p');
+    var txt = '';
+    for (var i = 0; i < datosmuest.length; i++) {
+      txt += datosmuest[i].text+', ';
+    }
+    p.innerHTML = etiTipoMuest+':<br>' + txt.replace(/,\s*$/, "");
+    divficha.appendChild(p);
+  }
+  if (datosmat) {
+    var p = document.createElement('p');
+    var txt = '';
+    for (var i = 0; i < datosmat.length; i++) {
+      txt += datosmat[i].text+', ';
+    }
+    p.innerHTML = etiTipoMat+':<br>' + txt.replace(/,\s*$/, "");
+    divficha.appendChild(p);
+  }
+  if ((fechamin != '') || (fechamax != '')) {
+    var p = document.createElement('p');
+    p.innerHTML = etiFecha+':<br>' + fechamin+'-'+fechamax+' BP | σ: '+desvmin+'-'+desvmax;
+    divficha.appendChild(p);
+  }
+  if (datosmetodo) {
+    var p = document.createElement('p');
+    var txt = '';
+    for (var i = 0; i < datosmetodo.length; i++) {
+      txt += datosmetodo[i].text+', ';
+    }
+    p.innerHTML = etiMetodo+':<br>' + txt.replace(/,\s*$/, "");
+    divficha.appendChild(p);
+  }
+  if (datoslab) {
+    var p = document.createElement('p');
+    var txt = '';
+    for (var i = 0; i < datoslab.length; i++) {
+      txt += datoslab[i].text+', ';
+    }
+    p.innerHTML = etiLab+':<br>' + txt.replace(/,\s*$/, "");
+    divficha.appendChild(p);
+  }
+  $('#ficha-selec').append(divficha);
+  $('#ficha-selec').removeClass('collapse');
+}
+
 
 function ponDatosTabla(resultado){
   var tabla = $('#tab-data').DataTable();
   tabla.clear().draw();
-  tabla.rows.add(resultado.data ); // Add new data
-  tabla.columns.adjust().draw(); // Redraw the DataTable
+  tabla.rows.add(resultado.data );
+  tabla.columns.adjust().draw();
   $('#piensa').removeClass('fa-spin');
-  $('.panel-tabla').removeClass('collapse');
+  $('.panel-resultados').removeClass('collapse');
   $('#panel-busca-yaci').hide();
   $('#panel-sel-filt').hide();
   $('#tit-buscayaci').show();
@@ -615,7 +674,7 @@ function extiendeData(datacion){
   var tr = document.createElement('tr');
    var td0 = tr.insertCell(0);
    var td1 = tr.insertCell(1);
-       td1.colSpan = 8;
+       td1.colSpan = 7;
    var div0 = document.createElement('div');
        $(div0).addClass( 'w-100' );
      var div1 = document.createElement('div');
@@ -644,50 +703,54 @@ function extiendeData(datacion){
            $(div1).text( '' );
            var divmat = document.createElement('div');
              $(divmat).addClass('col-md-12');
+             $(divmat).addClass('data-ext');
            var txtmat = '';
            if (json.data.contexto_estratigrafico) {
-             txtmat += 'Contexto estratigráfico: '+json.data.contexto_estratigrafico+' | ';
+             txtmat += 'Contexto estratigráfico: '+json.data.contexto_estratigrafico+' |';
            }
            if (json.data.evaluacion_asociacion) {
-             txtmat += 'Evaluación asociación: '+json.data.evaluacion_asociacion+' | ';
+             txtmat += ' Evaluación asociación: '+json.data.evaluacion_asociacion+' |';
            }
            if (json.data.observaciones) {
-             txtmat += 'Observaciones: '+json.data.observaciones+' | ';
+             txtmat += ' Observaciones: '+json.data.observaciones+' |';
            }
-           $(divmat).html(txtmat);
+           $(divmat).html('Info material: '+txtmat.substring(0, txtmat.length - 1));
            var divdat = document.createElement('div');
              $(divdat).addClass('col-md-12');
+             $(divdat).addClass('data-ext');
            var txtdat = '';
            if (json.data.num_datacion) {
-             txtdat += 'Datación número: '+json.data.num_datacion+' | ';
+             txtdat += ' Datación número: '+json.data.num_datacion+' |';
            }
            if (json.data.fecha_analisis) {
-             txtdat += 'Fecha análisis: '+json.data.fecha_analisis+' | ';
+             txtdat += ' Fecha análisis: '+json.data.fecha_analisis+' |';
            }
            if (json.data.d13c) {
-             txtdat += 'δ13C: '+json.data.d13c+' | ';
+             txtdat += ' δ13C: '+json.data.d13c+' |';
            }
            if (json.data.d15n) {
-             txtdat += 'δ15N: '+json.data.d15n+' | ';
+             txtdat += ' δ15N: '+json.data.d15n+' |';
            }
            if (json.data.c_n) {
-             txtdat += 'C/N: '+json.data.c_n+' | ';
+             txtdat += ' C/N: '+json.data.c_n+' |';
            }
            if (json.data.cor_frac_isotopo) {
-             txtdat += 'Corrección por fracción de isótopo: '+json.data.cor_frac_isotopo+' | ';
+             txtdat += ' Corrección por fracción de isótopo: '+json.data.cor_frac_isotopo+' |';
            }
-           $(divdat).html(txtdat);
+           $(divdat).html('Info datación: '+txtdat.substring(0, txtdat.length - 1));
            div1.appendChild(divmat);
            div1.appendChild(divdat);
            if (json.data.bibliografia) {
              var divbib = document.createElement('div');
                $(divbib).addClass('col-md-12');
-             var txtrefs = '';
+               $(divbib).addClass('data-ext');
+             var txtrefs = '<ul>';
              var refs = json.data.bibliografia.split('#');
              for (var i = 0; i < refs.length; i++) {
-               txtrefs += refs[i]+'<br>'
+               txtrefs += '<li>'+refs[i]+'</li>'
              }
-             $(divbib).html(txtrefs);
+             txtrefs += '</ul>';
+             $(divbib).html('Referencias bibliográficas: '+txtrefs);
              div1.appendChild(divbib);
            }
          }

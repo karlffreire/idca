@@ -24,6 +24,8 @@ var thEdad = '';
 var thDsv = '';
 var thMed = '';
 var thLab = '';
+var titFichaSel = '';
+
 
 function ponIdioma(ln){
   if (ln == 'es') {
@@ -53,6 +55,7 @@ function ponIdioma(ln){
     thDsv = 'σ';
     thMed = 'Método';
     thLab = 'Laboratorio';
+    titFichaSel = 'Has seleccionado';
   }
   else if (ln == 'en'){
     titulo = 'Carbon IDEArq';
@@ -81,6 +84,7 @@ function ponIdioma(ln){
     thDsv = 'σ';
     thMed = 'Method';
     thLab = 'Laboratory';
+    titFichaSel = 'You have selected';
   }
   $('#titulo').html(titulo);
   $('#tit-buscayaci').html(tituloBuscaYaci);
