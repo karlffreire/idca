@@ -128,7 +128,7 @@ FROM general.cultural_entity inner join geoprep on cultural_entity.id_cultural_e
 WHERE general.cuenta_dataciones(cultural_entity.id_cultural_entity) is not null	and (array_length(general.array_tipo(cultural_entity.id_cultural_entity),1) > 0 or array_length(general.array_crono(cultural_entity.id_cultural_entity),1) > 0) and cultural_entity.the_geom is not null;
 
 ALTER TABLE public.yacis_carbon ADD PRIMARY KEY (id_yaci);
-    
+
 CREATE INDEX index_prov ON public.yacis_carbon USING btree (id_prov ASC NULLS LAST);
 CREATE INDEX index_tipo ON public.yacis_carbon USING gin (arrtipo);
 CREATE INDEX index_crono ON public.yacis_carbon USING gin (arrcrono);

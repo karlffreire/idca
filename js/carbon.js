@@ -400,7 +400,13 @@ function initTabla(){
             "data": null,
             "defaultContent": '<i class="fas fa-plus-circle" aria-hidden="true" style="cursor:pointer;"></i>'
         },
-        {data: null,"render":function(data){return '<strong>'+data.fecha+' ±  '+data.stdev+' BP</strong>';}},
+        {data: 'fecha',"render":function(data,type,row){
+            if (type === 'display' || type === 'filter') {
+              return '<strong>'+row.fecha+' ± '+row.stdev+' BP</strong>';
+            }
+            return data;
+          }
+        },
         {data:'tipo_muestra_c14'},
         {data:'mostrar_tipomat',"render":function(data){
             var tipos = data.split('#');
@@ -449,27 +455,27 @@ function isCluster(feature) {
 }
 
 function ponEstiloYacis(feature) {
-	if (isCluster(feature)) {
-		var radio = Math.min(feature.get('features').length, 6) + 5;
-	}
-	else{
-		var radio = 5;
-	}
-    var circulo = new ol.style.Circle({
-      radius: radio,
-      stroke: new ol.style.Stroke({
-        width: 2,
-        color: '#454545'
-      }),
-      fill: new ol.style.Fill({
-        color: '#FF7542',
-      }),
-      rotateWithView: true
-    });
-	var estilo_yacis = new ol.style.Style({
-        image: circulo
-    });
-    return [estilo_yacis];
+  if (isCluster(feature)) {
+    var radio = Math.min(feature.get('features').length, 6) + 5;
+  }
+  else{
+    var radio = 5;
+  }
+  var circulo = new ol.style.Circle({
+    radius: radio,
+    stroke: new ol.style.Stroke({
+      width: 2,
+      color: '#454545'
+    }),
+    fill: new ol.style.Fill({
+      color: '#FF7542',
+    }),
+    rotateWithView: true
+  });
+  var estilo_yacis = new ol.style.Style({
+    image: circulo
+  });
+  return [estilo_yacis];
 }
 
 function ponCapa(resultado){
@@ -480,14 +486,14 @@ function ponCapa(resultado){
   });
   capayac.set('name', 'yacis');
 	if (featsArqueo.length > 0) {
-		var arqueoSource = new ol.source.Vector({
+		yacisSource = new ol.source.Vector({
 	        features: featsArqueo
 	      });
-		var agrupaArqueo = new ol.source.Cluster({
+		var agrupaYacis = new ol.source.Cluster({
 	        distance: 20,
-	        source: arqueoSource
+	        source: yacisSource
 	      });
-		capayac.setSource(agrupaArqueo);
+		capayac.setSource(agrupaYacis);
     mapa.addLayer(capayac);//al añadir cuando el mapa aún está oculto hay veces que da problemas
 	}
   else{
@@ -501,17 +507,33 @@ function initMapa(resultado){
             source: new ol.source.OSM()
           });
   mapa = new ol.Map({
+      controls: [new ol.control.OverviewMap()],
 	    layers: [osm],
 	    view: new ol.View({
 	      projection: 'EPSG:3857',
-	      center: [-4159000, 3920500],
+	      center: [-288976.121475105, 4868797.98060151],
         maxZoom : 12,//revisar a qué escala corresponde
-	      zoom: 4
+	      zoom: 5
 	    }),
-	    controls:[],
 	    target: 'map'
   	});
-    $('#fila-mapa').addClass('collapse');//Es necesario inicializar el mapa en un div que no esté oculto, y luego ocultarlo
+    $('#fila-mapa').addClass('collapse');
+    var popup = new ol.Overlay({
+        element: document.getElementById('popup')
+    });
+    mapa.addOverlay(popup);
+    mapa.on('click', function(evt) {
+   		var feature = mapa.forEachFeatureAtPixel(evt.pixel,
+  	    function(feature, layer) {
+  	      if (layer.get('name') == 'yacis') {
+    			 	if (feature) {
+    			        var coordinate = evt.coordinate;
+    			 		muestraPopup(coordinate,feature);
+    				}
+    	        	return feature;
+  	    	}
+  	    });
+    	});
 }
 
 /*==========================================
@@ -669,11 +691,9 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
   $('#ficha-selec').empty();
   var tit = document.createElement('div');
   tit.setAttribute('class','lst-flt-selec');
-  tit.setAttribute('style','border-bottom-left-radius:0;border-bottom-right-radius:0;');
   tit.innerHTML = '<strong>'+titFichaSel+'</strong>';
   var divficha = document.createElement('div');
     divficha.setAttribute('class','lst-flt-selec');
-    divficha.setAttribute('style','border-top-left-radius:0;border-top-right-radius:0;');
     $('#ficha-selec').append(tit);
   if (datosreg) {
     var p = document.createElement('p');
@@ -743,12 +763,32 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
     p.innerHTML = '<em>'+etiLab+'</em>:<br>' + txt.replace(/,\s*$/, "");
     divficha.appendChild(p);
   }
+  var pandesc = document.createElement('div');
+  var titdesc = document.createElement('div');
+  titdesc.setAttribute('class','descargas');
+  titdesc.setAttribute('style','border-bottom-left-radius:0;border-bottom-right-radius:0;');
+  titdesc.innerHTML = '<strong>'+titDesc+'</strong>';
+  var divdesc = document.createElement('div');
+    divdesc.setAttribute('class','descargas');
+    divdesc.setAttribute('style','border-top-left-radius:0;border-top-right-radius:0;');
+  var linkcsv = document.createElement('a');
+      $(linkcsv).addClass('btn boton-flujo');
+      $(linkcsv).html('csv');
+      linkcsv.setAttribute('style','padding:0.25em 1em;font-size:1em;')
+    divdesc.appendChild(linkcsv);
+    pandesc.appendChild(titdesc);
+    pandesc.appendChild(divdesc);
   $('#ficha-selec').append(divficha);
+  $('#ficha-selec').append(pandesc);
   $('#ficha-selec').removeClass('collapse');
 }
 
 
 function ponDatosTabla(resultado){
+  var arrids = [];
+  for (var i = 0; i < resultado.data.length; i++) {
+    arrids.push(resultado.data[i].id_yaci);
+  }
   var tabla = $('#tab-data').DataTable();
   tabla.clear().draw();
   tabla.rows.add(resultado.data );
@@ -759,6 +799,31 @@ function ponDatosTabla(resultado){
   $('#panel-sel-filt').hide();
   $('#tit-buscayaci').show();
   $('#tit-filtrar').show();
+  muestraPuntos(arrids);
+}
+
+function muestraPuntos(ids){
+  var capas = mapa.getLayers().getArray();
+  var capayac;
+  var yacisFltSource = new ol.source.Vector({
+  });
+  for (var i = 0; i < capas.length; i++) {
+    var nomcapa = capas[i].get('name');
+    if (nomcapa == 'yacis') {capayac = capas[i];}
+  }
+  var features = yacisSource.getFeatures();
+  for (var i = 0; i < features.length; i++) {
+    var idfeat = features[i].get('id');
+    if (ids.indexOf(idfeat) != -1) {
+      yacisFltSource.addFeature(features[i]);
+    }
+  }
+  var agrupaYacis = new ol.source.Cluster({
+        distance: 20,
+        source: yacisFltSource
+      });
+  capayac.setSource(agrupaYacis);
+  mapa.getView().fit(yacisFltSource.getExtent());
 }
 
 function extiendeData(datacion){
@@ -849,4 +914,68 @@ function extiendeData(datacion){
        }
    } );
    return tr;
+}
+
+function cierraPops(){
+	var elementos = mapa.getOverlays();
+		elementos.forEach(function(element,index,array){
+			var elemento = element.getElement();
+			$(elemento).popover('dispose');
+		})
+}
+
+function muestraPopup(coord,feature){
+	var element = document.getElementById('popup');
+	var popup = mapa.getOverlays().item(0);//esto sólo funciona porque no tengo más overlays en el mapa. HACER BIEN
+	var plantilla = '<div class="popover" role="tooltip"><div class="popover-header popover-title" title="Yacimientos"></div><div class="arrow"></div><div class="popover-body"></div></div>';
+		var titulo;
+		var contenido_popup = document.createElement('DIV');
+		var feats = feature.getProperties().features;
+		if (feats.length == 1) {
+			titulo = feats[0].get('text');
+			var txt_yaci = feats[0].get('cronotipo');;
+			contenido_popup.innerHTML = txt_yaci;
+		}
+		else{
+			titulo = feats.length + ' '+popYac;
+			for (var i = 0; i < feats.length; i++) {
+				var txt_yaci = feats[i].get('cronotipo');
+				var panel_yaci = document.createElement('div');
+					panel_yaci.setAttribute('id','tit_'+feats[i].get('id'));
+					panel_yaci.setAttribute('onclick','javascript:muestra_data_ext("tit_'+feats[i].get('id')+'")');
+				var tit_yaci = document.createElement('a');
+					tit_yaci.setAttribute('class','enlace_yaci');
+					tit_yaci.innerHTML = feats[i].get('text');
+				var prf_yaci = document.createElement('div');
+					prf_yaci.setAttribute('id','inf_'+feats[i].get('id'));
+					prf_yaci.setAttribute('class','yaci-ext');
+					prf_yaci.style.display ='none';
+					prf_yaci.innerHTML = txt_yaci;
+				panel_yaci.appendChild(tit_yaci);
+				panel_yaci.appendChild(prf_yaci);
+				contenido_popup.appendChild(panel_yaci);
+			}
+		}
+  $(element).popover('dispose');
+	    popup.setPosition(coord);
+	$(element).popover({
+	  'placement': 'top',
+	  'animation': false,
+	  'html': true,
+	  'content': contenido_popup,
+	  'title':'<img src="./img/paletin.svg" class="icono-pop" title="Yacimiento"></img>'+titulo+'<a href="javascript:cierraPops();" class="cierra-pop"><i class="fa fa-times fa-2x"></i></a>',
+	  'template':plantilla
+	});
+	$(element).popover('show');
+}
+
+function muestra_data_ext(id_div){
+	var padre = document.getElementById(id_div);
+	var hijo = padre.lastChild;
+	if(hijo.style.display == 'none'){
+		$(hijo).show();
+	}
+	else {
+		$(hijo).hide();
+	}
 }

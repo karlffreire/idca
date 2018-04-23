@@ -123,6 +123,13 @@ section {
   background-color: white;
   padding: 0.5em;
   margin-bottom: 1px;
+}
+
+.descargas{
+  color: white;
+  background-color: #454545;
+  padding: 0.5em;
+  margin-bottom: 1px;
   border-radius: 0.25em;
 }
 
@@ -170,4 +177,69 @@ section {
   position: absolute;
   display: block;
   margin: 0 10 5;
+}
+
+
+.popover-title{
+  background-color: #454545;
+}
+
+.popover-header{
+  padding-left: 0;
+  padding-right: 0;
+  color: white;
+  font-weight: bold;
+  min-height: 45px;
+}
+
+.popover-body{
+  min-width: 250px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.icono-pop{
+  float: left;
+  margin: 0 8px;
+  padding: 1px;
+  text-align: center;
+  position: relative;
+  top:0;
+  left: 0;
+}
+
+.cierra-pop{
+  float: right;
+  margin: 0 5px;
+  margin-right: 10px;
+  padding: 3px;
+  width: 20px;
+  text-align: center;
+  font-size: 12px;
+  position: relative;
+  top:0;
+  right: 0;
+  cursor: pointer;
+  border-radius: 100%;
+  color:white;
+}
+
+.cierra-pop:hover{
+  text-decoration: none;
+  color: #6E6E6E;
+  /*background: white;*//*#d9534f;*/
+}
+
+.enlace_yaci{
+  cursor: pointer;
+}
+
+.yaci-ext{
+	width: 100%;
+	float: right;
+	padding-left: 10px;
+	margin-bottom: 5px;
+	border-bottom-style: dashed;
+	border-bottom-color: #6E6E6E;
+	border-bottom-width: 2px;
 }

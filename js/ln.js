@@ -25,7 +25,8 @@ var thDsv = '';
 var thMed = '';
 var thLab = '';
 var titFichaSel = '';
-
+var titDesc = '';
+var popYac = '';
 
 function ponIdioma(ln){
   if (ln == 'es') {
@@ -56,6 +57,8 @@ function ponIdioma(ln){
     thMed = 'Método';
     thLab = 'Laboratorio';
     titFichaSel = 'Has seleccionado';
+    titDesc = 'Descargas';
+    popYac = 'yacimientos';
   }
   else if (ln == 'en'){
     titulo = 'Carbon IDEArq';
@@ -85,6 +88,8 @@ function ponIdioma(ln){
     thMed = 'Method';
     thLab = 'Laboratory';
     titFichaSel = 'You have selected';
+    titDesc = 'Downloads';
+    popYac = 'sites';
   }
   $('#titulo').html(titulo);
   $('#tit-buscayaci').html(tituloBuscaYaci);
