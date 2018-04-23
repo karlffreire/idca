@@ -119,11 +119,10 @@ section {
 }
 
 .lst-flt-selec{
-  background-color: #454545;
-  color: white;
-  padding: 1em;
-  margin-top: 5em;
-  margin-bottom: 5em;
+  color: #454545;
+  background-color: white;
+  padding: 0.5em;
+  margin-bottom: 1px;
   border-radius: 0.25em;
 }
 
@@ -156,10 +155,11 @@ section {
 
 /*Mapa*/
 .map{
-  /*position: absolute;*/
   width: 100%;
   height: 700px;
   padding: 0;
+  border: solid 3px #454545;
+  border-radius: 0.25em;
 }
 
 .attribution-container {

@@ -511,7 +511,7 @@ function initMapa(resultado){
 	    controls:[],
 	    target: 'map'
   	});
-    $('#panel-mapa').addClass('collapse');//Es necesario inicializar el mapa en un div que no esté oculto, y luego ocultarlo
+    $('#fila-mapa').addClass('collapse');//Es necesario inicializar el mapa en un div que no esté oculto, y luego ocultarlo
 }
 
 /*==========================================
@@ -667,18 +667,21 @@ function selYaci(yaci,callback){
 
 function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fechamin,fechamax,desvmin,desvmax,datosmetodo, datoslab){
   $('#ficha-selec').empty();
+  var tit = document.createElement('div');
+  tit.setAttribute('class','lst-flt-selec');
+  tit.setAttribute('style','border-bottom-left-radius:0;border-bottom-right-radius:0;');
+  tit.innerHTML = '<strong>'+titFichaSel+'</strong>';
   var divficha = document.createElement('div');
-  var tit = document.createElement('p');
-    tit.setAttribute('style','margin-bottom: 1.5em;border-bottom: solid 1px white;')
-    tit.innerHTML = '<strong>'+titFichaSel+'</strong>';
-  divficha.appendChild(tit);
+    divficha.setAttribute('class','lst-flt-selec');
+    divficha.setAttribute('style','border-top-left-radius:0;border-top-right-radius:0;');
+    $('#ficha-selec').append(tit);
   if (datosreg) {
     var p = document.createElement('p');
     var txt = '';
     for (var i = 0; i < datosreg.length; i++) {
       txt += datosreg[i].text+', ';
     }
-    p.innerHTML = etiProv+':<br>' + txt.replace(/,\s*$/, "");
+    p.innerHTML = '<em>'+etiProv+'</em>:<br>' + txt.replace(/,\s*$/, "");
     divficha.appendChild(p);
   }
   if (datostipo) {
@@ -687,7 +690,7 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
     for (var i = 0; i < datostipo.length; i++) {
       txt += datostipo[i].text+', ';
     }
-    p.innerHTML = etiTipoYac+':<br>' + txt.replace(/,\s*$/, "");
+    p.innerHTML = '<em>'+etiTipoYac+'</em>:<br>' + txt.replace(/,\s*$/, "");
     divficha.appendChild(p);
   }
   if (datoscrono) {
@@ -696,7 +699,7 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
     for (var i = 0; i < datoscrono.length; i++) {
       txt += datoscrono[i].text+', ';
     }
-    p.innerHTML = etiCronoYac+':<br>' + txt.replace(/,\s*$/, "");
+    p.innerHTML = '<em>'+etiCronoYac+'</em>:<br>' + txt.replace(/,\s*$/, "");
     divficha.appendChild(p);
   }
   if (datosmuest) {
@@ -705,7 +708,7 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
     for (var i = 0; i < datosmuest.length; i++) {
       txt += datosmuest[i].text+', ';
     }
-    p.innerHTML = etiTipoMuest+':<br>' + txt.replace(/,\s*$/, "");
+    p.innerHTML = '<em>'+etiTipoMuest+'</em>:<br>' + txt.replace(/,\s*$/, "");
     divficha.appendChild(p);
   }
   if (datosmat) {
@@ -714,12 +717,12 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
     for (var i = 0; i < datosmat.length; i++) {
       txt += datosmat[i].text+', ';
     }
-    p.innerHTML = etiTipoMat+':<br>' + txt.replace(/,\s*$/, "");
+    p.innerHTML = '<em>'+etiTipoMat+'</em>:<br>' + txt.replace(/,\s*$/, "");
     divficha.appendChild(p);
   }
   if ((fechamin != '') || (fechamax != '')) {
     var p = document.createElement('p');
-    p.innerHTML = etiFecha+':<br>' + fechamin+'-'+fechamax+' BP | σ: '+desvmin+'-'+desvmax;
+    p.innerHTML = '<em>'+etiFecha+'</em>:<br>' + fechamin+'-'+fechamax+' BP | σ: '+desvmin+'-'+desvmax;
     divficha.appendChild(p);
   }
   if (datosmetodo) {
@@ -728,7 +731,7 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
     for (var i = 0; i < datosmetodo.length; i++) {
       txt += datosmetodo[i].text+', ';
     }
-    p.innerHTML = etiMetodo+':<br>' + txt.replace(/,\s*$/, "");
+    p.innerHTML = '<em>'+etiMetodo+'</em>:<br>' + txt.replace(/,\s*$/, "");
     divficha.appendChild(p);
   }
   if (datoslab) {
@@ -737,7 +740,7 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
     for (var i = 0; i < datoslab.length; i++) {
       txt += datoslab[i].text+', ';
     }
-    p.innerHTML = etiLab+':<br>' + txt.replace(/,\s*$/, "");
+    p.innerHTML = '<em>'+etiLab+'</em>:<br>' + txt.replace(/,\s*$/, "");
     divficha.appendChild(p);
   }
   $('#ficha-selec').append(divficha);
@@ -802,7 +805,7 @@ function extiendeData(datacion){
            if (json.data.observaciones) {
              txtmat += ' Observaciones: '+json.data.observaciones+' |';
            }
-           $(divmat).html('Info material: '+txtmat.substring(0, txtmat.length - 1));
+           $(divmat).html('<em>Info material</em>: '+txtmat.substring(0, txtmat.length - 1));
            var divdat = document.createElement('div');
              $(divdat).addClass('col-md-12');
              $(divdat).addClass('data-ext');
@@ -825,7 +828,7 @@ function extiendeData(datacion){
            if (json.data.cor_frac_isotopo) {
              txtdat += ' Corrección por fracción de isótopo: '+json.data.cor_frac_isotopo+' |';
            }
-           $(divdat).html('Info datación: '+txtdat.substring(0, txtdat.length - 1));
+           $(divdat).html('<em>Info datación</em>: '+txtdat.substring(0, txtdat.length - 1));
            div1.appendChild(divmat);
            div1.appendChild(divdat);
            if (json.data.bibliografia) {
@@ -838,7 +841,7 @@ function extiendeData(datacion){
                txtrefs += '<li>'+refs[i]+'</li>'
              }
              txtrefs += '</ul>';
-             $(divbib).html('Referencias bibliográficas: '+txtrefs);
+             $(divbib).html('<em>Referencias bibliográficas</em>: '+txtrefs);
              div1.appendChild(divbib);
            }
          }
