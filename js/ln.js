@@ -27,6 +27,7 @@ var thLab = '';
 var titFichaSel = '';
 var titDesc = '';
 var popYac = '';
+var titIrA = '';
 
 function ponIdioma(ln){
   if (ln == 'es') {
@@ -59,6 +60,7 @@ function ponIdioma(ln){
     titFichaSel = 'Has seleccionado';
     titDesc = 'Descargas';
     popYac = 'yacimientos';
+    titIrA = 'Mostrar en mapa';
   }
   else if (ln == 'en'){
     titulo = 'Carbon IDEArq';
@@ -90,6 +92,7 @@ function ponIdioma(ln){
     titFichaSel = 'You have selected';
     titDesc = 'Downloads';
     popYac = 'sites';
+    titIrA = 'Show in map';
   }
   $('#titulo').html(titulo);
   $('#tit-buscayaci').html(tituloBuscaYaci);

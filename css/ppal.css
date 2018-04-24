@@ -160,6 +160,11 @@ section {
   padding: 0.25em;
 }
 
+.icono-mapa{
+  margin-right: 1em;
+  cursor: pointer;
+}
+
 /*Mapa*/
 .map{
   width: 100%;

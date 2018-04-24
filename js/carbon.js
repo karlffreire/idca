@@ -419,7 +419,10 @@ function initTabla(){
         },
         {data:'metodos_medida'},
         {data:'sigla'},
-        {data:'nombre_yaci'},
+        {data: 'nombre_yaci',"render":function(data,type,row){
+              return '<i class="fas fa-map icono-mapa" onclick="javascript:irAPunto('+row.id_yaci+')" title="'+titIrA+'"></i>'+data;
+          }
+        },
         {data:'ubicacion'}
       ],
       pageLength: 10,
@@ -447,67 +450,18 @@ function initTabla(){
     } );
 }
 
-function isCluster(feature) {
-  if (!feature || !feature.get('features')) {
-        return false;
-  }
-  return feature.get('features').length > 1;
-}
 
-function ponEstiloYacis(feature) {
-  if (isCluster(feature)) {
-    var radio = Math.min(feature.get('features').length, 6) + 5;
-  }
-  else{
-    var radio = 5;
-  }
-  var circulo = new ol.style.Circle({
-    radius: radio,
-    stroke: new ol.style.Stroke({
-      width: 2,
-      color: '#454545'
-    }),
-    fill: new ol.style.Fill({
-      color: '#FF7542',
-    }),
-    rotateWithView: true
-  });
-  var estilo_yacis = new ol.style.Style({
-    image: circulo
-  });
-  return [estilo_yacis];
-}
-
-function ponCapa(resultado){
-  var geojsonArq = resultado;
-	featsArqueo = (new ol.format.GeoJSON()).readFeatures(geojsonArq);
-  var capayac = new ol.layer.Vector({
-    style: ponEstiloYacis
-  });
-  capayac.set('name', 'yacis');
-	if (featsArqueo.length > 0) {
-		yacisSource = new ol.source.Vector({
-	        features: featsArqueo
-	      });
-		var agrupaYacis = new ol.source.Cluster({
-	        distance: 20,
-	        source: yacisSource
-	      });
-		capayac.setSource(agrupaYacis);
-    mapa.addLayer(capayac);//al añadir cuando el mapa aún está oculto hay veces que da problemas
-	}
-  else{
-    alert('Error loading archaeological sites. Map functionality not available.');
-  }
-
-}
 
 function initMapa(resultado){
   var osm = new ol.layer.Tile({
             source: new ol.source.OSM()
           });
   mapa = new ol.Map({
-      controls: [new ol.control.OverviewMap()],
+      controls: [new ol.control.OverviewMap({
+          layers:[osm]
+        }),
+        new ol.control.ScaleLine()
+      ],
 	    layers: [osm],
 	    view: new ol.View({
 	      projection: 'EPSG:3857',
@@ -799,6 +753,7 @@ function ponDatosTabla(resultado){
   $('#panel-sel-filt').hide();
   $('#tit-buscayaci').show();
   $('#tit-filtrar').show();
+  window.location.href = '#fila-tabla';
   muestraPuntos(arrids);
 }
 
@@ -924,6 +879,66 @@ function cierraPops(){
 		})
 }
 
+/*==========================================
+
+        FUNCIONALIDAD MAPA
+
+============================================*/
+
+function isCluster(feature) {
+  if (!feature || !feature.get('features')) {
+        return false;
+  }
+  return feature.get('features').length > 1;
+}
+
+function ponEstiloYacis(feature) {
+  if (isCluster(feature)) {
+    var radio = Math.min(feature.get('features').length, 6) + 5;
+  }
+  else{
+    var radio = 5;
+  }
+  var circulo = new ol.style.Circle({
+    radius: radio,
+    stroke: new ol.style.Stroke({
+      width: 2,
+      color: '#454545'
+    }),
+    fill: new ol.style.Fill({
+      color: '#FF7542',
+    }),
+    rotateWithView: true
+  });
+  var estilo_yacis = new ol.style.Style({
+    image: circulo
+  });
+  return [estilo_yacis];
+}
+
+function ponCapa(resultado){
+  var geojsonArq = resultado;
+	featsArqueo = (new ol.format.GeoJSON()).readFeatures(geojsonArq);
+  var capayac = new ol.layer.Vector({
+    style: ponEstiloYacis
+  });
+  capayac.set('name', 'yacis');
+	if (featsArqueo.length > 0) {
+		yacisSource = new ol.source.Vector({
+	        features: featsArqueo
+	      });
+		var agrupaYacis = new ol.source.Cluster({
+	        distance: 20,
+	        source: yacisSource
+	      });
+		capayac.setSource(agrupaYacis);
+    mapa.addLayer(capayac);//al añadir cuando el mapa aún está oculto hay veces que da problemas
+	}
+  else{
+    alert('Error loading archaeological sites. Map functionality not available.');
+  }
+}
+
 function muestraPopup(coord,feature){
 	var element = document.getElementById('popup');
 	var popup = mapa.getOverlays().item(0);//esto sólo funciona porque no tengo más overlays en el mapa. HACER BIEN
@@ -978,4 +993,14 @@ function muestra_data_ext(id_div){
 	else {
 		$(hijo).hide();
 	}
+}
+
+function irAPunto(idpunto){
+  for (var i = 0; i < featsArqueo.length; i++) {
+    if (featsArqueo[i].get('id') == idpunto) {console.log(featsArqueo[i]);
+      window.location.href = '#fila-mapa';
+      mapa.getView().fit(featsArqueo[i].getGeometry());
+      break;
+    }
+  }
 }
