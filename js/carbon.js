@@ -77,14 +77,6 @@ function cargaLstLabos(callback){
 
 ============================================*/
 
-function compare(a,b) {
-  if (a.text < b.text)
-    return -1;
-  if (a.text > b.text)
-    return 1;
-  return 0;
-}
-
 function unique(list) {
     var result = [];
     $.each(list, function(i, e) {
@@ -232,23 +224,13 @@ function initPaneles(){
 
 function initBuscaYaci(){
   var data = [];
-  var capas = mapa.getLayers().getArray();
-  var capayac;
-  for (var i = 0; i < capas.length; i++) {
-    var nomcapa = capas[i].get('name');
-    if (nomcapa == 'yacis') {capayac = capas[i];}
+  var features = featsArqueo;
+  for (var j = 0; j < features.length; j++) {
+    var obj = {};
+    obj.id = features[j].get('id');
+    obj.text = features[j].get('text');
+    data.push(obj);
   }
-  var featcluster = capayac.getSource().features;
-  for (var i = 0; i < featcluster.length; i++) {
-    var features = featcluster[i].getProperties().features;
-    for (var j = 0; j < features.length; j++) {
-      var obj = {};
-      obj.id = features[j].get('id');
-      obj.text = features[j].get('text');
-      data.push(obj);
-    }
-  }
-  data.sort(compare);
   $('#intro-yaci').select2({
     data : data,
     placeholder: 'Busca un yacimiento',
@@ -420,7 +402,7 @@ function initTabla(){
         {data:'metodos_medida'},
         {data:'sigla'},
         {data: 'nombre_yaci',"render":function(data,type,row){
-              return '<i class="fas fa-map icono-mapa" onclick="javascript:irAPunto('+row.id_yaci+')" title="'+titIrA+'"></i>'+data;
+              return '<div class="row"><div class="col-md-10">'+data+'</div><div class="col-md-2"><i class="fas fa-map icono-mapa" onclick="javascript:irAPunto('+row.id_yaci+')" title="'+titIrA+'"></i></div></div>';
           }
         },
         {data:'ubicacion'}
@@ -458,9 +440,11 @@ function initMapa(resultado){
           });
   mapa = new ol.Map({
       controls: [new ol.control.OverviewMap({
-          layers:[osm]
+          layers:[osm],
+          className: 'ol-overviewmap ol-custom-overviewmap'
         }),
-        new ol.control.ScaleLine()
+        new ol.control.ScaleLine(),
+        new ol.control.Attribution()
       ],
 	    layers: [osm],
 	    view: new ol.View({
@@ -481,8 +465,8 @@ function initMapa(resultado){
   	    function(feature, layer) {
   	      if (layer.get('name') == 'yacis') {
     			 	if (feature) {
-    			        var coordinate = evt.coordinate;
-    			 		muestraPopup(coordinate,feature);
+    			       var coordinate = evt.coordinate;
+    			 	     muestraPopup(coordinate,feature);
     				}
     	        	return feature;
   	    	}
@@ -758,6 +742,16 @@ function ponDatosTabla(resultado){
 }
 
 function muestraPuntos(ids){
+  var overlays = mapa.getOverlays();
+  if (overlays) {
+    cierraPops();
+    if (overlays.item(1)) {
+      var over_txtyac = overlays.item(1);
+      if (over_txtyac.get('position') != 'undefined') {
+        overlays.item(1).unset('position');
+      }
+    }
+  }
   var capas = mapa.getLayers().getArray();
   var capayac;
   var yacisFltSource = new ol.source.Vector({
@@ -996,11 +990,22 @@ function muestra_data_ext(id_div){
 }
 
 function irAPunto(idpunto){
+  var elemento = document.getElementById('txt_yaci');
+  var pos;
   for (var i = 0; i < featsArqueo.length; i++) {
-    if (featsArqueo[i].get('id') == idpunto) {console.log(featsArqueo[i]);
+    if (featsArqueo[i].get('id') == idpunto) {
       window.location.href = '#fila-mapa';
       mapa.getView().fit(featsArqueo[i].getGeometry());
+      pos = featsArqueo[i].getGeometry().getCoordinates();
+      elemento.innerHTML = featsArqueo[i].get('text');
       break;
     }
   }
+  var marca = new ol.Overlay({
+    positioning: 'top-center',
+    offset: [0,-40],
+    position: pos,
+    element: elemento
+  });
+  mapa.addOverlay(marca);
 }
