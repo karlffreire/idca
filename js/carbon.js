@@ -402,7 +402,7 @@ function initTabla(){
         {data:'metodos_medida'},
         {data:'sigla'},
         {data: 'nombre_yaci',"render":function(data,type,row){
-              return '<div class="row"><div class="col-md-10">'+data+'</div><div class="col-md-2"><i class="fas fa-map icono-mapa" onclick="javascript:irAPunto('+row.id_yaci+')" title="'+titIrA+'"></i></div></div>';
+              return '<div class="row"><div class="col-md-2"><i class="fas fa-map-marker-alt icono-mapa" onclick="javascript:irAPunto('+row.id_yaci+')" title="'+titIrA+'"></i></div><div class="col-md-10">'+data+'</div></div>';
           }
         },
         {data:'ubicacion'}
@@ -768,11 +768,14 @@ function muestraPuntos(ids){
     }
   }
   var agrupaYacis = new ol.source.Cluster({
-        distance: 20,
-        source: yacisFltSource
-      });
+    distance: 20,
+    source: yacisFltSource
+  });
   capayac.setSource(agrupaYacis);
-  mapa.getView().fit(yacisFltSource.getExtent());
+  if (ids.length > 0) {
+    mapa.getView().fit(yacisFltSource.getExtent());
+  }
+
 }
 
 function extiendeData(datacion){
@@ -983,9 +986,11 @@ function muestra_data_ext(id_div){
 	var hijo = padre.lastChild;
 	if(hijo.style.display == 'none'){
 		$(hijo).show();
+    $(padre).attr("style","font-weight:bold;");
 	}
 	else {
 		$(hijo).hide();
+    $(padre).attr("style","font-weight:normal;");
 	}
 }
 

@@ -165,7 +165,7 @@ section {
 }
 
 .icono-mapa{
-  margin-right: 1em;
+  font-size: 1.2em;
   cursor: pointer;
 }
 
@@ -274,10 +274,8 @@ section {
 	width: 100%;
 	float: right;
 	padding-left: 10px;
-	margin-bottom: 5px;
-	border-bottom-style: dashed;
-	border-bottom-color: #6E6E6E;
-	border-bottom-width: 2px;
+	margin-bottom: 1.2em;
+  font-weight: normal;
 }
 
 .etiqueta-mapa{
