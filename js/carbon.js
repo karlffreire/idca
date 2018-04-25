@@ -325,8 +325,8 @@ function initBarras(resultado){
     grid: true,
     min: initdesvmin,
     max: initdesvmax,
-    from: 200,
-    to: 4500,
+    from: 100,
+    to: 2500,
     step: 50,
     postfix: "",
     onStart:function(data){
