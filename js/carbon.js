@@ -889,16 +889,21 @@ function histograma(data){
       height = +svg.attr("height") - margin.top - margin.bottom,
       g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var y = d3.scaleLinear()
-      .domain([d3.min(data),d3.max(data)])
-      .rangeRound([height,0]);
-
-    var intervalos = 1+ 3.3*Math.log(data.length);
-
+    var extent = d3.extent(data);
+    var formatEdad = function(d) {
+        return d + " BP";
+    }
     var bins = d3.histogram()
       .domain([d3.min(data),d3.max(data)])
-      .thresholds(y.ticks(Math.ceil(intervalos)))
       (data);
+
+    var y = d3.scaleLinear()
+      .domain(extent)
+      .range([height,0]);
+      //.tickFormat(formatEdad);
+      //y.tickFormat(d3.format(",%"));
+      y.clamp(true);//¿por qué no funciona?
+      y.nice();
 
     var x = d3.scaleLinear()
       .domain([0, d3.max(bins, function(d) { return d.length; })])
@@ -911,14 +916,14 @@ function histograma(data){
       .attr("transform", function(d) {return "translate(" + 0 + "," + y(d.x1) + ")"; });
 
     bar.append("rect")
-      .attr("x", 0)
-      .attr("height", function(d) { return y(bins[0].x0) - y(bins[0].x1) -1 ; })
+      .attr("x", 3)//esto es para pegarlo al eje o separarlo
+      .attr("height", function(d) {return y(bins[1].x0) - y(bins[1].x1) -1 ; })
       .attr("width", function(d) { return x(d.length); });
 
     bar.append("text")
       .attr("dx", ".75em")
       .attr("x", (function(d) {return x(d.length)-20; }))
-      .attr("y", ((y(bins[0].x0) - y(bins[0].x1))/2)+3)
+      .attr("y", ((y(bins[1].x0) - y(bins[1].x1))/2)+3)
       .attr("text-anchor", "middle")
       .text(function(d) { return d.length; });
 

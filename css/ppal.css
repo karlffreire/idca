@@ -174,8 +174,8 @@ section {
   width: 100%;
   height: 700px;
   padding: 0;
-  border: solid 3px #454545;
-  border-radius: 0.25em;
+  border: solid 1px #454545;
+
 }
 
 .attribution-container {

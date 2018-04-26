@@ -47,7 +47,7 @@ function cargaYacis(){
 
 function listaRegiones(){
   $db = conectaBD();
- 	$prp = pg_prepare($db,"lst-reg","SELECT gid as id, prov_dist as text, paises as grupo FROM general.nut3 ORDER BY cod_pais,prov_dist;");
+ 	$prp = pg_prepare($db,"lst-reg","SELECT gid as id, prov_dist as text, mostrar_pais as grupo FROM general.nut3 ORDER BY cod_pais,prov_dist;");
   $prp = pg_execute($db,"lst-reg",array());
 	while ($row=pg_fetch_assoc($prp)){
 		$regiones[] = $row;
@@ -103,7 +103,7 @@ function listaTiposMuestra(){
 
 function listaTiposMaterial(){
   $db = conectaBD();
- 	$prp = pg_prepare($db,"lst-material","SELECT id_tipo_material as id, tipo_material as text, nombre_esquema as grupo from c14.tipo_material_c14 inner join c14.esquemas_material_c14 on tipo_material_c14.id_esquemas_materiales_c14 = esquemas_material_c14.id_esquemas_material_c14 WHERE tipo_primario is true ORDER BY grupo,text");
+ 	$prp = pg_prepare($db,"lst-material","SELECT id_tipo_material as id, tipo_material as text, CASE WHEN nombre_esquema = 'Taxones' THEN 'Taxones (Familia)' ELSE nombre_esquema END as grupo from c14.tipo_material_c14 inner join c14.esquemas_material_c14 on tipo_material_c14.id_esquemas_materiales_c14 = esquemas_material_c14.id_esquemas_material_c14 WHERE tipo_primario is true ORDER BY grupo,text");
   $prp = pg_execute($db,"lst-material",array());
 	while ($row=pg_fetch_assoc($prp)){
 		$tipmaterial[] = $row;
