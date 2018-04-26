@@ -323,9 +323,9 @@ function initBarras(resultado){
 	$("#seldev").ionRangeSlider({
     type: "double",
     grid: true,
-    min: initdesvmin,
+    min: 0,
     max: initdesvmax,
-    from: 100,
+    from: 0,
     to: 2500,
     step: 50,
     postfix: "",
@@ -724,8 +724,10 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
 
 function ponDatosTabla(resultado){
   var arrids = [];
+  var fechas = []
   for (var i = 0; i < resultado.data.length; i++) {
     arrids.push(resultado.data[i].id_yaci);
+    fechas.push(Number(resultado.data[i].fecha));
   }
   var tabla = $('#tab-data').DataTable();
   tabla.clear().draw();
@@ -739,6 +741,7 @@ function ponDatosTabla(resultado){
   $('#tit-filtrar').show();
   window.location.href = '#fila-tabla';
   muestraPuntos(arrids);
+  histograma(fechas);
 }
 
 function muestraPuntos(ids){
@@ -874,6 +877,55 @@ function cierraPops(){
 			var elemento = element.getElement();
 			$(elemento).popover('dispose');
 		})
+}
+
+function histograma(data){
+  var graf = document.getElementById('hst');
+  d3.select(graf).selectAll("*").remove();;
+
+  var svg = d3.select(graf),
+      margin = {top: 10, right: 30, bottom: 30, left: 60},
+      width = +svg.attr("width") - margin.left - margin.right,
+      height = +svg.attr("height") - margin.top - margin.bottom,
+      g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  var y = d3.scaleLinear()
+      .domain([d3.min(data),d3.max(data)])
+      .range([height,0]);
+
+  var intervalos = 1+ 3.3*Math.log(data.length);//revisar si esta fórmula es la más adecuada
+
+  var bins = d3.histogram()
+      .domain([d3.min(data),d3.max(data)])
+      .thresholds(y.ticks(intervalos.toFixed(0)))
+      (data);
+
+  var x = d3.scaleLinear()
+      .domain([0, d3.max(bins, function(d) { return d.length; })])
+      .range([0, width]);
+
+  var bar = g.selectAll(".bar")
+    .data(bins)
+    .enter().append("g")
+      .attr("class", "bar")
+      .attr("transform", function(d) {return "translate(" + 0 + "," + y(d.x1) + ")"; });
+
+    bar.append("rect")
+        .attr("x", 0)
+        .attr("height", function(d) { return y(bins[0].x0) - y(bins[0].x1) -1 ; })
+        .attr("width", function(d) { return x(d.length); });
+
+    bar.append("text")
+        .attr("dx", ".75em")
+        .attr("x", (function(d) {return x(d.length)-20; }))
+        .attr("y", ((y(bins[0].x0) - y(bins[0].x1))/2)+3)
+        .attr("text-anchor", "middle")
+        .text(function(d) { return d.length; });
+
+    g.append("g")
+        .attr("class", "axis axis--y")
+        .attr("transform", "translate(0,0)")
+        .call(d3.axisLeft(y));
 }
 
 /*==========================================
