@@ -881,51 +881,52 @@ function cierraPops(){
 
 function histograma(data){
   var graf = document.getElementById('hst');
-  d3.select(graf).selectAll("*").remove();;
-
-  var svg = d3.select(graf),
+  d3.select(graf).selectAll("*").remove();
+  if (data.length > 30) {
+    var svg = d3.select(graf),
       margin = {top: 10, right: 30, bottom: 30, left: 60},
       width = +svg.attr("width") - margin.left - margin.right,
       height = +svg.attr("height") - margin.top - margin.bottom,
       g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  var y = d3.scaleLinear()
+    var y = d3.scaleLinear()
       .domain([d3.min(data),d3.max(data)])
-      .range([height,0]);
+      .rangeRound([height,0]);
 
-  var intervalos = 1+ 3.3*Math.log(data.length);//revisar si esta fórmula es la más adecuada
+    var intervalos = 1+ 3.3*Math.log(data.length);
 
-  var bins = d3.histogram()
+    var bins = d3.histogram()
       .domain([d3.min(data),d3.max(data)])
-      .thresholds(y.ticks(intervalos.toFixed(0)))
+      .thresholds(y.ticks(Math.ceil(intervalos)))
       (data);
 
-  var x = d3.scaleLinear()
+    var x = d3.scaleLinear()
       .domain([0, d3.max(bins, function(d) { return d.length; })])
       .range([0, width]);
 
-  var bar = g.selectAll(".bar")
-    .data(bins)
-    .enter().append("g")
+    var bar = g.selectAll(".bar")
+      .data(bins)
+      .enter().append("g")
       .attr("class", "bar")
       .attr("transform", function(d) {return "translate(" + 0 + "," + y(d.x1) + ")"; });
 
     bar.append("rect")
-        .attr("x", 0)
-        .attr("height", function(d) { return y(bins[0].x0) - y(bins[0].x1) -1 ; })
-        .attr("width", function(d) { return x(d.length); });
+      .attr("x", 0)
+      .attr("height", function(d) { return y(bins[0].x0) - y(bins[0].x1) -1 ; })
+      .attr("width", function(d) { return x(d.length); });
 
     bar.append("text")
-        .attr("dx", ".75em")
-        .attr("x", (function(d) {return x(d.length)-20; }))
-        .attr("y", ((y(bins[0].x0) - y(bins[0].x1))/2)+3)
-        .attr("text-anchor", "middle")
-        .text(function(d) { return d.length; });
+      .attr("dx", ".75em")
+      .attr("x", (function(d) {return x(d.length)-20; }))
+      .attr("y", ((y(bins[0].x0) - y(bins[0].x1))/2)+3)
+      .attr("text-anchor", "middle")
+      .text(function(d) { return d.length; });
 
     g.append("g")
-        .attr("class", "axis axis--y")
-        .attr("transform", "translate(0,0)")
-        .call(d3.axisLeft(y));
+      .attr("class", "axis axis--y")
+      .attr("transform", "translate(0,0)")
+      .call(d3.axisLeft(y));
+  }
 }
 
 /*==========================================
