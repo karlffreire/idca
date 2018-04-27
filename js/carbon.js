@@ -380,7 +380,7 @@ function initTabla(){
             "className": 'detalles-data',
             "orderable": false,
             "data": null,
-            "defaultContent": '<i class="fas fa-plus-circle" aria-hidden="true" style="cursor:pointer;"></i>'
+            "defaultContent": '<i class="fas fa-plus-circle icono-tabla" aria-hidden="true"></i>'
         },
         {data: 'fecha',"render":function(data,type,row){
             if (type === 'display' || type === 'filter') {
@@ -402,7 +402,7 @@ function initTabla(){
         {data:'metodos_medida'},
         {data:'sigla'},
         {data: 'nombre_yaci',"render":function(data,type,row){
-              return '<div class="row"><div class="col-md-2"><i class="fas fa-map-marker-alt icono-mapa" onclick="javascript:irAPunto('+row.id_yaci+')" title="'+titIrA+'"></i></div><div class="col-md-10">'+data+'</div></div>';
+              return '<div class="row"><div class="col-md-2"><i class="fas fa-map-marker-alt icono-tabla" onclick="javascript:irAPunto('+row.id_yaci+')" title="'+titIrA+'"></i></div><div class="col-md-10">'+data+'</div></div>';
           }
         },
         {data:'ubicacion'}
@@ -726,6 +726,10 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
   $('#ficha-selec').removeClass('collapse');
 }
 
+function resalta(iddiv){
+  $(iddiv).addClass('resalta');
+  setTimeout(function(){ $(iddiv).removeClass('resalta'); }, 1000);
+}
 
 function ponDatosTabla(resultado){
   var arrids = [];
@@ -903,7 +907,7 @@ function histograma(data){
       y.clamp(true);//¿por qué no funciona?
       y.nice();
 
-    var intervalos = d3.thresholdFreedmanDiaconis(data, d3.min(data), d3.max(data));
+    var intervalos = d3.thresholdScott(data, d3.min(data), d3.max(data));
     var bins = d3.histogram()
       .domain(y.domain())
       .thresholds(y.ticks(intervalos))
@@ -943,8 +947,8 @@ function histograma(data){
       .attr("class", "axis axis--y")
       .attr("transform", "translate(0,0)")
       .call(d3.axisLeft(y));
-
   }
+  resalta('.lst-flt-selec');
 }
 
 /*==========================================

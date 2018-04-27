@@ -137,6 +137,11 @@ section {
   border-radius: 0.25em;
 }
 
+.resalta{
+  background-color: #FF7542;
+  color: white;
+}
+
 /*tabla*/
 .tabla-dataciones {
   color:#454545;
@@ -147,7 +152,7 @@ section {
 }
 
 .tabla-dataciones.table-hover tbody tr:hover td, .tabla-dataciones.table-hover tbody tr:hover th {
-  background-color: rgba(255,177,66,0.6);
+  background-color: rgba(200,200,200,0.6);/* rgba(255,177,66,0.6);*/
 }
 
 .lst-dataciones .page-link{
@@ -164,9 +169,13 @@ section {
   padding: 0.25em;
 }
 
-.icono-mapa{
+.icono-tabla{
   font-size: 1.2em;
   cursor: pointer;
+}
+
+.icono-tabla:hover{
+  color: #FF7542;
 }
 
 /*Mapa*/
@@ -268,6 +277,10 @@ section {
 
 .enlace_yaci{
   cursor: pointer;
+}
+
+.enlace_yaci a:hover{/*no funciona, creo que porque no tiene href*/
+  color: #FF7542;
 }
 
 .yaci-ext{
