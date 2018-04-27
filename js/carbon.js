@@ -897,7 +897,7 @@ function histograma(data){
     var extent = d3.extent(data);
 
     var y = d3.scaleLinear()
-      .domain([d3.min(data),d3.max(data)+1]) //sumo 1 al máximo para que no falle en los casos en los que hay valores agrupados justo en el límite
+      .domain([d3.min(data),d3.max(data)+1]) //sumo 1 al máximo para que no falle en los casos en los que hay valores agrupados justo en el límite. Sigue fallando en algunas ocasiones, habría que añadir un bin entero, pero no puedo porque se generan pasándle el número de intervalos... Por ejemplo fecha > 25000
       .range([height,0]);
 
       y.clamp(true);//¿por qué no funciona?

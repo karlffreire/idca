@@ -1,6 +1,12 @@
 <?php
 require '../datos/conexion.php';
 
+function desconecta(){
+	unset($_SESSION['usidca']);
+	unset($_SESSION['pssidca']);
+	unset($_SESSION['proyecto']);
+}
+
 /*
 ======================================
 

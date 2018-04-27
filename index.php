@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['proyecto'] != 'idearq_carbon')) {
+  header('location:./entrando.php');
+}
+
+ ?>
+
  <!DOCTYPE html>
  <html lang="es">
    <head>
@@ -32,6 +41,7 @@
      <div class="container-fluid">
        <div id="cabecera" class="row">
          <h1 id="titulo" class=""></h1>
+         <button type="button" onclick="window.location.href='./datos/desconecta.php'" class="offset-8 btn btn-lg boton-flujo text-center" style="background-color:#454545;">Salir <i class="fas fa-sign-out-alt"></i></button>
        </div>
       <div class="row">
         <div class="col"></div>
@@ -213,7 +223,6 @@
 				<div class="col-xs-12 col-sm-12 col-md-12 mt-2">
 					<ul class="list-unstyled list-inline social text-center">
 						<li class="list-inline-item"><a href="https://github.com/karlffreire/idca" target="_blank"><i class="fab fa-github fa-2x"></i></a></li>
-						<li class="list-inline-item"><a href="javascript:void();" target="_blank"><i class="fab fa-twitter fa-2x"></i></a></li>
 						<li class="list-inline-item"><a href="javascript:void();" target="_blank"><i class="fa fa-envelope fa-2x"></i></a></li>
 					</ul>
 				</div>

@@ -1,5 +1,11 @@
 <?php
 require './modelo.php';
+session_start();
+
+if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['proyecto'] != 'idearq_carbon')) {
+  header('location:./entrando.php');
+}
+
 $prov = filter_var($_GET['prov'],FILTER_SANITIZE_STRING);
 $tipos = filter_var($_GET['tipo'],FILTER_SANITIZE_STRING);
 $cronos = filter_var($_GET['crono'],FILTER_SANITIZE_STRING);
