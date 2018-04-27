@@ -716,8 +716,13 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
     divdesc.appendChild(linkcsv);
     pandesc.appendChild(titdesc);
     pandesc.appendChild(divdesc);
+  var sube = document.createElement('div');
+    $(sube).addClass('p-idearq text-center')
+      .attr('style','font-size:3em;margin-top:1.5em;')
+      .html('<a href="#"><i class="fas fa-arrow-alt-circle-up"></i></a><a href="#fila-mapa"><i class="fas fa-arrow-alt-circle-down"></i></a>');
   $('#ficha-selec').append(divficha);
   $('#ficha-selec').append(pandesc);
+  $('#ficha-selec').append(sube);
   $('#ficha-selec').removeClass('collapse');
 }
 
@@ -890,20 +895,19 @@ function histograma(data){
       g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     var extent = d3.extent(data);
-    var formatEdad = function(d) {
-        return d + " BP";
-    }
-    var bins = d3.histogram()
-      .domain([d3.min(data),d3.max(data)])
-      (data);
 
     var y = d3.scaleLinear()
-      .domain(extent)
+      .domain([d3.min(data),d3.max(data)+1]) //sumo 1 al máximo para que no falle en los casos en los que hay valores agrupados justo en el límite
       .range([height,0]);
-      //.tickFormat(formatEdad);
-      //y.tickFormat(d3.format(",%"));
+
       y.clamp(true);//¿por qué no funciona?
       y.nice();
+
+    var intervalos = d3.thresholdFreedmanDiaconis(data, d3.min(data), d3.max(data));
+    var bins = d3.histogram()
+      .domain(y.domain())
+      .thresholds(y.ticks(intervalos))
+      (data);
 
     var x = d3.scaleLinear()
       .domain([0, d3.max(bins, function(d) { return d.length; })])
@@ -927,10 +931,19 @@ function histograma(data){
       .attr("text-anchor", "middle")
       .text(function(d) { return d.length; });
 
+      svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -5)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("Before Present");
+
     g.append("g")
       .attr("class", "axis axis--y")
       .attr("transform", "translate(0,0)")
       .call(d3.axisLeft(y));
+
   }
 }
 
