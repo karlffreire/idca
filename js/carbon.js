@@ -913,6 +913,11 @@ function histograma(data){
       .thresholds(y.ticks(intervalos))
       (data);
 
+    var ancho_intervalo = bins[1].x1 - bins[1].x0;
+      y.domain([d3.min(data)-ancho_intervalo,d3.max(data)+ancho_intervalo])
+
+      bins[0].x0 = bins[0].x1 - ancho_intervalo; //Ajusto el límite inferior al ancho de los intervalos
+
     var x = d3.scaleLinear()
       .domain([0, d3.max(bins, function(d) { return d.length; })])
       .range([0, width]);
@@ -921,7 +926,7 @@ function histograma(data){
       .data(bins)
       .enter().append("g")
       .attr("class", "bar")
-      .attr("transform", function(d) {return "translate(" + 0 + "," + y(d.x1) + ")"; });
+      .attr("transform", function(d) {return "translate(" + 0 + "," + y(d.x0+ancho_intervalo) + ")"; });//coloco las barras de arriba abajo
 
     bar.append("rect")
       .attr("x", 3)//esto es para pegarlo al eje o separarlo
