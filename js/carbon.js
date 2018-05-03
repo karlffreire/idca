@@ -145,11 +145,13 @@ function initSelFiltYac(){
   cargaLstCrono(initSelCronYac);
   $('.selfilt-yac').on('select2:select',function(){//si se selecciona alguna tipo de yacimiento
     tipoFilSelec.filtyac = true;
+    habLimpia();
   });
   $('.selfilt-yac').on('select2:unselect',function(e){//si se borran las selecciones
     var selecyac = $('.selfilt-yac').find(':selected');
     if (selecyac.length == 0) {
       tipoFilSelec.filtyac = false;
+      deshabLimpia();
     }
   });
 }
@@ -159,11 +161,13 @@ function initSelFiltMat(){
   cargaLstTipMat(initSelMat);
   $('.selfilt-mat').on('select2:select',function(){
     tipoFilSelec.filtmat = true;
+    habLimpia();
   });
   $('.selfilt-mat').on('select2:unselect',function(e){//si se borran las selecciones
     var selecmat = $('.selfilt-mat').find(':selected');
     if (selecmat.length == 0) {
       tipoFilSelec.filtmat = false;
+      deshabLimpia();
     }
   });
 }
@@ -174,11 +178,13 @@ function initSelFiltDat(){
   cargaLstLabos(initSelLab);
   $('.selfilt-dat').on('select2:select',function(){
     tipoFilSelec.filtdat = true;
+    habLimpia();
   });
   $('.selfilt-dat').on('select2:unselect',function(e){//si se borran las selecciones
     var selecdat = $('.selfilt-dat').find(':selected');
     if (selecdat.length == 0) {
       tipoFilSelec.filtdat = false;
+      deshabLimpia();
     }
   });
 }
@@ -318,6 +324,7 @@ function initBarras(resultado){
     onFinish:function(data){
       tipoFilSelec.filtdat = true;
       salvarFecha(data);
+      habLimpia();
     }
   });
 	$("#seldev").ionRangeSlider({
@@ -335,6 +342,7 @@ function initBarras(resultado){
     onFinish:function(data){
       tipoFilSelec.filtdat = true;
       salvarDesv(data);
+      habLimpia();
     }
   });
 }
@@ -474,6 +482,46 @@ function initMapa(resultado){
     	});
 }
 
+function limpiaSelec(){
+  if (tipoFilSelec.filtyac) {
+    $('.selfilt-yac').val(null).trigger('change');
+    $('.selfilt-yac').trigger({
+        type: 'select2:unselect'
+    });
+  }
+  if (tipoFilSelec.filtmat) {
+    $('.selfilt-mat').val(null).trigger('change');
+    $('.selfilt-mat').trigger({
+        type: 'select2:unselect'
+    });
+  }
+  if (tipoFilSelec.filtdat) {
+    //a ver lo de las fechas
+    var fechas = $("#selfecha").data("ionRangeSlider");
+    fechas.reset();
+    var desv = $("#seldev").data("ionRangeSlider");
+    desv.reset();
+    fechamin = '';
+    fechamax = '';
+    desvmin = '';
+    desvmax = '';
+    $('.selfilt-dat').val(null).trigger('change');
+    $('.selfilt-dat').trigger({
+        type: 'select2:unselect'
+    });
+  }
+}
+
+function deshabLimpia(){
+  if (!tipoFilSelec.filtyac&&!tipoFilSelec.filtmat&&!tipoFilSelec.filtdat) {
+    $('#limp-filt').prop( "disabled", true );
+  }
+}
+
+function habLimpia(){
+  $('#limp-filt').prop( "disabled", false );
+}
+
 /*==========================================
 
         PETICIONES DE DATOS
@@ -481,8 +529,9 @@ function initMapa(resultado){
 ============================================*/
 
 function buscaDatYaci(idyaci){
+  $('#ficha-selec').empty();
   selYaci(idyaci,ponDatosTabla);
-  $('#ficha-selec').addClass('collapse');
+  ponDescargas();
 }
 
 function recogePeticion(){
@@ -678,11 +727,14 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
     p.innerHTML = '<em>'+etiTipoMat+'</em>:<br>' + txt.replace(/,\s*$/, "");
     divficha.appendChild(p);
   }
+  var pfechas = document.createElement('p');
   if ((fechamin != '') || (fechamax != '')) {
-    var p = document.createElement('p');
-    p.innerHTML = '<em>'+etiFecha+'</em>:<br>' + fechamin+'-'+fechamax+' BP | σ: '+desvmin+'-'+desvmax;
-    divficha.appendChild(p);
+    pfechas.innerHTML = '<em>'+etiFecha+'</em>:<br>' + fechamin+'-'+fechamax+' BP';
   }
+  if ((desvmin != '') || (desvmax != '')) {
+    pfechas.innerHTML += '| σ: '+desvmin+'-'+desvmax;
+  }
+  divficha.appendChild(pfechas);
   if (datosmetodo) {
     var p = document.createElement('p');
     var txt = '';
@@ -701,6 +753,11 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
     p.innerHTML = '<em>'+etiLab+'</em>:<br>' + txt.replace(/,\s*$/, "");
     divficha.appendChild(p);
   }
+  $('#ficha-selec').append(divficha);
+  ponDescargas();
+}
+
+function ponDescargas(){
   var pandesc = document.createElement('div');
   var titdesc = document.createElement('div');
   titdesc.setAttribute('class','descargas');
@@ -720,7 +777,6 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
     $(sube).addClass('p-idearq text-center')
       .attr('style','font-size:3em;margin-top:1.5em;')
       .html('<a href="#"><i class="fas fa-arrow-alt-circle-up"></i></a><a href="#fila-mapa"><i class="fas fa-arrow-alt-circle-down"></i></a>');
-  $('#ficha-selec').append(divficha);
   $('#ficha-selec').append(pandesc);
   $('#ficha-selec').append(sube);
   $('#ficha-selec').removeClass('collapse');
@@ -728,7 +784,7 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
 
 function resalta(iddiv){
   $(iddiv).addClass('resalta');
-  setTimeout(function(){ $(iddiv).removeClass('resalta'); }, 1000);
+  setTimeout(function(){ $(iddiv).removeClass('resalta'); }, 1500);
 }
 
 function ponDatosTabla(resultado){

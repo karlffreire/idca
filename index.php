@@ -149,6 +149,10 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
                     <i id="piensa" class="fas fa-cog"></i>
                     <span id="filtra-ya" style="margin-left:1em;"></span>
                   </button>
+                  <button id="limp-filt" onclick="javascript:limpiaSelec();" class="btn btn-lg boton-flujo" title = "" style="margin-left:1em;" disabled = "disabled">
+                    <i class="fas fa-eraser"></i>
+                    <span id="tit-limpiar"></span>
+                  </button>
                 </div>
         			</div>
         		</div>

@@ -256,12 +256,15 @@ function selecDataciones($pideprov,$pidetipo,$pidecronos,$pidetmuestra,$pidetmat
     }
     $where .= ' AND id_laboratorio IN ('.rtrim($txtfilt,',').')';
   }
-  if ($pideedadmin != '') {//Estas van en bloque porque si se inicializan las barras ya tenemos todos los valores
+  if ($pideedadmin != '') {
     $edadmin  = filter_var($pideedadmin,FILTER_VALIDATE_INT);
     $edadmax = filter_var($pideedadmax,FILTER_VALIDATE_INT);
+    $where .= " AND fecha >= $edadmin AND fecha <= $edadmax";
+  }
+	if ($pidestdevmin != '') {
     $stdevmin = filter_var($pidestdevmin,FILTER_VALIDATE_INT);
     $stdevmax = filter_var($pidestdevmax,FILTER_VALIDATE_INT);
-    $where .= " AND fecha >= $edadmin AND fecha <= $edadmax AND stdev >= $stdevmin AND stdev <= $stdevmax";
+    $where .= " AND stdev >= $stdevmin AND stdev <= $stdevmax";
   }
   $db = conectaBD();
   $resultado = pg_query($db,$select.ltrim(pg_escape_string($where),' AND'));//revisar pg_send_query y pg_connection_busy

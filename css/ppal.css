@@ -51,6 +51,10 @@ h5{
 .boton-flujo:hover{
   background-color: #a74b29;
 }
+.boton-flujo:disabled,
+.boton-flujo[disabled] {
+  background-color: #a74b29;
+}
 
 #panel-filt{
   margin-bottom: 5em;
@@ -122,11 +126,13 @@ section {
   cursor:pointer;
 }
 
+/*Resultados*/
 .lst-flt-selec{
   color: #454545;
   background-color: white;
   padding: 0.5em;
   margin-bottom: 1px;
+  transition:background-color 1.5s ease;
 }
 
 .descargas{
