@@ -11,63 +11,126 @@
 function cargaYacis(callback){
   $.ajax({
     url: './datos/cargaYacis.php',
-    success: callback
+    success: function(response){
+  			if (response) {
+  				callback(response);
+  			}
+  			else{
+  				alert('Error cargando los yacimientos');
+  			}
+  		}
   });
 }
 
 function cargaLstReg(callback){
   $.ajax({
     url: './datos/cargaRegiones.php',
-    success: callback
+    success: function(response){
+  			if (response) {
+  				callback(response);
+  			}
+  			else{
+  				alert('Error cargando las regiones');
+  			}
+  		}
   });
 }
 
 function cargaLstTipYac(callback){
   $.ajax({
     url: './datos/cargaTiposYac.php',
-    success: callback
+    success: function(response){
+  			if (response) {
+  				callback(response);
+  			}
+  			else{
+  				alert('Error cargando los tipos de yacimientos');
+  			}
+  		}
   });
 }
 
 function cargaLstCrono(callback){
   $.ajax({
     url: './datos/cargaCronos.php',
-    success: callback
+    success: function(response){
+  			if (response) {
+  				callback(response);
+  			}
+  			else{
+  				alert('Error cargando las cronologías');
+  			}
+  		}
   });
 }
 
 function cargaLstTipMuest(callback){
   $.ajax({
     url: './datos/cargaTiposMuestra.php',
-    success: callback
+    success: function(response){
+  			if (response) {
+  				callback(response);
+  			}
+  			else{
+  				alert('Error cargando los tipos de muestras');
+  			}
+  		}
   });
 }
 
 function cargaLstTipMat(callback){
   $.ajax({
     url: './datos/cargaTiposMaterial.php',
-    success: callback
+    success: function(response){
+  			if (response) {
+  				callback(response);
+  			}
+  			else{
+  				alert('Error cargando los tipos de material');
+  			}
+  		}
   });
 }
 
 function cargaLstRang(callback){
   $.ajax({
     url: './datos/cargaRangos.php',
-    success: callback
+    success: function(response){
+  			if (response) {
+  				callback(response);
+  			}
+  			else{
+  				alert('Error cargando los rangos');
+  			}
+  		}
   });
 }
 
 function cargaLstMetodos(callback){
   $.ajax({
     url: './datos/cargaMetodos.php',
-    success: callback
+    success: function(response){
+  			if (response) {
+  				callback(response);
+  			}
+  			else{
+  				alert('Error cargando los métodos');
+  			}
+  		}
   });
 }
 
 function cargaLstLabos(callback){
   $.ajax({
     url: './datos/cargaLabos.php',
-    success: callback
+    success: function(response){
+  			if (response) {
+  				callback(response);
+  			}
+  			else{
+  				alert('Error cargando los laboratorios');
+  			}
+  		}
   });
 }
 
@@ -465,7 +528,11 @@ function initMapa(resultado){
   	});
     $('#fila-mapa').addClass('collapse');
     var popup = new ol.Overlay({
-        element: document.getElementById('popup')
+        element: document.getElementById('popup'),
+        autoPan: true,
+        autoPanAnimation: {
+          duration: 250
+        }
     });
     mapa.addOverlay(popup);
     mapa.on('click', function(evt) {
@@ -957,20 +1024,20 @@ function histograma(data){
     var extent = d3.extent(data);
 
     var y = d3.scaleLinear()
-      .domain([d3.min(data),d3.max(data)+1]) //sumo 1 al máximo para que no falle en los casos en los que hay valores agrupados justo en el límite. Sigue fallando en algunas ocasiones, habría que añadir un bin entero, pero no puedo porque se generan pasándle el número de intervalos... Por ejemplo fecha > 25000
+      .domain([d3.min(data),d3.max(data)])
       .range([height,0]);
 
       y.clamp(true);//¿por qué no funciona?
       y.nice();
 
-    var intervalos = d3.thresholdScott(data, d3.min(data), d3.max(data));
+    //var intervalos = d3.thresholdScott(data, d3.min(data), d3.max(data));
     var bins = d3.histogram()
       .domain(y.domain())
-      .thresholds(y.ticks(intervalos))
+      .thresholds(y.ticks())
       (data);
 
     var ancho_intervalo = bins[1].x1 - bins[1].x0;
-      y.domain([d3.min(data)-ancho_intervalo,d3.max(data)+ancho_intervalo])
+    y.domain([Math.max(d3.min(data)-ancho_intervalo,0),d3.max(data)+ancho_intervalo]);
 
       bins[0].x0 = bins[0].x1 - ancho_intervalo; //Ajusto el límite inferior al ancho de los intervalos
 

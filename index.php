@@ -198,51 +198,38 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
   <!-- Footer -->
   	<footer>
   		<div class="container">
-  			<div class="row text-center text-xs-center text-sm-left text-md-left">
-  				<div class="col-xs-12 col-sm-4 col-md-4">
-  					<h5>IDEArq</h5>
-  					<ul class="list-unstyled quick-links">
-  						<li><a href="javascript:void();"><i class="fa fa-angle-double-right"></i>Inicio</a></li>
-              <li><a href="javascript:void();"><i class="fa fa-angle-double-right"></i>Visualizador</a></li>
-  					</ul>
-  				</div>
-  				<div class="col-xs-12 col-sm-4 col-md-4">
-  					<h5>Institucional</h5>
-  					<ul class="list-unstyled quick-links">
-  						<li><a href="javascript:void();"><i class="fa fa-angle-double-right"></i>CSIC</a></li>
-              <li><a href="javascript:void();"><i class="fa fa-angle-double-right"></i>USIG</a></li>
-              <li><a href="javascript:void();"><i class="fa fa-angle-double-right"></i>IH</a></li>
-  					</ul>
-  				</div>
-  				<div class="col-xs-12 col-sm-4 col-md-4">
-  					<h5>Acerca de</h5>
-  					<ul class="list-unstyled quick-links">
-  						<li><a href="javascript:void();"><i class="fa fa-angle-double-right"></i>Documentación</a></li>
-              <li><a href="javascript:void();"><i class="fa fa-angle-double-right"></i>Créditos</a></li>
-              <li><a href="javascript:void();"><i class="fa fa-angle-double-right"></i>Cítanos</a></li>
-  					</ul>
-  				</div>
-  			</div>
-        <div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-12 mt-2">
-					<ul class="list-unstyled list-inline social text-center">
-						<li class="list-inline-item"><a href="https://github.com/karlffreire/idca" target="_blank"><i class="fab fa-github fa-2x"></i></a></li>
-						<li class="list-inline-item"><a href="javascript:void();" target="_blank"><i class="fa fa-envelope fa-2x"></i></a></li>
-					</ul>
-				</div>
-				</hr>
-			</div>
   			<div class="row">
-  				<div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center">
-  					<p>C/Albasanz, 26-28. Madrid 28037 (España). Tlf: +34 91 602 23 00 Fax: +34 91 602 29 71</p>
-            <p class="h6">2018 &copy; Consejo Superior de Investigaciones Cient&iacute;ficas</p>
-  				</div>
-  				</hr>
-  			</div>
+          <div class="col-md-5">
+            <img src="./img/logo_idearq.png" alt="Logo idearq">
+            <p>contacto: idearq@cchs.csic.es</p>
+          </div>
+          <div class="col-md-7">
+            <ul>
+              <li><a href="#">Documentación</a></li>
+              <li><a href="#">Créditos</a></li>
+              <li><a href="#">Cítanos</a></li>
+            </ul>
+            <ul>
+              <li><a href="#">Inicio</a></li>
+              <li><a href="#">Visualizador</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="row" style="margin-top:3em;">
+          <div class="col-md-7">
+            <p>C/Albasanz, 26-28. Madrid 28037 (España). Tlf: +34 91 602 23 00 Fax: +34 91 602 29 71</p>
+            <p>2018 &copy; Consejo Superior de Investigaciones Cient&iacute;ficas</p>
+          </div>
+          <div class="col-md-5">
+            <a target="_blank" href="http://www.csic.es/"><img src="./img/csic_bn.png" alt="csic" class="d-inline logo"></a>
+            <a target="_blank" href="http://unidadsig.cchs.csic.es/sig/"><img src="./img/usig_go.png" alt="usig" class="d-inline logo"></a>
+            <a target="_blank" href="http://ih.csic.es/"><img src="./img/logo_ih.png" alt="ih" class="d-inline logo"></a>
+          </div>
+        </div>
   		</div>
   	</footer>
   	<!-- ./Footer -->
-<!-- VER: https://bootsnipp.com/snippets/featured/footer-using-bootstrap-4 -->
+
 
    </body>
  </html>
