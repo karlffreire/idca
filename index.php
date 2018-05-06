@@ -20,6 +20,13 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
      <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
      <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+
+     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.16/b-1.5.1/b-html5-1.5.1/b-print-1.5.1/datatables.min.css"/>
+
+     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/b-1.5.1/b-html5-1.5.1/b-print-1.5.1/datatables.min.js"></script>
+
      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css" rel="stylesheet" />
      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.full.min.js"></script>
@@ -160,9 +167,15 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
         </section>
       </div>
       <div id="fila-tabla" class="row justify-content-md-center panel-resultados collapse" style="margin-top:5em;">
-        <div id="ficha-selec" class="col-md-2">
+        <div id="ficha-selec" class="col-md-6">
         </div>
-        <div class="panel-tabla col-md-10 ">
+        <div id="flechas" class="d-block collapse">
+          <div class="p-idearq text-center" style="font-size:3em;">
+            <a href="#"><i class="fas fa-arrow-alt-circle-up"></i></a>
+            <a href="#fila-mapa"><i class="fas fa-arrow-alt-circle-down"></i></a>
+          </div>
+        </div>
+        <div class="panel-tabla col-md-12 ">
           <table id="tab-data" class="table table-hover tabla-dataciones w-100" cellspacing="0">
             <thead>
               <tr>
@@ -212,6 +225,7 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
             <ul>
               <li><a href="#">Inicio</a></li>
               <li><a href="#">Visualizador</a></li>
+              <li><a href="#">Manual</a></li>
             </ul>
           </div>
         </div>

@@ -444,6 +444,24 @@ function salvarDesv(data){
 
 function initTabla(){
     var tabla = $('#tab-data').DataTable({
+      buttons: [
+            {
+                extend: 'copy',
+                messageTop: 'CC-BY info copyright'
+            },
+           {
+               extend: 'excel',
+               messageTop: 'CC-BY info copyright'
+           },
+           {
+               extend: 'pdf',
+               messageTop: 'CC-BY info copyright'
+           },
+           {
+               extend: 'print',
+               messageTop: 'CC-BY info copyright'
+           }
+       ],
       dataSrc: 'data',
       order: [[1, 'desc']],
       columns: [
@@ -479,7 +497,7 @@ function initTabla(){
         {data:'ubicacion'}
       ],
       pageLength: 10,
-      dom: "<'row'<'col-md-5'i><'col-md-7 pull-right'f>>" +"<'row'<'col-md-12'tr>>" +"<'row'<'col-md-12 lst-dataciones'p>>",
+      dom: "<'row'<'col-md-5'i><'col-md-7 pull-right'f>>" +"<'row'<'col-md-12'tr>>" +"<'row'<'col-md-6'B><'col-md-6 lst-dataciones'p>>",
       renderer: "bootstrap",
       language: {
       "search": "_INPUT_",
@@ -598,7 +616,7 @@ function habLimpia(){
 function buscaDatYaci(idyaci){
   $('#ficha-selec').empty();
   selYaci(idyaci,ponDatosTabla);
-  ponDescargas();
+  ponFlechas();
 }
 
 function recogePeticion(){
@@ -821,32 +839,11 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
     divficha.appendChild(p);
   }
   $('#ficha-selec').append(divficha);
-  ponDescargas();
+  ponFlechas();
 }
 
-function ponDescargas(){
-  var pandesc = document.createElement('div');
-  var titdesc = document.createElement('div');
-  titdesc.setAttribute('class','descargas');
-  titdesc.setAttribute('style','border-bottom-left-radius:0;border-bottom-right-radius:0;');
-  titdesc.innerHTML = '<strong>'+titDesc+'</strong>';
-  var divdesc = document.createElement('div');
-    divdesc.setAttribute('class','descargas');
-    divdesc.setAttribute('style','border-top-left-radius:0;border-top-right-radius:0;');
-  var linkcsv = document.createElement('a');
-      $(linkcsv).addClass('btn boton-flujo');
-      $(linkcsv).html('csv');
-      linkcsv.setAttribute('style','padding:0.25em 1em;font-size:1em;')
-    divdesc.appendChild(linkcsv);
-    pandesc.appendChild(titdesc);
-    pandesc.appendChild(divdesc);
-  var sube = document.createElement('div');
-    $(sube).addClass('p-idearq text-center')
-      .attr('style','font-size:3em;margin-top:1.5em;')
-      .html('<a href="#"><i class="fas fa-arrow-alt-circle-up"></i></a><a href="#fila-mapa"><i class="fas fa-arrow-alt-circle-down"></i></a>');
-  $('#ficha-selec').append(pandesc);
-  $('#ficha-selec').append(sube);
-  $('#ficha-selec').removeClass('collapse');
+function ponFlechas(){
+  $('#flechas').removeClass('collapse');
 }
 
 function resalta(iddiv){
@@ -873,7 +870,7 @@ function ponDatosTabla(resultado){
   $('#tit-filtrar').show();
   window.location.href = '#fila-tabla';
   muestraPuntos(arrids);
-  histograma(fechas);
+  grafico(fechas);
 }
 
 function muestraPuntos(ids){
@@ -1011,72 +1008,129 @@ function cierraPops(){
 		})
 }
 
+function grafico(data){
+  if (data.length > 30) {
+    histograma(data);
+  }
+  else{
+    dispersion(data);
+  }
+  resalta('.lst-flt-selec');
+}
+
+function dispersion(data){
+  var graf = document.getElementById('hst');
+  d3.select(graf).selectAll("*").remove();
+  var svg = d3.select(graf),
+    margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = +svg.attr("width") - margin.left - margin.right,
+    height = +svg.attr("height") - margin.top - margin.bottom,
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  var extent = d3.extent(data);
+  var y = d3.scaleLinear()
+    .domain([d3.min(data),d3.max(data)])
+    .range([height,0]);
+    y.nice();
+  var x = d3.scaleLinear()
+    .range([0,width]);
+  var pasoX = width / data.length;
+  svg.selectAll("circle")
+   .data(data)
+   .enter()
+   .append("circle")
+   .attr("cy", function(d) {return y(d);})
+   .attr("cx", function(d) { return pasoX; })
+   .attr("r", 5);
+  svg.append("text")
+   .attr("transform", "rotate(-90)")
+   .attr("y", 0)
+   .attr("x",0 - (height / 2))
+   .attr("dy", "1em")
+   .style("text-anchor", "middle")
+   .text("Before Present");
+   g.append("g")
+     .attr("class", "axis axis--y")
+     .attr("transform", "translate(0,0)")
+     .call(d3.axisLeft(y));
+}
+
 function histograma(data){
   var graf = document.getElementById('hst');
   d3.select(graf).selectAll("*").remove();
-  if (data.length > 30) {
     var svg = d3.select(graf),
       margin = {top: 10, right: 30, bottom: 30, left: 60},
       width = +svg.attr("width") - margin.left - margin.right,
       height = +svg.attr("height") - margin.top - margin.bottom,
       g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
     var extent = d3.extent(data);
-
     var y = d3.scaleLinear()
       .domain([d3.min(data),d3.max(data)])
       .range([height,0]);
-
       y.clamp(true);//¿por qué no funciona?
       y.nice();
-
     //var intervalos = d3.thresholdScott(data, d3.min(data), d3.max(data));
     var bins = d3.histogram()
       .domain(y.domain())
       .thresholds(y.ticks())
       (data);
-
     var ancho_intervalo = bins[1].x1 - bins[1].x0;
     y.domain([Math.max(d3.min(data)-ancho_intervalo,0),d3.max(data)+ancho_intervalo]);
-
-      bins[0].x0 = bins[0].x1 - ancho_intervalo; //Ajusto el límite inferior al ancho de los intervalos
-
+    bins[0].x0 = bins[0].x1 - ancho_intervalo; //Ajusto el límite inferior al ancho de los intervalos
     var x = d3.scaleLinear()
       .domain([0, d3.max(bins, function(d) { return d.length; })])
       .range([0, width]);
-
     var bar = g.selectAll(".bar")
       .data(bins)
       .enter().append("g")
       .attr("class", "bar")
       .attr("transform", function(d) {return "translate(" + 0 + "," + y(d.x0+ancho_intervalo) + ")"; });//coloco las barras de arriba abajo
-
     bar.append("rect")
-      .attr("x", 3)//esto es para pegarlo al eje o separarlo
+      .attr("x", 3)//un poquito separadas del eje
       .attr("height", function(d) {return y(bins[1].x0) - y(bins[1].x1) -1 ; })
-      .attr("width", function(d) { return x(d.length); });
-
+      .attr("width", function(d) { return x(d.length); })
+      .append("svg:title")
+      .text(function(d) {
+        if (d.length > 1) {
+          return d.length+' dataciones\n'+d3.min(d)+' - '+d3.max(d)+' BP';
+        }
+        else {
+          return d[0]+' BP';
+        }
+      });
     bar.append("text")
       .attr("dx", ".75em")
       .attr("x", (function(d) {return x(d.length)-20; }))
       .attr("y", ((y(bins[1].x0) - y(bins[1].x1))/2)+3)
       .attr("text-anchor", "middle")
       .text(function(d) { return d.length; });
-
       svg.append("text")
       .attr("transform", "rotate(-90)")
-      .attr("y", -5)
+      .attr("y", 0)
       .attr("x",0 - (height / 2))
       .attr("dy", "1em")
       .style("text-anchor", "middle")
       .text("Before Present");
-
     g.append("g")
       .attr("class", "axis axis--y")
       .attr("transform", "translate(0,0)")
       .call(d3.axisLeft(y));
+}
+
+function descargaResultados(tipodesc){
+  var objDesc = {};
+  var tabla = $('#tab-data').DataTable();
+  var datos = tabla.buttons.exportData( {
+    columns: ':visible'
+  } );
+  console.log(datos);
+  var csvContent = "data:text/csv;charset=utf-8,";
+  for (var i = 0; i < datos.length; i++) {
+    //recorrer prop objeto
+    //var row = rowArray.join(",");
+    //csvContent += row + "\r\n";
+
   }
-  resalta('.lst-flt-selec');
+
 }
 
 /*==========================================

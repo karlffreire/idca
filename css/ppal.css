@@ -67,11 +67,17 @@ h5{
 .panel-resultados h4{
   color: #FF0000;
 }
+
+.panel-tabla{
+  padding: 1em 2em;
+}
+
 #salida{
   columns: 2;
   -webkit-columns: 2;
   -moz-columns: 2;
 }
+
 /* Tabs*/
 section {
   padding: 1em;
@@ -133,6 +139,9 @@ section {
   padding: 0.5em;
   margin-bottom: 1px;
   transition:background-color 1.5s ease;
+  columns: 3;
+  -webkit-columns: 3;
+  -moz-columns: 3;
 }
 
 .descargas{
@@ -141,6 +150,11 @@ section {
   padding: 0.5em;
   margin-bottom: 1px;
   border-radius: 0.25em;
+}
+
+.btn-secondary{
+  background-color: #FF7542;
+  border-color: #FF7542;
 }
 
 .resalta{
