@@ -1026,17 +1026,17 @@ function dispersion(data){
   var y = d3.scaleLinear()
     .domain([d3.min(data),d3.max(data)]).nice()
     .range([height,0]);
-    y.nice();
-  var x = d3.scaleLinear()
-    .domain([0,data.length])
-    .range([margin.left, width]);
+  // var x = d3.scaleLinear()
+  //   .domain([0,data.length])
+  //   .range([margin.left, width]);
+  var pasoX = width / data.length;
   svg.selectAll("circle")
    .data(data)
    .enter()
    .append("circle")
    .attr('class','punto')
-   .attr("cy", function(d) {console.log(y(d)+':'+d);return y(d)+2;})//LAS ESTOY POSICIONANDO DEMASIADO ARRIBA: REVISAR!!!!!!!!!!!!!!!!! ej: Casa Montero
-   .attr("cx", function(d,i) {return x(i)+10; })
+   .attr("cy", function(d) {return y(d)+margin.top;})
+   .attr("cx", function(d,i) {return pasoX*i+margin.left+10; })
    .attr("r", 4)
    .append("svg:title")
    .text(function(d) {return d+' BP';});
