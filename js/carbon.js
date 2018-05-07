@@ -849,10 +849,14 @@ function resalta(iddiv){
 
 function ponDatosTabla(resultado){
   var arrids = [];
-  var fechas = []
+  var datos = []
   for (var i = 0; i < resultado.data.length; i++) {
     arrids.push(resultado.data[i].id_yaci);
-    fechas.push(Number(resultado.data[i].fecha));
+    var obj = {};
+    obj.fecha = Number(resultado.data[i].fecha);
+    obj.stdev = Number(resultado.data[i].stdev);
+    obj.nombre_yaci = resultado.data[i].nombre_yaci;
+    datos.push(obj);
   }
   var tabla = $('#tab-data').DataTable();
   tabla.clear().draw();
@@ -866,7 +870,7 @@ function ponDatosTabla(resultado){
   $('#tit-filtrar').show();
   window.location.href = '#fila-tabla';
   muestraPuntos(arrids);
-  grafico(fechas);
+  grafico(datos);
 }
 
 function muestraPuntos(ids){
@@ -1017,6 +1021,14 @@ function grafico(data){
 function dispersion(data){
   var graf = document.getElementById('hst');
   d3.select(graf).selectAll("*").remove();
+  var fechas = [];
+  var maxs = [];
+  var mins = [];
+  for (var i = 0; i < data.length; i++) {
+    maxs.push(data[i].fecha+data[i].stdev);
+    mins.push(data[i].fecha-data[i].stdev);
+    fechas.push(data[i].fecha);
+  }
   var svg = d3.select(graf),
     margin = {top: 10, right: 30, bottom: 30, left: 60},
     width = +svg.attr("width") - margin.left - margin.right,
@@ -1024,22 +1036,22 @@ function dispersion(data){
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   var extent = d3.extent(data);
   var y = d3.scaleLinear()
-    .domain([d3.min(data),d3.max(data)]).nice()
+    .domain([d3.min(mins),d3.max(maxs)]).nice()
     .range([height,0]);
   // var x = d3.scaleLinear()
   //   .domain([0,data.length])
   //   .range([margin.left, width]);
   var pasoX = width / data.length;
-  svg.selectAll("circle")
+  svg.selectAll("circle")//HAY QUE ENGLOBAR EL CIRCULO Y LA LÍNEA EN OTRO ELEMENTO, COMO BAR
    .data(data)
    .enter()
    .append("circle")
    .attr('class','punto')
-   .attr("cy", function(d) {return y(d)+margin.top;})
+   .attr("cy", function(d) {return y(d.fecha)+margin.top;})
    .attr("cx", function(d,i) {return pasoX*i+margin.left+10; })
    .attr("r", 4)
    .append("svg:title")
-   .text(function(d) {return d+' BP';});
+   .text(function(d) {return d.fecha+' BP';});
   svg.append("text")
    .attr("transform", "rotate(-90)")
    .attr("y", 0)
@@ -1055,25 +1067,29 @@ function dispersion(data){
 
 function histograma(data){
   var graf = document.getElementById('hst');
+  var fechas = [];
+  for (var i = 0; i < data.length; i++) {
+    fechas.push(data[i].fecha);
+  }
   d3.select(graf).selectAll("*").remove();
     var svg = d3.select(graf),
       margin = {top: 10, right: 30, bottom: 30, left: 60},
       width = +svg.attr("width") - margin.left - margin.right,
       height = +svg.attr("height") - margin.top - margin.bottom,
       g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    var extent = d3.extent(data);
+    var extent = d3.extent(fechas);
     var y = d3.scaleLinear()
-      .domain([d3.min(data),d3.max(data)])
+      .domain([d3.min(fechas),d3.max(fechas)])
       .range([height,0]);
       y.clamp(true);//¿por qué no funciona?
       y.nice();
-    //var intervalos = d3.thresholdScott(data, d3.min(data), d3.max(data));
+    //var intervalos = d3.thresholdScott(fechas, d3.min(fechas), d3.max(fechas));
     var bins = d3.histogram()
       .domain(y.domain())
       .thresholds(y.ticks())
-      (data);
+      (fechas);
     var ancho_intervalo = bins[1].x1 - bins[1].x0;
-    y.domain([Math.max(d3.min(data)-ancho_intervalo,0),d3.max(data)+ancho_intervalo]);
+    y.domain([Math.max(d3.min(fechas)-ancho_intervalo,0),d3.max(fechas)+ancho_intervalo]);
     bins[0].x0 = bins[0].x1 - ancho_intervalo; //Ajusto el límite inferior al ancho de los intervalos
     var x = d3.scaleLinear()
       .domain([0, d3.max(bins, function(d) { return d.length; })])
@@ -1115,22 +1131,21 @@ function histograma(data){
       .call(d3.axisLeft(y));
 }
 
-function descargaResultados(tipodesc){
-  var objDesc = {};
-  var tabla = $('#tab-data').DataTable();
-  var datos = tabla.buttons.exportData( {
-    columns: ':visible'
-  } );
-  console.log(datos);
-  var csvContent = "data:text/csv;charset=utf-8,";
-  for (var i = 0; i < datos.length; i++) {
-    //recorrer prop objeto
-    //var row = rowArray.join(",");
-    //csvContent += row + "\r\n";
-
-  }
-
-}
+// function descargaResultados(tipodesc){
+//   var objDesc = {};
+//   var tabla = $('#tab-data').DataTable();
+//   var datos = tabla.buttons.exportData( {
+//     columns: ':visible'
+//   } );
+//   var csvContent = "data:text/csv;charset=utf-8,";
+//   for (var i = 0; i < datos.length; i++) {
+//     //recorrer prop objeto
+//     //var row = rowArray.join(",");
+//     //csvContent += row + "\r\n";
+//
+//   }
+//
+// }
 
 /*==========================================
 
