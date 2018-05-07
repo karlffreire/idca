@@ -334,6 +334,15 @@ section {
   font: 10px sans-serif;
 }
 
+/*Dispersión*/
+
+.punto{
+  fill: #454545;
+}
+
+.punto:hover{
+  fill: #FF7542;
+}
 /* Footer */
 footer {
   padding: 30px 0;

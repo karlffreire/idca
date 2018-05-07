@@ -450,10 +450,6 @@ function initTabla(){
                 messageTop: 'CC-BY info copyright'
             },
            {
-               extend: 'excel',
-               messageTop: 'CC-BY info copyright'
-           },
-           {
                extend: 'pdf',
                messageTop: 'CC-BY info copyright'
            },
@@ -1009,7 +1005,7 @@ function cierraPops(){
 }
 
 function grafico(data){
-  if (data.length > 30) {
+  if (data.length > 20) {
     histograma(data);
   }
   else{
@@ -1028,19 +1024,22 @@ function dispersion(data){
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   var extent = d3.extent(data);
   var y = d3.scaleLinear()
-    .domain([d3.min(data),d3.max(data)])
+    .domain([d3.min(data),d3.max(data)]).nice()
     .range([height,0]);
     y.nice();
   var x = d3.scaleLinear()
-    .range([0,width]);
-  var pasoX = width / data.length;
+    .domain([0,data.length])
+    .range([margin.left, width]);
   svg.selectAll("circle")
    .data(data)
    .enter()
    .append("circle")
-   .attr("cy", function(d) {return y(d);})
-   .attr("cx", function(d) { return pasoX; })
-   .attr("r", 5);
+   .attr('class','punto')
+   .attr("cy", function(d) {console.log(y(d)+':'+d);return y(d)+2;})//LAS ESTOY POSICIONANDO DEMASIADO ARRIBA: REVISAR!!!!!!!!!!!!!!!!! ej: Casa Montero
+   .attr("cx", function(d,i) {return x(i)+10; })
+   .attr("r", 4)
+   .append("svg:title")
+   .text(function(d) {return d+' BP';});
   svg.append("text")
    .attr("transform", "rotate(-90)")
    .attr("y", 0)
