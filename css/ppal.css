@@ -336,21 +336,29 @@ section {
 
 /*Dispersión*/
 
+.eje-y-disp path{
+  stroke-width: 0;
+}
+
 .punto{
   fill: #454545;
 }
 
-.punto:hover{
-  fill: #FF7542;
+.linea{
+  stroke: #454545;
+  stroke-width: 1;
+  stroke-opacity: 1;
+  shape-rendering: crispEdges;
 }
 
 .grid path {
   stroke-width: 0;
 }
 
-.grid line {
-  stroke: lightgrey;
-  stroke-opacity: 0.7;
+.tick line {
+  stroke: #CCC;
+  stroke-opacity: 0.8;
+  stroke-dasharray: 5;
   shape-rendering: crispEdges;
 }
 

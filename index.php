@@ -194,14 +194,14 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
       </div>
       <div id="fila-mapa" class="row panel-resultados">
         <div id="map" class="map col-md-8">
+          <div id="popup"></div>
           <div style="display: none;">
             <p class="overlay etiqueta-mapa" id="txt_yaci"></p>
           </div>
-          <div id="popup"></div>
           <div id="creditos-base" class="attribution-container"></div>
         </div>
           <div class="col-md-4">
-          <svg id="hst" width="500" height="650"></svg>
+          <svg id="hst" width="600" height="650"></svg>
           <div class="p-idearq text-center" style="font-size:3em;margin-top:0.75em;">
             <a href="#"><i class="fas fa-arrow-alt-circle-up"></i></a>
           </div>

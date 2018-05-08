@@ -906,7 +906,7 @@ function ponDatosTabla(resultado){
 function muestraPuntos(ids){
   var overlays = mapa.getOverlays();
   if (overlays) {
-    cierraPops();
+      cierraPops();
     if (overlays.item(1)) {
       var over_txtyac = overlays.item(1);
       if (over_txtyac.get('position') != 'undefined') {
@@ -1064,7 +1064,7 @@ function dispersion(data){
     fechas.push(data[i].fecha);
   }
   var svg = d3.select(graf),
-    margin = {top: 10, right: 30, bottom: 30, left: 60},
+    margin = {top: 10, right: 30, bottom: 30, left: 70},
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -1072,34 +1072,39 @@ function dispersion(data){
   var y = d3.scaleLinear()
     .domain([d3.min(mins),d3.max(maxs)]).nice()
     .range([height,0]);
-  // var x = d3.scaleLinear()
-  //   .domain([0,data.length])
-  //   .range([margin.left, width]);
 
   function make_y_gridlines() {
       return d3.axisLeft(y)
           .ticks()
   }
   svg.append("g")
-  .attr("class", "grid")
-  .attr("transform", "translate("+margin.left+","+margin.top+")")
-  .call(make_y_gridlines()
-      .tickSize(-width)
-      .tickFormat("")
-  );
-
+    .attr("class", "grid")
+    .attr("transform", "translate("+margin.left+","+margin.top+")")
+    .call(make_y_gridlines()
+        .tickSize(-width)
+        .tickFormat("")
+    );
 
   var pasoX = width / data.length;
-  svg.selectAll("circle")//HAY QUE ENGLOBAR EL CIRCULO Y LA LÍNEA EN OTRO ELEMENTO, COMO BAR
-   .data(data)
-   .enter()
-   .append("circle")
-   .attr('class','punto')
-   .attr("cy", function(d) {return y(d.fecha)+margin.top;})
-   .attr("cx", function(d,i) {return pasoX*i+margin.left+10; })
-   .attr("r", 4)
-   .append("svg:title")
-   .text(function(d) {return d.fecha+' BP';});
+
+  var grupo = svg.selectAll("g.dataciones").data(data);
+  var puntolinea = grupo.enter().append('g')//puntos y líneas irán en el mismo grupo
+    .attr('class','grupo-datacion');
+
+   puntolinea.append("line")
+         .attr('class','linea')
+         .attr("x1", function(d,i) {return pasoX*i+margin.left+10; })
+         .attr("x2", function(d,i) {return pasoX*i+margin.left+10; })
+         .attr("y1", function(d) {return y(d.fecha+d.stdev)+margin.top;})
+         .attr("y2", function(d) {return y(d.fecha-d.stdev)+margin.top; });
+   puntolinea.append("circle")
+         .attr("class", "punto")
+         .attr("cy", function(d) {return y(d.fecha)+margin.top;})
+         .attr("cx", function(d,i) {return pasoX*i+margin.left+10; })
+         .attr("r", 4);
+   puntolinea.append("svg:title")
+     .text(function(d) {return d.fecha+' ± '+d.stdev+' BP\n'+d.nombre_yaci;});
+
   svg.append("text")
    .attr("transform", "rotate(-90)")
    .attr("y", 0)
@@ -1109,7 +1114,7 @@ function dispersion(data){
    .text("Before Present");
 
    g.append("g")
-     .attr("class", "axis axis--y")
+     .attr("class", "axis eje-y-disp")
      .attr("transform", "translate(0,0)")
      .call(d3.axisLeft(y));
 }
@@ -1122,7 +1127,7 @@ function histograma(data){
   }
   d3.select(graf).selectAll("*").remove();
     var svg = d3.select(graf),
-      margin = {top: 10, right: 30, bottom: 30, left: 60},
+      margin = {top: 10, right: 30, bottom: 30, left: 70},
       width = +svg.attr("width") - margin.left - margin.right,
       height = +svg.attr("height") - margin.top - margin.bottom,
       g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -1179,22 +1184,6 @@ function histograma(data){
       .attr("transform", "translate(0,0)")
       .call(d3.axisLeft(y));
 }
-
-// function descargaResultados(tipodesc){
-//   var objDesc = {};
-//   var tabla = $('#tab-data').DataTable();
-//   var datos = tabla.buttons.exportData( {
-//     columns: ':visible'
-//   } );
-//   var csvContent = "data:text/csv;charset=utf-8,";
-//   for (var i = 0; i < datos.length; i++) {
-//     //recorrer prop objeto
-//     //var row = rowArray.join(",");
-//     //csvContent += row + "\r\n";
-//
-//   }
-//
-// }
 
 /*==========================================
 
