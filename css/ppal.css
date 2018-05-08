@@ -343,6 +343,17 @@ section {
 .punto:hover{
   fill: #FF7542;
 }
+
+.grid path {
+  stroke-width: 0;
+}
+
+.grid line {
+  stroke: lightgrey;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+}
+
 /* Footer */
 footer {
   padding: 30px 0;

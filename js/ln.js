@@ -24,7 +24,6 @@ var thEdad = '';
 var thDsv = '';
 var thMed = '';
 var thLab = '';
-var titFichaSel = '';
 var titDesc = '';
 var popYac = '';
 var titIrA = '';
@@ -58,7 +57,6 @@ function ponIdioma(ln){
     thDsv = 'σ';
     thMed = 'Método';
     thLab = 'Laboratorio';
-    titFichaSel = 'Has seleccionado';
     titDesc = 'Descargas';
     popYac = 'yacimientos';
     titIrA = 'Mostrar en mapa';
@@ -91,7 +89,6 @@ function ponIdioma(ln){
     thDsv = 'σ';
     thMed = 'Method';
     thLab = 'Laboratory';
-    titFichaSel = 'You have selected';
     titDesc = 'Downloads';
     popYac = 'sites';
     titIrA = 'Show in map';

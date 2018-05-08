@@ -447,15 +447,47 @@ function initTabla(){
       buttons: [
             {
                 extend: 'copy',
-                messageTop: 'CC-BY info copyright'
+                title:'Dataciones C14 de la Península Ibérica',
+                messageTop:function (){
+                  var ficha = $('#ficha-selec').text();
+                  return 'CC-BY info copyright\n'+ficha;
+                },
+                exportOptions: {
+                    columns: [ 1, 2,3,4, 5,6,7 ]
+                }
+            },
+            {
+                extend: 'csv',
+                title:'Dataciones C14 de la Península Ibérica',
+                messageTop:function (){
+                  var ficha = $('#ficha-selec').text();
+                  return 'CC-BY info copyright\n'+ficha;
+                },
+                exportOptions: {
+                    columns: [ 1, 2,3,4, 5,6,7 ]
+                }
             },
            {
                extend: 'pdf',
-               messageTop: 'CC-BY info copyright'
+               title:'Dataciones C14 de la Península Ibérica',
+               messageTop:function (){
+                 var ficha = $('#ficha-selec').text();
+                 return 'CC-BY info copyright\n'+ficha;
+               },
+               exportOptions: {
+                   columns: [ 1, 2,3,4, 5,6,7 ]
+               }
            },
            {
                extend: 'print',
-               messageTop: 'CC-BY info copyright'
+               title:'Dataciones C14 de la Península Ibérica',
+               messageTop:function (){
+                 var ficha = $('#ficha-selec').text();
+                 return 'CC-BY info copyright\n'+ficha;
+               },
+               exportOptions: {
+                   columns: [ 1, 2,3,4, 5,6,7 ]
+               }
            }
        ],
       dataSrc: 'data',
@@ -467,15 +499,17 @@ function initTabla(){
             "data": null,
             "defaultContent": '<i class="fas fa-plus-circle icono-tabla" aria-hidden="true"></i>'
         },
-        {data: 'fecha',"render":function(data,type,row){
+        {
+          name:'fecha',
+          data: 'fecha',"render":function(data,type,row){
             if (type === 'display' || type === 'filter') {
               return '<strong>'+row.fecha+' ± '+row.stdev+' BP</strong>';
             }
             return data;
           }
         },
-        {data:'tipo_muestra_c14'},
-        {data:'mostrar_tipomat',"render":function(data){
+        {name:'tipo_muestra_c14',data:'tipo_muestra_c14'},
+        {name:'mostrar_tipomat',data:'mostrar_tipomat',"render":function(data){
             var tipos = data.split('#');
             var txt = '';
             for (var i = 0; i < tipos.length; i++) {
@@ -484,13 +518,13 @@ function initTabla(){
             return txt;
           }
         },
-        {data:'metodos_medida'},
-        {data:'sigla'},
-        {data: 'nombre_yaci',"render":function(data,type,row){
+        {name:'metodos_medida',data:'metodos_medida'},
+        {name:'sigla',data:'sigla'},
+        {name:'nombre_yaci',data: 'nombre_yaci',"render":function(data,type,row){
               return '<div class="row"><div class="col-md-2"><i class="fas fa-map-marker-alt icono-tabla" onclick="javascript:irAPunto('+row.id_yaci+')" title="'+titIrA+'"></i></div><div class="col-md-10">'+data+'</div></div>';
           }
         },
-        {data:'ubicacion'}
+        {name:'ubicacion',data:'ubicacion'}
       ],
       pageLength: 10,
       dom: "<'row'<'col-md-5'i><'col-md-7 pull-right'f>>" +"<'row'<'col-md-12'tr>>" +"<'row'<'col-md-6'B><'col-md-6 lst-dataciones'p>>",
@@ -757,12 +791,8 @@ function selYaci(yaci,callback){
 
 function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fechamin,fechamax,desvmin,desvmax,datosmetodo, datoslab){
   $('#ficha-selec').empty();
-  var tit = document.createElement('div');
-  tit.setAttribute('class','lst-flt-selec');
-  tit.innerHTML = '<strong>'+titFichaSel+'</strong>';
   var divficha = document.createElement('div');
     divficha.setAttribute('class','lst-flt-selec');
-    $('#ficha-selec').append(tit);
   if (datosreg) {
     var p = document.createElement('p');
     var txt = '';
@@ -1012,8 +1042,12 @@ function grafico(data){
   if (data.length > 20) {
     histograma(data);
   }
-  else{
+  else if (data.length > 1 && data.length <=20){
     dispersion(data);
+  }
+  else{
+    var graf = document.getElementById('hst');
+    d3.select(graf).selectAll("*").remove();
   }
   resalta('.lst-flt-selec');
 }
@@ -1041,6 +1075,20 @@ function dispersion(data){
   // var x = d3.scaleLinear()
   //   .domain([0,data.length])
   //   .range([margin.left, width]);
+
+  function make_y_gridlines() {
+      return d3.axisLeft(y)
+          .ticks()
+  }
+  svg.append("g")
+  .attr("class", "grid")
+  .attr("transform", "translate("+margin.left+","+margin.top+")")
+  .call(make_y_gridlines()
+      .tickSize(-width)
+      .tickFormat("")
+  );
+
+
   var pasoX = width / data.length;
   svg.selectAll("circle")//HAY QUE ENGLOBAR EL CIRCULO Y LA LÍNEA EN OTRO ELEMENTO, COMO BAR
    .data(data)
@@ -1059,6 +1107,7 @@ function dispersion(data){
    .attr("dy", "1em")
    .style("text-anchor", "middle")
    .text("Before Present");
+
    g.append("g")
      .attr("class", "axis axis--y")
      .attr("transform", "translate(0,0)")
