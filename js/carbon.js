@@ -442,15 +442,20 @@ function salvarDesv(data){
   desvmax = data.to;
 }
 
+function fechaHoy(){
+  var d = new Date();
+return d.getDate()+'-'+d.getMonth()+'-'+d.getFullYear();
+}
+
 function initTabla(){
     var tabla = $('#tab-data').DataTable({
       buttons: [
             {
                 extend: 'copy',
                 title:'Dataciones C14 de la Península Ibérica',
-                messageTop:function (){
+                messageTop:function (){fechaHoy();
                   var ficha = $('#ficha-selec').text();
-                  return 'CC-BY info copyright\n'+ficha;
+                  return fechaHoy()+'\nCC-BY info copyright\n'+ficha;
                 },
                 exportOptions: {
                     columns: [ 1, 2,3,4, 5,6,7 ]
@@ -459,9 +464,9 @@ function initTabla(){
             {
                 extend: 'csv',
                 title:'Dataciones C14 de la Península Ibérica',
-                messageTop:function (){
+                messageBottom:function (){
                   var ficha = $('#ficha-selec').text();
-                  return 'CC-BY info copyright\n'+ficha;
+                  return fechaHoy()+'\nCC-BY info copyright\n'+ficha;
                 },
                 exportOptions: {
                     columns: [ 1, 2,3,4, 5,6,7 ]
@@ -472,7 +477,7 @@ function initTabla(){
                title:'Dataciones C14 de la Península Ibérica',
                messageTop:function (){
                  var ficha = $('#ficha-selec').text();
-                 return 'CC-BY info copyright\n'+ficha;
+                return fechaHoy()+'\nCC-BY info copyright\n'+ficha;
                },
                exportOptions: {
                    columns: [ 1, 2,3,4, 5,6,7 ]
@@ -483,7 +488,7 @@ function initTabla(){
                title:'Dataciones C14 de la Península Ibérica',
                messageTop:function (){
                  var ficha = $('#ficha-selec').text();
-                 return 'CC-BY info copyright\n'+ficha;
+                return fechaHoy()+'\nCC-BY info copyright\n'+ficha;
                },
                exportOptions: {
                    columns: [ 1, 2,3,4, 5,6,7 ]

@@ -201,7 +201,7 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
           <div id="creditos-base" class="attribution-container"></div>
         </div>
           <div class="col-md-4">
-          <svg id="hst" width="600" height="650"></svg>
+          <svg id="hst" width="500" height="600"></svg>
           <div class="p-idearq text-center" style="font-size:3em;margin-top:0.75em;">
             <a href="#"><i class="fas fa-arrow-alt-circle-up"></i></a>
           </div>
