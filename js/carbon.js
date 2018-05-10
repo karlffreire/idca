@@ -444,7 +444,7 @@ function salvarDesv(data){
 
 function fechaHoy(){
   var d = new Date();
-return d.getDate()+'-'+d.getMonth()+'-'+d.getFullYear();
+return d.getDate()+'-'+(d.getMonth()+1)+'-'+d.getFullYear();
 }
 
 function initTabla(){
