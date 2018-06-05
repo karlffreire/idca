@@ -458,18 +458,7 @@ function initTabla(){
                   return fechaHoy()+'\nCC-BY info copyright\n'+ficha;
                 },
                 exportOptions: {
-                    columns: [ 1, 2,3,4, 5,6,7 ]
-                }
-            },
-            {
-                extend: 'csv',
-                title:'Dataciones C14 de la Península Ibérica',
-                messageBottom:function (){
-                  var ficha = $('#ficha-selec').text();
-                  return fechaHoy()+'\nCC-BY info copyright\n'+ficha;
-                },
-                exportOptions: {
-                    columns: [ 1, 2,3,4, 5,6,7 ]
+                    columns: [1,2,3,4,5,6,7]
                 }
             },
            {
@@ -480,7 +469,7 @@ function initTabla(){
                 return fechaHoy()+'\nCC-BY info copyright\n'+ficha;
                },
                exportOptions: {
-                   columns: [ 1, 2,3,4, 5,6,7 ]
+                   columns: [1,2,3,4,5,6,7]
                }
            },
            {
@@ -491,7 +480,7 @@ function initTabla(){
                 return fechaHoy()+'\nCC-BY info copyright\n'+ficha;
                },
                exportOptions: {
-                   columns: [ 1, 2,3,4, 5,6,7 ]
+                   columns: [1,2,3,4,5,6,7]
                }
            }
        ],
@@ -513,6 +502,12 @@ function initTabla(){
             return data;
           }
         },
+        {name:'sigla',data:'sigla',"render":function(data,type,row){
+          if (type === 'display' || type === 'filter') {
+            return row.sigla+'-'+row.num_dat;
+          }
+          return data;
+        }},
         {name:'tipo_muestra_c14',data:'tipo_muestra_c14'},
         {name:'mostrar_tipomat',data:'mostrar_tipomat',"render":function(data){
             var tipos = data.split('#');
@@ -524,7 +519,6 @@ function initTabla(){
           }
         },
         {name:'metodos_medida',data:'metodos_medida'},
-        {name:'sigla',data:'sigla'},
         {name:'nombre_yaci',data: 'nombre_yaci',"render":function(data,type,row){
               return '<div class="row"><div class="col-md-2"><i class="fas fa-map-marker-alt icono-tabla" onclick="javascript:irAPunto('+row.id_yaci+')" title="'+titIrA+'"></i></div><div class="col-md-10">'+data+'</div></div>';
           }
@@ -535,9 +529,9 @@ function initTabla(){
       dom: "<'row'<'col-md-5'i><'col-md-7 pull-right'f>>" +"<'row'<'col-md-12'tr>>" +"<'row'<'col-md-6'B><'col-md-6 lst-dataciones'p>>",
       renderer: "bootstrap",
       language: {
-      "search": "_INPUT_",
-      "searchPlaceholder": "Search...",
-      "info": "Showing _START_ to _END_ out of <strong> _TOTAL_ </strong> datings"
+      "search": "Filter table: ",
+      "searchPlaceholder": "Type filter...",
+      "info": "<span class='caption'><strong> _TOTAL_ radiocarbon dates</strong> | Showing _START_ to _END_</span>"
     }
     });
     tabla.on('click', 'td.detalles-data', function () {
@@ -575,7 +569,9 @@ function initMapa(resultado){
 	      projection: 'EPSG:3857',
 	      center: [-288976.121475105, 4868797.98060151],
         maxZoom : 12,//revisar a qué escala corresponde
-	      zoom: 5
+        minZoom: 2,
+	      zoom: 5,
+        extent: [-3268931,2703396,2888198,7220756]
 	    }),
 	    target: 'map'
   	});

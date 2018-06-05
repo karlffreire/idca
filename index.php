@@ -20,7 +20,7 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
      <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
      <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-
+     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.16/b-1.5.1/b-html5-1.5.1/b-print-1.5.1/datatables.min.css"/>
 
      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
@@ -181,10 +181,10 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
               <tr>
                 <th id="th-ext"><i class="fas fa-cog"></i></th>
                 <th id="th-edad"></th>
+                <th id="th-lab"></th>
                 <th id="th-tmuest"></th>
                 <th id="th-tmat"></th>
                 <th id="th-med"></th>
-                <th id="th-lab"></th>
                 <th id="th-yac"></th>
                 <th id="th-ubi"></th>
               </tr>

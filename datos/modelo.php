@@ -184,9 +184,9 @@ function selecYac($yaci){
 
 //SI SE ESTABLECEN LÍMITES EN LA INTERFAZ TAMBIÉN HAY QUE REPRODUCIRLOS AQUÍ ANTES DE LANZAR LA CONSULTA
 function selecDataciones($pideprov,$pidetipo,$pidecronos,$pidetmuestra,$pidetmat,$pideedadmin,$pideedadmax,$pidestdevmin,$pidestdevmax,$pidemetod,$pidelab){
-  $select ="SELECT yacis_carbon.id_yaci,nombre_yaci, id_prov, cronotipo, ubicacion, id_material_c14, id_datacion_c14, id_tipo_muestra_c14, array_to_string(mostrar_tipomat,'#') as mostrar_tipomat, fecha, stdev, id_metodos_medida,id_laboratorio, sigla, nombre_completo, metodos_medida,tipo_muestra_c14 FROM public.yacis_carbon INNER JOIN public.data_carbon ON yacis_carbon.id_yaci = data_carbon.id_yaci WHERE ";
+  $select ="SELECT yacis_carbon.id_yaci,nombre_yaci, id_prov, cronotipo, ubicacion, id_material_c14, id_datacion_c14, id_tipo_muestra_c14, array_to_string(mostrar_tipomat,'#') as mostrar_tipomat, fecha, stdev, id_metodos_medida,id_laboratorio, sigla, nombre_completo, metodos_medida,tipo_muestra_c14, num_dat FROM public.yacis_carbon INNER JOIN public.data_carbon ON yacis_carbon.id_yaci = data_carbon.id_yaci WHERE ";
   $where = '';
-  if ($pideprov != '') {
+  if ($pideprov != '') {//ENTRE 1 Y 9!!!!!
     $provs = explode('-',$pideprov);
     $txtfilt = '';
     foreach ($provs as $key => $value) {
@@ -267,7 +267,7 @@ function selecDataciones($pideprov,$pidetipo,$pidecronos,$pidetmuestra,$pidetmat
     $where .= " AND stdev >= $stdevmin AND stdev <= $stdevmax";
   }
   $db = conectaBD();
-  $resultado = pg_query($db,$select.ltrim(pg_escape_string($where),' AND'));//revisar pg_send_query y pg_connection_busy
+  $resultado = pg_query($db,$select.ltrim(pg_escape_string($where),' AND'));//revisar pg_send_query y pg_connection_busy //AÑADIR ;
   if (!$resultado) {
     return pg_last_error($db);
   }

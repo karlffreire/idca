@@ -1,3 +1,7 @@
+body{
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
 h5{
   margin: 0;
 }
@@ -159,10 +163,21 @@ section {
 
 .resalta{
   background-color: #FF7542;
-  color: white;
 }
 
 /*tabla*/
+.caption{
+  color: #454545;
+}
+
+.caption strong{
+  font-size: 1.3em;
+}
+
+.dataTables_filter{
+  padding-top: 0.85em;
+}
+
 .tabla-dataciones {
   color:#454545;
 }

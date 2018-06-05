@@ -56,7 +56,7 @@ function ponIdioma(ln){
     thEdad = 'Fecha';
     thDsv = 'σ';
     thMed = 'Método';
-    thLab = 'Laboratorio';
+    thLab = 'Referencia';
     titDesc = 'Descargas';
     popYac = 'yacimientos';
     titIrA = 'Mostrar en mapa';
@@ -65,7 +65,7 @@ function ponIdioma(ln){
   else if (ln == 'en'){
     titulo = 'Carbon IDEArq';
     tituloBuscaYaci = 'Search for a site';
-    tituloFiltrar = 'Filter datings';
+    tituloFiltrar = 'Filter radiocarbon dates';
     caracYac = 'Site features';
     caracMat = 'Material features';
     caracDat = 'Dating features';
@@ -88,7 +88,7 @@ function ponIdioma(ln){
     thEdad = 'Date';
     thDsv = 'σ';
     thMed = 'Method';
-    thLab = 'Laboratory';
+    thLab = 'Reference';
     titDesc = 'Downloads';
     popYac = 'sites';
     titIrA = 'Show in map';
