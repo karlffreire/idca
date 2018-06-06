@@ -316,9 +316,10 @@ function initSelReg(resultado){
   var data = organizaOpciones(resultado);
   $('#selprov').select2({
     data:data,
-    placeholder: '*',
+    placeholder: 'min 1, max 9',
     allowClear: true,
     theme: "bootstrap",
+    maximumSelectionLength: 9,
     templateResult: colPorGrupo
   });
 }
@@ -375,15 +376,10 @@ function initBarras(resultado){
     grid: true,
     min: initfechmin,
     max: initfechmax,
-    //max_interval: 5000,
-    //drag_interval:true,
     from: 5000,
     to: 10000,
     step: 100,
     postfix: " BP",
-    onStart:function(data){
-      salvarFecha(data);
-    },
     onFinish:function(data){
       tipoFilSelec.filtdat = true;
       salvarFecha(data);
@@ -399,9 +395,6 @@ function initBarras(resultado){
     to: 2500,
     step: 50,
     postfix: "",
-    onStart:function(data){
-      salvarDesv(data);
-    },
     onFinish:function(data){
       tipoFilSelec.filtdat = true;
       salvarDesv(data);
@@ -431,6 +424,11 @@ function initSelLab(resultado){
     //matcher: selecConDetalle
   });
 }
+
+fechamin = false;
+fechamax = false;
+desvmin = false;
+desvmax = false;
 
 function salvarFecha(data){
   fechamin = data.from;
@@ -497,7 +495,7 @@ function initTabla(){
           name:'fecha',
           data: 'fecha',"render":function(data,type,row){
             if (type === 'display' || type === 'filter') {
-              return '<strong>'+row.fecha+' ± '+row.stdev+' BP</strong>';
+              return '<strong>'+row.fecha+' ± '+ valonull(row.stdev) +' BP</strong>';
             }
             return data;
           }
@@ -604,27 +602,29 @@ function limpiaSelec(){
     $('.selfilt-yac').trigger({
         type: 'select2:unselect'
     });
+    tipoFilSelec.filtyac = false;
   }
   if (tipoFilSelec.filtmat) {
     $('.selfilt-mat').val(null).trigger('change');
     $('.selfilt-mat').trigger({
         type: 'select2:unselect'
     });
+    tipoFilSelec.filtmat = false;
   }
   if (tipoFilSelec.filtdat) {
-    //a ver lo de las fechas
     var fechas = $("#selfecha").data("ionRangeSlider");
     fechas.reset();
     var desv = $("#seldev").data("ionRangeSlider");
     desv.reset();
-    fechamin = '';
-    fechamax = '';
-    desvmin = '';
-    desvmax = '';
+    fechamin = false;
+    fechamax = false;
+    desvmin = false;
+    desvmax = false;
     $('.selfilt-dat').val(null).trigger('change');
     $('.selfilt-dat').trigger({
         type: 'select2:unselect'
     });
+    tipoFilSelec.filtdat = false;
   }
 }
 
@@ -653,12 +653,21 @@ function buscaDatYaci(idyaci){
 function recogePeticion(){
   if (!tipoFilSelec.filtyac&&!tipoFilSelec.filtmat&&!tipoFilSelec.filtdat) {
     alert(noSelec);
+    return;
+  }
+  var datosreg = ($('#selprov').find(':selected').length > 0) ? $('#selprov').select2('data') : false;
+  if (!datosreg) {
+    alert(noReg);
+    return;
   }
   else{
     $('#piensa').addClass('fa-spin');
-    var inityac = $('#selprov').hasClass("select2-hidden-accessible");
-    var initmat = $('#seltipomuest').hasClass("select2-hidden-accessible");
-    var initdat = $('#selmetodo').hasClass("select2-hidden-accessible");
+    // var inityac = $('#selprov').hasClass("select2-hidden-accessible");
+    // var initmat = $('#seltipomuest').hasClass("select2-hidden-accessible");
+    // var initdat = $('#selmetodo').hasClass("select2-hidden-accessible");
+    var inityac = tipoFilSelec.filtyac;
+    var initmat = tipoFilSelec.filtmat;
+    var initdat = tipoFilSelec.filtdat;
     var pidereg = '';
     var pidetipo = '';
     var pidecrono = '';
@@ -668,7 +677,6 @@ function recogePeticion(){
     var pidelab = '';
     //Recogemos los datos, y si no hay, false
     if (inityac) {
-      var datosreg = ($('#selprov').find(':selected').length > 0) ? $('#selprov').select2('data') : false;
       var datostipo = ($('#seltipoyac').find(':selected').length > 0) ? $('#seltipoyac').select2('data') : false;
       var datoscrono = ($('#selcronoyac').find(':selected').length > 0) ? $('#selcronoyac').select2('data') : false;
     }
@@ -690,10 +698,6 @@ function recogePeticion(){
       var datoslab = ($('#sellab').find(':selected').length > 0) ? $('#sellab').select2('data') : false;
     }
     else if (!initdat) {
-      fechamin = '';
-      fechamax = '';
-      desvmin = '';
-      desvmax = '';
       var datosmetodo = false;
       var datoslab = false;
     }
@@ -740,8 +744,8 @@ function recogePeticion(){
       }
       pidelab = pidelab.substring('-',pidelab.length - 1);
     }
-    fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fechamin,fechamax,desvmin,desvmax, datosmetodo, datoslab);
-    selecDataciones(pidereg,pidetipo,pidecrono,pidemuest,pidemat,fechamin,fechamax,desvmin,desvmax,pidemetodo,pidelab,ponDatosTabla);
+    fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, datosmetodo, datoslab);
+    selecDataciones(pidereg,pidetipo,pidecrono,pidemuest,pidemat,pidemetodo,pidelab,ponDatosTabla);
   }
 }
 
@@ -753,7 +757,7 @@ function recogePeticion(){
 ===========================================*/
 
 
-function selecDataciones(prov,tipo,crono,tmuestra,tmat,edadmin,edadmax,stdevmin,stdevmax,metod,lab,callback){
+function selecDataciones(prov,tipo,crono,tmuestra,tmat,metod,lab,callback){
   $.ajax({
     url: "./datos/selecDataciones.php",
     data:{
@@ -762,10 +766,10 @@ function selecDataciones(prov,tipo,crono,tmuestra,tmat,edadmin,edadmax,stdevmin,
       crono : crono,
       tmuestra : tmuestra,
       tmat : tmat,
-      edadmin : edadmin,
-      edadmax : edadmax,
-      stdevmin : stdevmin,
-      stdevmax : stdevmax,
+      edadmin : function (){ return fechamin ? fechamin : '';},
+      edadmax : function (){ return fechamax ? fechamax : '';},
+      stdevmin : function (){ return desvmin ? desvmin : '';},
+      stdevmax : function (){ return desvmax ? desvmax : '';},
       metod : metod,
       lab : lab
     },
@@ -790,7 +794,7 @@ function selYaci(yaci,callback){
 
 ===========================================*/
 
-function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fechamin,fechamax,desvmin,desvmax,datosmetodo, datoslab){
+function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, datosmetodo, datoslab){
   $('#ficha-selec').empty();
   var divficha = document.createElement('div');
     divficha.setAttribute('class','lst-flt-selec');
@@ -840,10 +844,11 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, fecha
     divficha.appendChild(p);
   }
   var pfechas = document.createElement('p');
-  if ((fechamin != '') || (fechamax != '')) {
+  //if ((fechamin != '') || (fechamax != '')) {
+  if (fechamin|| fechamax){
     pfechas.innerHTML = '<em>'+etiFecha+'</em>:<br>' + fechamin+'-'+fechamax+' BP';
   }
-  if ((desvmin != '') || (desvmax != '')) {
+  if (desvmin || desvmax) {
     pfechas.innerHTML += '| σ: '+desvmin+'-'+desvmax;
   }
   divficha.appendChild(pfechas);
@@ -1323,4 +1328,15 @@ function irAPunto(idpunto){
     element: elemento
   });
   mapa.addOverlay(marca);
+}
+
+/*==========================================
+
+                GENÉRICAS
+
+============================================*/
+
+function valonull(valor){
+  var resultado = valor ? valor : '';
+  return resultado;
 }

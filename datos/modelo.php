@@ -186,86 +186,92 @@ function selecYac($yaci){
 function selecDataciones($pideprov,$pidetipo,$pidecronos,$pidetmuestra,$pidetmat,$pideedadmin,$pideedadmax,$pidestdevmin,$pidestdevmax,$pidemetod,$pidelab){
   $select ="SELECT yacis_carbon.id_yaci,nombre_yaci, id_prov, cronotipo, ubicacion, id_material_c14, id_datacion_c14, id_tipo_muestra_c14, array_to_string(mostrar_tipomat,'#') as mostrar_tipomat, fecha, stdev, id_metodos_medida,id_laboratorio, sigla, nombre_completo, metodos_medida,tipo_muestra_c14, num_dat FROM public.yacis_carbon INNER JOIN public.data_carbon ON yacis_carbon.id_yaci = data_carbon.id_yaci WHERE ";
   $where = '';
-  if ($pideprov != '') {//ENTRE 1 Y 9!!!!!
-    $provs = explode('-',$pideprov);
-    $txtfilt = '';
-    foreach ($provs as $key => $value) {
-      if (filter_var($value,FILTER_VALIDATE_INT)) {
-        $txtfilt .= $value.',';
-      }
-    }
-    $where .= 'AND id_prov in ('.rtrim($txtfilt,',').')';
-  }
-  if ($pidetipo != '') {
-    $tipos = explode('-',$pidetipo);
-    $txtfilt = '';
-    foreach ($tipos as $key => $value) {
-      if (filter_var($value,FILTER_VALIDATE_INT)) {
-        $txtfilt .= $value.',';
-      }
-    }
-    $where .= ' AND arrtipo && ARRAY['.rtrim($txtfilt,',').']';
-  }
-  if ($pidecronos != '') {
-    $cronos = explode('-',$pidecronos);
-    $txtfilt = '';
-    foreach ($cronos as $key => $value) {
-      if (filter_var($value,FILTER_VALIDATE_INT)) {
-        $txtfilt .= $value.',';
-      }
-    }
-    $where .= ' AND arrcrono && ARRAY['.rtrim($txtfilt,',').']';
-  }
-  if ($pidetmuestra != '') {
-    $tmuestra = explode('-',$pidetmuestra);
-    $txtfilt = '';
-    foreach ($tmuestra as $key => $value) {
-      if (filter_var($value,FILTER_VALIDATE_INT)) {
-        $txtfilt .= $value.',';
-      }
-    }
-    $where .= ' AND id_tipo_muestra_c14 IN ('.rtrim($txtfilt,',').')';
-  }
-  if ($pidetmat != '') {
-    $tmat = explode('-',$pidetmat);
-    $txtfilt = '';
-    foreach ($tmat as $key => $value) {
-      if (filter_var($value,FILTER_VALIDATE_INT)) {
-        $txtfilt .= $value.',';
-      }
-    }
-    $where .= ' AND arrtiptax && ARRAY['.rtrim($txtfilt,',').']';
-  }
-  if ($pidemetod != '') {
-    $metodos = explode('-',$pidemetod);
-    $txtfilt = '';
-    foreach ($metodos as $key => $value) {
-      if (filter_var($value,FILTER_VALIDATE_INT)) {
-        $txtfilt .= $value.',';
-      }
-    }
-    $where .= ' AND id_metodos_medida IN ('.rtrim($txtfilt,',').')';
-  }
-  if ($pidelab != '') {
-    $labs = explode('-',$pidelab);
-    $txtfilt = '';
-    foreach ($labs as $key => $value) {
-      if (filter_var($value,FILTER_VALIDATE_INT)) {
-        $txtfilt .= $value.',';
-      }
-    }
-    $where .= ' AND id_laboratorio IN ('.rtrim($txtfilt,',').')';
-  }
-  if ($pideedadmin != '') {
-    $edadmin  = filter_var($pideedadmin,FILTER_VALIDATE_INT);
-    $edadmax = filter_var($pideedadmax,FILTER_VALIDATE_INT);
-    $where .= " AND fecha >= $edadmin AND fecha <= $edadmax";
-  }
-	if ($pidestdevmin != '') {
-    $stdevmin = filter_var($pidestdevmin,FILTER_VALIDATE_INT);
-    $stdevmax = filter_var($pidestdevmax,FILTER_VALIDATE_INT);
-    $where .= " AND stdev >= $stdevmin AND stdev <= $stdevmax";
-  }
+	if ($pideprov == '') {
+		return null;
+	}
+  else{
+	    $provs = explode('-',$pideprov);
+			if (count($provs) > 9) {
+				return null;
+			}
+	    $txtfilt = '';
+	    foreach ($provs as $key => $value) {
+	      if (filter_var($value,FILTER_VALIDATE_INT)) {
+	        $txtfilt .= $value.',';
+	      }
+	    }
+	    $where .= 'AND id_prov in ('.rtrim($txtfilt,',').')';
+	  if ($pidetipo != '') {
+	    $tipos = explode('-',$pidetipo);
+	    $txtfilt = '';
+	    foreach ($tipos as $key => $value) {
+	      if (filter_var($value,FILTER_VALIDATE_INT)) {
+	        $txtfilt .= $value.',';
+	      }
+	    }
+	    $where .= ' AND arrtipo && ARRAY['.rtrim($txtfilt,',').']';
+	  }
+	  if ($pidecronos != '') {
+	    $cronos = explode('-',$pidecronos);
+	    $txtfilt = '';
+	    foreach ($cronos as $key => $value) {
+	      if (filter_var($value,FILTER_VALIDATE_INT)) {
+	        $txtfilt .= $value.',';
+	      }
+	    }
+	    $where .= ' AND arrcrono && ARRAY['.rtrim($txtfilt,',').']';
+	  }
+	  if ($pidetmuestra != '') {
+	    $tmuestra = explode('-',$pidetmuestra);
+	    $txtfilt = '';
+	    foreach ($tmuestra as $key => $value) {
+	      if (filter_var($value,FILTER_VALIDATE_INT)) {
+	        $txtfilt .= $value.',';
+	      }
+	    }
+	    $where .= ' AND id_tipo_muestra_c14 IN ('.rtrim($txtfilt,',').')';
+	  }
+	  if ($pidetmat != '') {
+	    $tmat = explode('-',$pidetmat);
+	    $txtfilt = '';
+	    foreach ($tmat as $key => $value) {
+	      if (filter_var($value,FILTER_VALIDATE_INT)) {
+	        $txtfilt .= $value.',';
+	      }
+	    }
+	    $where .= ' AND arrtiptax && ARRAY['.rtrim($txtfilt,',').']';
+	  }
+	  if ($pidemetod != '') {
+	    $metodos = explode('-',$pidemetod);
+	    $txtfilt = '';
+	    foreach ($metodos as $key => $value) {
+	      if (filter_var($value,FILTER_VALIDATE_INT)) {
+	        $txtfilt .= $value.',';
+	      }
+	    }
+	    $where .= ' AND id_metodos_medida IN ('.rtrim($txtfilt,',').')';
+	  }
+	  if ($pidelab != '') {
+	    $labs = explode('-',$pidelab);
+	    $txtfilt = '';
+	    foreach ($labs as $key => $value) {
+	      if (filter_var($value,FILTER_VALIDATE_INT)) {
+	        $txtfilt .= $value.',';
+	      }
+	    }
+	    $where .= ' AND id_laboratorio IN ('.rtrim($txtfilt,',').')';
+	  }
+	  if ($pideedadmin != '') {
+	    $edadmin  = filter_var($pideedadmin,FILTER_VALIDATE_INT);
+	    $edadmax = filter_var($pideedadmax,FILTER_VALIDATE_INT);
+	    $where .= " AND fecha >= $edadmin AND fecha <= $edadmax";
+	  }
+		if ($pidestdevmin != '') {
+	    $stdevmin = filter_var($pidestdevmin,FILTER_VALIDATE_INT);
+	    $stdevmax = filter_var($pidestdevmax,FILTER_VALIDATE_INT);
+	    $where .= " AND stdev >= $stdevmin AND stdev <= $stdevmax";
+	  }
+	}
   $db = conectaBD();
   $resultado = pg_query($db,$select.ltrim(pg_escape_string($where),' AND'));//revisar pg_send_query y pg_connection_busy //AÑADIR ;
   if (!$resultado) {

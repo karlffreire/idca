@@ -16,6 +16,7 @@ var etiMetodo = '';
 var etiLab = '';
 var filtraYa = '';
 var noSelec = '';
+var noReg = '';
 var thYac = '';
 var thUbi = '';
 var thTmuest = '';
@@ -49,6 +50,7 @@ function ponIdioma(ln){
     etiLab = 'Laboratorios';
     filtraYa = 'Filtra dataciones';
     noSelec = 'Es necesario seleccionar algún filtro';
+    noReg = 'Es necesario seleccionar alguna región geográfica';
     thYac = 'Yacimiento';
     thUbi = 'Ubicación';
     thTmuest = 'Tipo de muestra';
@@ -81,6 +83,7 @@ function ponIdioma(ln){
     etiLab = 'Laboratories';
     filtraYa = 'Filter datings';
     noSelec = 'Some filtering options required';
+    noReg = 'At least one geographic region required';
     thYac = 'Site';
     thUbi = 'Location';
     thTmuest = 'Sample type';
