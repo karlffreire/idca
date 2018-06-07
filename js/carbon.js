@@ -1091,6 +1091,7 @@ function dispersion(data){
         .tickFormat("")
     );
 
+  data.sort(ordenaFechas);
   var pasoX = width / data.length;
 
   var grupo = svg.selectAll("g.dataciones").data(data);
@@ -1339,4 +1340,12 @@ function irAPunto(idpunto){
 function valonull(valor){
   var resultado = valor ? valor : '';
   return resultado;
+}
+
+function ordenaFechas(a,b) {
+  if (a.fecha < b.fecha)
+    return 1;
+  if (a.fecha > b.fecha)
+    return -1;
+  return 0;
 }
