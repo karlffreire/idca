@@ -453,7 +453,7 @@ function initTabla(){
                 title:'Dataciones C14 de la Península Ibérica',
                 messageTop:function (){fechaHoy();
                   var ficha = $('#ficha-selec').text();
-                  return fechaHoy()+'\nCC-BY info copyright\n'+ficha;
+                  return fechaHoy()+'\nCC-BY info copyright\n'+'Citation: XXXXXX\n'+ficha;
                 },
                 exportOptions: {
                     columns: [1,2,3,4,5,6,7]
@@ -464,7 +464,7 @@ function initTabla(){
                title:'Dataciones C14 de la Península Ibérica',
                messageTop:function (){
                  var ficha = $('#ficha-selec').text();
-                return fechaHoy()+'\nCC-BY info copyright\n'+ficha;
+                return fechaHoy()+'\nCC-BY info copyright\n'+'Citation: XXXXXX\n'+ficha;
                },
                exportOptions: {
                    columns: [1,2,3,4,5,6,7]
@@ -475,7 +475,7 @@ function initTabla(){
                title:'Dataciones C14 de la Península Ibérica',
                messageTop:function (){
                  var ficha = $('#ficha-selec').text();
-                return fechaHoy()+'\nCC-BY info copyright\n'+ficha;
+                return fechaHoy()+'\nCC-BY info copyright\n'+'Citation: XXXXXX\n'+ficha;
                },
                exportOptions: {
                    columns: [1,2,3,4,5,6,7]
@@ -551,16 +551,21 @@ function initTabla(){
 
 
 function initMapa(resultado){
+  var iconoMapaLlave = document.createElement('i');
+    $(iconoMapaLlave).addClass('fas fa-globe');
   var osm = new ol.layer.Tile({
-            source: new ol.source.OSM()
+            source: new ol.source.OSM(),
+            attributions:'OL contributors'
           });
   mapa = new ol.Map({
-      controls: [new ol.control.OverviewMap({
-          layers:[osm],
-          className: 'ol-overviewmap ol-custom-overviewmap'
-        }),
+      controls: [
         new ol.control.ScaleLine(),
-        new ol.control.Attribution()
+        new ol.control.OverviewMap({
+          layers:[osm],
+          className: 'ol-overviewmap ol-custom-overviewmap',
+          label: iconoMapaLlave
+        })
+
       ],
 	    layers: [osm],
 	    view: new ol.View({
@@ -594,6 +599,14 @@ function initMapa(resultado){
   	    	}
   	    });
     	});
+      mapa.on('postrender', function(e) {
+           let popover = $('#popup').data('bs.popover');
+           if(!popover) return;
+           let popper = popover._popper;
+           if(!popper) return;
+         popper.scheduleUpdate();
+       });
+      document.getElementById('creditos-base').innerHTML = '© <a target=_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.';//osm.getSource().attributions_[0].html_;
 }
 
 function limpiaSelec(){
@@ -1013,6 +1026,9 @@ function extiendeData(datacion){
            if (json.data.cor_frac_isotopo) {
              txtdat += ' Corrección por fracción de isótopo: '+json.data.cor_frac_isotopo+' |';
            }
+           if (json.data.observaciones) {
+             txtdat += ' Observaciones: '+json.data.observaciones_dat+' |';
+           }
            $(divdat).html('<em>Info datación</em>: '+txtdat.substring(0, txtdat.length - 1));
            div1.appendChild(divmat);
            div1.appendChild(divdat);
@@ -1069,6 +1085,11 @@ function dispersion(data){
     mins.push(data[i].fecha-data[i].stdev);
     fechas.push(data[i].fecha);
   }
+  var tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-10, 0])
+    .html(function(d) {return d.fecha+' ± '+d.stdev+' BP<br>'+d.nombre_yaci;});
+
   var svg = d3.select(graf),
     margin = {top: 10, right: 30, bottom: 30, left: 70},
     width = +svg.attr("width") - margin.left - margin.right,
@@ -1097,7 +1118,7 @@ function dispersion(data){
   var grupo = svg.selectAll("g.dataciones").data(data);
   var puntolinea = grupo.enter().append('g')//puntos y líneas irán en el mismo grupo
     .attr('class','grupo-datacion');
-
+  svg.call(tip);
    puntolinea.append("line")
          .attr('class','linea')
          .attr("x1", function(d,i) {return pasoX*i+margin.left+10; })
@@ -1109,8 +1130,8 @@ function dispersion(data){
          .attr("cy", function(d) {return y(d.fecha)+margin.top;})
          .attr("cx", function(d,i) {return pasoX*i+margin.left+10; })
          .attr("r", 4);
-   puntolinea.append("svg:title")
-     .text(function(d) {return d.fecha+' ± '+d.stdev+' BP\n'+d.nombre_yaci;});
+   puntolinea.on('mouseover', tip.show)
+     .on('mouseout', tip.hide);
 
   svg.append("text")
    .attr("transform", "rotate(-90)")
@@ -1133,6 +1154,19 @@ function histograma(data){
     fechas.push(data[i].fecha);
   }
   d3.select(graf).selectAll("*").remove();
+
+    var tip = d3.tip()
+      .attr('class', 'd3-tip')
+      .offset([-10, 0])
+      .html(function(d) {
+        if (d.length == 1){
+          return d.length+' datación<br>'+d[0]+' BP';
+        }
+        else {
+          return d.length+' dataciones<br>'+d3.min(d)+' - '+d3.max(d)+' BP';
+        }
+      });
+
     var svg = d3.select(graf),
       margin = {top: 10, right: 30, bottom: 30, left: 70},
       width = +svg.attr("width") - margin.left - margin.right,
@@ -1155,6 +1189,9 @@ function histograma(data){
     var x = d3.scaleLinear()
       .domain([0, d3.max(bins, function(d) { return d.length; })])
       .range([0, width]);
+
+    svg.call(tip);
+
     var bar = g.selectAll(".bar")
       .data(bins)
       .enter().append("g")
@@ -1163,29 +1200,30 @@ function histograma(data){
     bar.append("rect")
       .attr("x", 3)//un poquito separadas del eje
       .attr("height", function(d) {return y(bins[1].x0) - y(bins[1].x1) -1 ; })
-      .attr("width", function(d) { return x(d.length); })
-      .append("svg:title")
-      .text(function(d) {
-        if (d.length > 1) {
-          return d.length+' dataciones\n'+d3.min(d)+' - '+d3.max(d)+' BP';
-        }
-        else {
-          return d[0]+' BP';
-        }
-      });
+      .attr("width", function(d) { return x(d.length); });
+
     bar.append("text")
       .attr("dx", ".75em")
       .attr("x", (function(d) {return x(d.length)-20; }))
       .attr("y", ((y(bins[1].x0) - y(bins[1].x1))/2)+3)
       .attr("text-anchor", "middle")
-      .text(function(d) { return d.length; });
-      svg.append("text")
+      .text(function(d) {
+        if (x(d.length) > 20) {
+          return d.length;
+        }
+      });
+
+    bar.on('mouseover', tip.show)
+      .on('mouseout', tip.hide);
+
+    svg.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 0)
       .attr("x",0 - (height / 2))
       .attr("dy", "1em")
       .style("text-anchor", "middle")
       .text("Before Present");
+
     g.append("g")
       .attr("class", "axis axis--y")
       .attr("transform", "translate(0,0)")

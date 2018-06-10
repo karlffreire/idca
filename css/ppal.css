@@ -230,6 +230,7 @@ section {
   position: absolute;
   display: block;
   margin: 0 10 5;
+  z-index: 8000;
 }
 
 
@@ -280,6 +281,36 @@ section {
 .cierra-pop:hover{
   text-decoration: none;
   color: #6E6E6E;
+}
+
+.ol-control {
+  color: #454545;
+  background-color: white;
+}
+
+.ol-scale-line{
+  background-color: white;
+  border-radius: 2px;
+}
+
+.ol-scale-line-inner{
+  color: #454545;
+  border-color: #454545;
+}
+
+.ol-control button{
+  color: #454545;
+  background-color: white;
+}
+
+.ol-control button:hover{
+  color: white;
+  background-color: #454545;
+}
+
+.ol-control button:focus{
+  color: white;
+  background-color: #454545;
 }
 
 .ol-custom-overviewmap,
@@ -333,6 +364,36 @@ section {
   background-color: #FF7542;
   padding: 0 1em;
   border-radius: 0.25em;
+}
+
+/*graficos*/
+
+.d3-tip {
+  line-height: 120%;
+  padding: 5px;
+  background: #454545;
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: #454545;
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -3px 0 0 0;
+  top: 100%;
+  left: 0;
 }
 
 /*Histograma*/
