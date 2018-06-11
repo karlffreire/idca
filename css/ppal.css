@@ -65,7 +65,7 @@ h5{
 }
 
 .panel-resultados{
-  margin-bottom: 5em;
+  margin-bottom: 0.25em;
   padding: 1em;
 }
 .panel-resultados h4{
@@ -440,10 +440,8 @@ section {
 
 /* Footer */
 footer {
+  margin-top: 3em;
   padding: 30px 0;
-}
-
-footer {
   background: #FAFAFA !important;
   color: #454545;
 }

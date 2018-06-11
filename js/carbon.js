@@ -289,6 +289,17 @@ function initPaneles(){
       initSelFiltDat();
     }
   });
+  $('#fila-mapa').on('shown.bs.collapse',function(e){
+    $(this).addClass('d-flex');
+    var arrids = $('#map').data('yacids');
+    muestraPuntos(arrids);//a ver cómo hago que sólo se ejecute la primera vez después de una búsqueda
+    mapa.updateSize();
+    $('#tira-mapa').html(ocultarMapa);
+  });
+  $('#fila-mapa').on('hide.bs.collapse',function(e){
+    $(this).removeClass('d-flex');
+    $('#tira-mapa').html(verMapa);
+  });
 }
 
 function initBuscaYaci(){
@@ -550,7 +561,7 @@ function initTabla(){
 
 
 
-function initMapa(resultado){
+function initMapa(){
   var iconoMapaLlave = document.createElement('i');
     $(iconoMapaLlave).addClass('fas fa-globe');
   var osm = new ol.layer.Tile({
@@ -659,6 +670,7 @@ function habLimpia(){
 
 function buscaDatYaci(idyaci){
   $('#ficha-selec').empty();
+  $('#fila-mapa').collapse('hide');
   selYaci(idyaci,ponDatosTabla);
   ponFlechas();
 }
@@ -675,9 +687,7 @@ function recogePeticion(){
   }
   else{
     $('#piensa').addClass('fa-spin');
-    // var inityac = $('#selprov').hasClass("select2-hidden-accessible");
-    // var initmat = $('#seltipomuest').hasClass("select2-hidden-accessible");
-    // var initdat = $('#selmetodo').hasClass("select2-hidden-accessible");
+    $('#fila-mapa').collapse('hide');
     var inityac = tipoFilSelec.filtyac;
     var initmat = tipoFilSelec.filtmat;
     var initdat = tipoFilSelec.filtdat;
@@ -912,14 +922,14 @@ function ponDatosTabla(resultado){
   tabla.rows.add(resultado.data );
   tabla.columns.adjust().draw();
   $('#piensa').removeClass('fa-spin');
-  $('.panel-resultados').removeClass('collapse');
+  $('#resultados').removeClass('collapse');
   $('#panel-busca-yaci').hide();
   $('#panel-sel-filt').hide();
   $('#tit-buscayaci').show();
   $('#tit-filtrar').show();
   window.location.href = '#fila-tabla';
-  muestraPuntos(arrids);
   grafico(datos);
+  $('#map').data('yacids',arrids);
 }
 
 function muestraPuntos(ids){
@@ -956,7 +966,6 @@ function muestraPuntos(ids){
   if (ids.length > 0) {
     mapa.getView().fit(yacisFltSource.getExtent());
   }
-
 }
 
 function extiendeData(datacion){
@@ -1386,4 +1395,8 @@ function ordenaFechas(a,b) {
   if (a.fecha > b.fecha)
     return -1;
   return 0;
+}
+
+function compareArrays(arr1, arr2) {
+    return $(arr1).not(arr2).length == 0 && $(arr2).not(arr1).length == 0
 }

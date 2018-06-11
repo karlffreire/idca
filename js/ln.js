@@ -29,6 +29,8 @@ var titDesc = '';
 var popYac = '';
 var titIrA = '';
 var titLimpFilt = '';
+var verMapa = '';
+var ocultarMapa = '';
 
 function ponIdioma(ln){
   if (ln == 'es') {
@@ -63,6 +65,8 @@ function ponIdioma(ln){
     popYac = 'yacimientos';
     titIrA = 'Mostrar en mapa';
     titLimpFilt = 'Limpiar todos los filtros';
+    verMapa = 'Mostrar mapa';
+    ocultarMapa = 'Ocultar mapa';
   }
   else if (ln == 'en'){
     titulo = 'Carbon IDEArq';
@@ -96,6 +100,8 @@ function ponIdioma(ln){
     popYac = 'sites';
     titIrA = 'Show in map';
     titLimpFilt = 'Clear all filters';
+    verMapa = 'Show map';
+    ocultarMapa = 'Hide map';
   }
   $('#titulo').html(titulo);
   $('#tit-buscayaci').html(tituloBuscaYaci);
@@ -127,4 +133,5 @@ function ponIdioma(ln){
   $('#th-med').html(thMed);
   $('#th-lab').html(thLab);
   $('#limp-filt').prop('title',titLimpFilt);
+  $('#tira-mapa').html(verMapa);
 }

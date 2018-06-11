@@ -167,48 +167,57 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
         	</div>
         </section>
       </div>
-      <div id="fila-tabla" class="row justify-content-md-center panel-resultados collapse" style="margin-top:5em;">
-        <div id="ficha-selec" class="col-md-6">
-        </div>
-        <div id="flechas" class="d-block collapse">
-          <div class="p-idearq text-center" style="font-size:3em;">
-            <a href="#"><i class="fas fa-arrow-alt-circle-up"></i></a>
-            <a href="#fila-mapa"><i class="fas fa-arrow-alt-circle-down"></i></a>
+      <div id="resultados" class="panel-resultados collapse">
+
+        <div id="fila-tabla" class="row justify-content-md-center" style="margin-top:5em;">
+          <div id="ficha-selec" class="col-md-6">
+          </div>
+          <div id="flechas" class="d-block collapse">
+            <div class="p-idearq text-center" style="font-size:3em;">
+              <a href="#"><i class="fas fa-arrow-alt-circle-up"></i></a>
+              <a href="#fila-mapa"><i class="fas fa-arrow-alt-circle-down"></i></a>
+            </div>
+          </div>
+          <div class="panel-tabla col-md-12 ">
+            <table id="tab-data" class="table table-hover tabla-dataciones w-100" cellspacing="0">
+              <thead>
+                <tr>
+                  <th id="th-ext"><i class="fas fa-cog"></i></th>
+                  <th id="th-edad"></th>
+                  <th id="th-lab"></th>
+                  <th id="th-tmuest"></th>
+                  <th id="th-tmat"></th>
+                  <th id="th-med"></th>
+                  <th id="th-yac"></th>
+                  <th id="th-ubi"></th>
+                </tr>
+              </thead>
+            </table>
           </div>
         </div>
-        <div class="panel-tabla col-md-12 ">
-          <table id="tab-data" class="table table-hover tabla-dataciones w-100" cellspacing="0">
-            <thead>
-              <tr>
-                <th id="th-ext"><i class="fas fa-cog"></i></th>
-                <th id="th-edad"></th>
-                <th id="th-lab"></th>
-                <th id="th-tmuest"></th>
-                <th id="th-tmat"></th>
-                <th id="th-med"></th>
-                <th id="th-yac"></th>
-                <th id="th-ubi"></th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-      </div>
-      <div id="fila-mapa" class="row panel-resultados">
-        <div id="map" class="map col-md-8">
-          <div id="popup"></div>
-          <div style="display: none;">
-            <p class="overlay etiqueta-mapa" id="txt_yaci"></p>
+        <div id="fila-mapa" class="row" >
+          <div id="map" class="map col-md-8" data-yacids="">
+            <div id="popup"></div>
+            <div style="display: none;">
+              <p class="overlay etiqueta-mapa" id="txt_yaci"></p>
+            </div>
+            <div id="creditos-base" class="attribution-container"></div>
           </div>
-          <div id="creditos-base" class="attribution-container"></div>
-        </div>
           <div class="col-md-4">
-          <svg id="hst" width="500" height="600"></svg>
-          <div class="p-idearq text-center" style="font-size:3em;margin-top:0.75em;">
-            <a href="#"><i class="fas fa-arrow-alt-circle-up"></i></a>
+            <svg id="hst" width="500" height="600"></svg>
+            <div class="p-idearq text-center" style="font-size:3em;margin-top:0.75em;">
+              <a href="#"><i class="fas fa-arrow-alt-circle-up"></i></a>
+            </div>
           </div>
+        </div>
+        <div class="row justify-content-center" >
+          <button id="muestra-mapa" class="btn btn-lg boton-flujo" data-toggle="collapse" href="#fila-mapa">
+            <i class="fas fa-map" style="margin-right:1em;"></i><span id="tira-mapa"></span>
+          </button>
         </div>
       </div>
     </div>
+
   <!-- Footer -->
   	<footer>
   		<div class="container">
