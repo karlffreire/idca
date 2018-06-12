@@ -302,6 +302,8 @@ function initPaneles(){
   });
 }
 
+var mapaMostrado = false;
+
 function initBuscaYaci(){
   var data = [];
   var features = featsArqueo;
@@ -529,7 +531,7 @@ function initTabla(){
         },
         {name:'metodos_medida',data:'metodos_medida'},
         {name:'nombre_yaci',data: 'nombre_yaci',"render":function(data,type,row){
-              return '<div class="row"><div class="col-md-2"><i class="fas fa-map-marker-alt icono-tabla" onclick="javascript:irAPunto('+row.id_yaci+')" title="'+titIrA+'"></i></div><div class="col-md-10">'+data+'</div></div>';
+              return '<div class="row"><div class="col-md-2"><i class="fas fa-map-marker-alt icono-tabla" onclick="javascript:abrePunto('+row.id_yaci+',irAPunto)" title="'+titIrA+'"></i></div><div class="col-md-10">'+data+'</div></div>';
           }
         },
         {name:'ubicacion',data:'ubicacion'}
@@ -907,6 +909,7 @@ function resalta(iddiv){
 }
 
 function ponDatosTabla(resultado){
+  mapaMostrado = false;
   var arrids = [];
   var datos = []
   for (var i = 0; i < resultado.data.length; i++) {
@@ -933,39 +936,42 @@ function ponDatosTabla(resultado){
 }
 
 function muestraPuntos(ids){
-  var overlays = mapa.getOverlays();
-  if (overlays) {
+  if (!mapaMostrado) {
+    var overlays = mapa.getOverlays();
+    if (overlays) {
       cierraPops();
-    if (overlays.item(1)) {
-      var over_txtyac = overlays.item(1);
-      if (over_txtyac.get('position') != 'undefined') {
-        overlays.item(1).unset('position');
+      if (overlays.item(1)) {
+        var over_txtyac = overlays.item(1);
+        if (over_txtyac.get('position') != 'undefined') {
+          overlays.item(1).unset('position');
+        }
       }
     }
-  }
-  var capas = mapa.getLayers().getArray();
-  var capayac;
-  var yacisFltSource = new ol.source.Vector({
-  });
-  for (var i = 0; i < capas.length; i++) {
-    var nomcapa = capas[i].get('name');
-    if (nomcapa == 'yacis') {capayac = capas[i];}
-  }
-  var features = yacisSource.getFeatures();
-  for (var i = 0; i < features.length; i++) {
-    var idfeat = features[i].get('id');
-    if (ids.indexOf(idfeat) != -1) {
-      yacisFltSource.addFeature(features[i]);
+    var capas = mapa.getLayers().getArray();
+    var capayac;
+    var yacisFltSource = new ol.source.Vector({
+    });
+    for (var i = 0; i < capas.length; i++) {
+      var nomcapa = capas[i].get('name');
+      if (nomcapa == 'yacis') {capayac = capas[i];}
+    }
+    var features = yacisSource.getFeatures();
+    for (var i = 0; i < features.length; i++) {
+      var idfeat = features[i].get('id');
+      if (ids.indexOf(idfeat) != -1) {
+        yacisFltSource.addFeature(features[i]);
+      }
+    }
+    var agrupaYacis = new ol.source.Cluster({
+      distance: 20,
+      source: yacisFltSource
+    });
+    capayac.setSource(agrupaYacis);
+    if (ids.length > 0) {
+      mapa.getView().fit(yacisFltSource.getExtent());
     }
   }
-  var agrupaYacis = new ol.source.Cluster({
-    distance: 20,
-    source: yacisFltSource
-  });
-  capayac.setSource(agrupaYacis);
-  if (ids.length > 0) {
-    mapa.getView().fit(yacisFltSource.getExtent());
-  }
+  mapaMostrado = true;
 }
 
 function extiendeData(datacion){
@@ -1006,7 +1012,7 @@ function extiendeData(datacion){
            if (json.data.contexto_estratigrafico) {
              txtmat += 'Contexto estratigráfico: '+json.data.contexto_estratigrafico+' |';
            }
-           if (json.data.evaluacion_asociacion) {
+           if (json.data.evaluacion_asociacion && json.data.evaluacion_asociacion != 'POR ASIGNAR') {
              txtmat += ' Evaluación asociación: '+json.data.evaluacion_asociacion+' |';
            }
            if (json.data.observaciones) {
@@ -1355,6 +1361,11 @@ function muestra_data_ext(id_div){
 		$(hijo).hide();
     $(padre).attr("style","font-weight:normal;");
 	}
+}
+
+function abrePunto(idpunto,callback){
+  $('#fila-mapa').collapse('show');
+  callback(idpunto);
 }
 
 function irAPunto(idpunto){
