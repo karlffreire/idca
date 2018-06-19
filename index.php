@@ -46,11 +46,21 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
      <script type="text/javascript" src="./js/ln.js"></script>
    </head>
    <body onload="javascript:ponIdioma('es');initMapa();cargaYacis(ponCapa);initPaneles();initTabla();">
-     <div class="container-fluid">
-       <div id="cabecera" class="row">
-         <h1 id="titulo" class=""></h1>
-         <button type="button" onclick="window.location.href='./datos/desconecta.php'" class="offset-8 btn btn-lg boton-flujo text-center" style="background-color:#454545;">Salir <i class="fas fa-sign-out-alt"></i></button>
-       </div>
+       <nav class="navbar cabecera">
+         <div class="">
+           <span class="navbar-brand" href="#">
+             <img src="./img/hombres_blancos.png" height="40" alt="">
+           </span>
+           <span id="titulo" class=""></span>
+         </div>
+         <div class="">
+           <span class="navbar-text">
+             Web en desarrollo
+           </span>
+           <button type="button" onclick="window.location.href='./datos/desconecta.php'" class="btn btn-warning" style="margin-left:10px;">Salir <i class="fas fa-sign-out-alt"></i></button>
+         </div>
+      </nav>
+      <div class="container-fluid">
       <div class="row">
         <div class="col"></div>
         <div class="col"></div>
@@ -58,8 +68,8 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
           <span class="p-idearq"><a href="javascript:ponIdioma('es')">Español</a> | <a href="javascript:ponIdioma('en')">English</a></span>
         </div>
       </div>
-      <div class="row justify-content-md-center" style="color:#454545;text-align:center;margin-bottom:4em;margin-top:2em;">
-        <h4 class="col-md-8">Dadme un texto introductorio de un párrafo para poner aquí, explicando el objetivo de este buscador.<br>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque.<br> In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.</h4>
+      <div class="row justify-content-md-center div-intro">
+        <span id="intro" class="col-md-8"></span>
       </div>
       <div id="panel-yaci" class="row justify-content-md-center panel-consultas">
         <div class="cabecera-consultas">
@@ -230,7 +240,7 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
             <ul>
               <li><a href="#">Documentación</a></li>
               <li><a href="#">Créditos</a></li>
-              <li><a href="#">Cítanos</a></li>
+              <li><a id="cita" role="button" tabindex="0" data-container="body" data-toggle="popover" data-placement="top" data-content="" style="cursor:pointer;"></a></li>
             </ul>
             <ul>
               <li><a href="#">Inicio</a></li>

@@ -253,6 +253,8 @@ function initSelFiltDat(){
 }
 
 function initPaneles(){
+  $('#cita').popover();
+
   $('#panel-busca-yaci').hide();
   $('#panel-sel-filt').hide();
   $('.filt').hide();
@@ -466,7 +468,7 @@ function initTabla(){
                 title:'Dataciones C14 de la Península Ibérica',
                 messageTop:function (){fechaHoy();
                   var ficha = $('#ficha-selec').text();
-                  return fechaHoy()+'\nCC-BY info copyright\n'+'Citation: XXXXXX\n'+ficha;
+                  return fechaHoy()+'\nCC-BY info copyright\n'+'Citation: IDEArq (n.d.).  IDEArq-C14: Base de Datos de Dataciones Radiocarbónicas de la Península Ibérica (Archivo Antonio Gilman). IDEArq: Infraestructura de Datos Espaciales de Investigación Arqueológica. Madrid: CSIC. Disponible en: http://www.idearqueologia.org/idearq_c14/. ['+fechaHoy()+']\n'+ficha;
                 },
                 exportOptions: {
                     columns: [1,2,3,4,5,6,7]
@@ -477,7 +479,7 @@ function initTabla(){
                title:'Dataciones C14 de la Península Ibérica',
                messageTop:function (){
                  var ficha = $('#ficha-selec').text();
-                return fechaHoy()+'\nCC-BY info copyright\n'+'Citation: XXXXXX\n'+ficha;
+                return fechaHoy()+'\nCC-BY info copyright\n'+'Citation: IDEArq (n.d.).  IDEArq-C14: Base de Datos de Dataciones Radiocarbónicas de la Península Ibérica (Archivo Antonio Gilman). IDEArq: Infraestructura de Datos Espaciales de Investigación Arqueológica. Madrid: CSIC. Disponible en: http://www.idearqueologia.org/idearq_c14/. ['+fechaHoy()+']\n'+ficha;
                },
                exportOptions: {
                    columns: [1,2,3,4,5,6,7]
@@ -488,7 +490,7 @@ function initTabla(){
                title:'Dataciones C14 de la Península Ibérica',
                messageTop:function (){
                  var ficha = $('#ficha-selec').text();
-                return fechaHoy()+'\nCC-BY info copyright\n'+'Citation: XXXXXX\n'+ficha;
+                return fechaHoy()+'\nCC-BY info copyright\n'+'Citation: IDEArq (n.d.).  IDEArq-C14: Base de Datos de Dataciones Radiocarbónicas de la Península Ibérica (Archivo Antonio Gilman). IDEArq: Infraestructura de Datos Espaciales de Investigación Arqueológica. Madrid: CSIC. Disponible en: http://www.idearqueologia.org/idearq_c14/. ['+fechaHoy()+']\n'+ficha;
                },
                exportOptions: {
                    columns: [1,2,3,4,5,6,7]

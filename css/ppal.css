@@ -6,6 +6,33 @@ h5{
   margin: 0;
 }
 
+.cabecera{
+  background-color: #8A0808;
+  color: white;
+}
+
+#titulo{
+  font-size: 2em;
+}
+
+.div-intro{
+  text-align:justify;
+  margin-bottom:4em;
+  margin-top:2em;
+}
+
+#intro{
+  columns: 2;
+  -webkit-columns: 2;
+  -moz-columns: 2;
+  column-gap: 80px;
+  font-size: 1.2em;
+}
+
+.superindice{
+  font-size: 60%;
+}
+
 .p-idearq{
   color:#454545;
 }
@@ -17,15 +44,6 @@ h5{
 
 .p-idearq a:hover{
   color: #FF7542;
-}
-
-#cabecera{
-  background-color: #8A0808;
-  color: white;
-  padding-right: 5em;
-  padding-left: 5em;
-  padding-top: 1em;
-  padding-bottom: 1em;
 }
 
 .panel-consultas{
