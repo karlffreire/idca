@@ -77,7 +77,7 @@ function ponIdioma(ln){
     alertCopiaCita = 'Cita copiada al portapapeles';
   }
   else if (ln == 'en'){
-    titulo = 'Carbon IDEArq';
+    titulo = 'IDEArq C<span class="align-top superindice">14</span>';
     tituloBuscaYaci = 'Search for a site';
     tituloFiltrar = 'Filter radiocarbon dates';
     caracYac = 'Site features';

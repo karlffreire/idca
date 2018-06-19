@@ -18,18 +18,27 @@ else {
 <head>
     <meta charset="utf-8">
     <title>Entrada</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
        <link rel="stylesheet" href="./css/ppal.css">
 </head>
 <body>
-
-  <div class="container-fluid">
-      <div id="cabecera" class="row">
-        <h1 id="titulo" class="">IDEArq</h1>
-      </div>
-      <div class="row">
-        <div id="signupbox" style="margin-top:50px" class="mainbox col-md-3 col-md-offset-2 ">
-          <div class="panel-body" style="margin-top: 100px;">
+  <nav class="navbar cabecera">
+    <div class="">
+      <span class="navbar-brand" href="#">
+        <img src="./img/hombres_blancos.png" height="40" alt="">
+      </span>
+      <span id="titulo" class="">IDEArq C<span class="align-top superindice">14</span></span>
+    </div>
+    <div class="">
+      <span class="navbar-text">
+        Web en desarrollo
+      </span>
+    </div>
+  </nav>
+  <div class="container">
+      <div class="row" style="margin-top:10em;">
+        <div id="signupbox"  class="col-md-5">
+          <div class="panel-body" >
             <?php
             if ($fallo == 'ident') {
               echo "<strong style='color:red'>Usuario no válido</strong>";
@@ -54,11 +63,16 @@ else {
             </form>
           </div>
         </div>
-        <div style="margin-top:50px" class="mainbox col-md-4 col-md-offset-1">
-          <div class="panel panel-danger" style="margin-top: 100px;">
-            <div class="panel-heading">Web en desarrollo</div>
-            <div class="panel-body">
-              Este es un portal que aún se encuentra en fase de desarrollo.<br><br>Regístrate para poder acceder y cierra sesión cuando termines, por favor.<br>
+        <div class="col-md-5 offset-2">
+          <div class="card">
+            <div class="card-header">
+              Web en desarrollo
+            </div>
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <p>Este es un portal que aún se encuentra en fase de desarrollo.<br><br>Regístrate para poder acceder y cierra la sesión cuando termines pinchando en el botón de "Salir", por favor.<br></p>
+                <footer class="blockquote-footer">Equipo de <cite title="Source Title">IDEArq</cite></footer>
+              </blockquote>
             </div>
           </div>
         </div>
