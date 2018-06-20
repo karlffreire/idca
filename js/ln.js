@@ -78,6 +78,7 @@ function ponIdioma(ln){
   }
   else if (ln == 'en'){
     titulo = 'IDEArq C<span class="align-top superindice">14</span>';
+    txtIntro = '<p class="p-idearq">This portal web gives access to the Antonio Gilman Archive. Radiocarbon Dates Database of the Iberian Peninsula Recent Prehistory (IDEArq C<span class="align-top superindice">14</span>). It contains technical and contextual information about radiocarbon dates in the Iberian Peninsula since the Epipaleolithic to the Iron Age extracted from the bibliographical sources, collected and critically reviewed by Prof. Antonio Gilman and normalized for publication, under his direction, by the IDEArq editorial team. Users, through the query forms, can get those dates that meet selected criteria relating to the archaeological context, the dated object and the date characteristics itself. This information is also accessible, through related archaeological sites, in the <a href="http://www.idearqueologia.org/visualizador_idearq/">IDEArq cartographic viewer</a>.</p>'
     tituloBuscaYaci = 'Search for a site';
     tituloFiltrar = 'Filter radiocarbon dates';
     caracYac = 'Site features';

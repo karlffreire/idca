@@ -289,14 +289,14 @@ function selecDataciones($pideprov,$pidetipo,$pidecronos,$pidetmuestra,$pidetmat
 
 function selecDataExt($datacion){
   $db = conectaBD();
-  $prp = pg_prepare($db,"biblio","SELECT material_c14.contexto_estratigrafico,evaluacion_asociacion.evaluacion_asociacion,material_c14.observaciones,datacion_c14.fecha_analisis,datacion_c14.num_datacion,datacion_c14.c_n,datacion_c14.d13c,datacion_c14.d15n,datacion_c14.cor_frac_isotopo,array_to_string(array_agg(referencia_completa),'#') as bibliografia,datacion_c14.observaciones as observaciones_dat
+  $prp = pg_prepare($db,"biblio","SELECT material_c14.contexto_estratigrafico,evaluacion_asociacion.evaluacion_asociacion,material_c14.observaciones,datacion_c14.fecha_analisis,datacion_c14.c_n,datacion_c14.d13c,datacion_c14.d15n,datacion_c14.cor_frac_isotopo,array_to_string(array_agg(referencia_completa),'#') as bibliografia,datacion_c14.observaciones as observaciones_dat
   FROM c14.material_c14
   	LEFT JOIN c14.datacion_c14 on material_c14.id_material_c14 = datacion_c14.id_material_c14
   	LEFT JOIN c14.evaluacion_asociacion on material_c14.id_evaluacion_asociacion = evaluacion_asociacion.id_evaluacion_asociacion
   	LEFT JOIN c14.datacion_c14_bibliografia_idearq on datacion_c14.id_datacion_c14 = datacion_c14_bibliografia_idearq.id_datacion_c14
   	LEFT JOIN general.bibliografia_idearq on datacion_c14_bibliografia_idearq.id_bibliografia_idearq = bibliografia_idearq.id_bibliografia_idearq
   WHERE datacion_c14.id_datacion_c14 = $1
-  GROUP BY material_c14.id_material_c14,datacion_c14.id_datacion_c14,material_c14.contexto_estratigrafico,evaluacion_asociacion.evaluacion_asociacion,material_c14.observaciones,datacion_c14.fecha_analisis,datacion_c14.num_datacion,datacion_c14.c_n,datacion_c14.d13c,datacion_c14.d15n,datacion_c14.cor_frac_isotopo,datacion_c14.observaciones;");
+  GROUP BY material_c14.id_material_c14,datacion_c14.id_datacion_c14,material_c14.contexto_estratigrafico,evaluacion_asociacion.evaluacion_asociacion,material_c14.observaciones,datacion_c14.fecha_analisis,datacion_c14.c_n,datacion_c14.d13c,datacion_c14.d15n,datacion_c14.cor_frac_isotopo,datacion_c14.observaciones;");
   $prp = pg_execute($db,"biblio",array($datacion));
   $datosext=pg_fetch_assoc($prp);
   pg_close($db);

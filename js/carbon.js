@@ -1020,14 +1020,11 @@ function extiendeData(datacion){
            if (json.data.observaciones) {
              txtmat += ' Observaciones: '+json.data.observaciones+' |';
            }
-           $(divmat).html('<em>Info material</em>: '+txtmat.substring(0, txtmat.length - 1));
+           $(divmat).html('<em>Info material:</em> '+txtmat.substring(0, txtmat.length - 1));
            var divdat = document.createElement('div');
              $(divdat).addClass('col-md-12');
              $(divdat).addClass('data-ext');
            var txtdat = '';
-           if (json.data.num_datacion) {
-             txtdat += ' Datación número: '+json.data.num_datacion+' |';
-           }
            if (json.data.fecha_analisis) {
              txtdat += ' Fecha análisis: '+json.data.fecha_analisis+' |';
            }
@@ -1046,7 +1043,7 @@ function extiendeData(datacion){
            if (json.data.observaciones) {
              txtdat += ' Observaciones: '+json.data.observaciones_dat+' |';
            }
-           $(divdat).html('<em>Info datación</em>: '+txtdat.substring(0, txtdat.length - 1));
+           $(divdat).html('<em>Info datación:</em> '+txtdat.substring(0, txtdat.length - 1));
            div1.appendChild(divmat);
            div1.appendChild(divdat);
            if (json.data.bibliografia) {
@@ -1059,7 +1056,7 @@ function extiendeData(datacion){
                txtrefs += '<li>'+refs[i]+'</li>'
              }
              txtrefs += '</ul>';
-             $(divbib).html('<em>Referencias bibliográficas</em>: '+txtrefs);
+             $(divbib).html('<em>Referencias bibliográficas:</em> '+txtrefs);
              div1.appendChild(divbib);
            }
          }
