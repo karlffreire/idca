@@ -252,8 +252,16 @@ function initSelFiltDat(){
   });
 }
 
+function cierraCita(){
+  $('#cita').popover('hide');
+}
+
 function initPaneles(){
-  $('#cita').popover();
+  $('#cita').popover(
+     {
+       template : '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-header" style="color:#454545;padding-left:10px"></div><div onclick="javascript:cierraCita();" class="cierra-pop">X</div><div class="popover-body"></div></div>'
+     }
+  );
 
   $('#panel-busca-yaci').hide();
   $('#panel-sel-filt').hide();
@@ -331,10 +339,10 @@ function initSelReg(resultado){
   var data = organizaOpciones(resultado);
   $('#selprov').select2({
     data:data,
-    placeholder: 'min 1, max 9',
+    placeholder: '*',
     allowClear: true,
     theme: "bootstrap",
-    maximumSelectionLength: 9,
+    //maximumSelectionLength: 9,
     templateResult: colPorGrupo
   });
 }
@@ -391,8 +399,8 @@ function initBarras(resultado){
     grid: true,
     min: initfechmin,
     max: initfechmax,
-    from: 5000,
-    to: 10000,
+    from: initfechmin,
+    to: initfechmax,
     step: 100,
     postfix: " BP",
     onFinish:function(data){
@@ -407,7 +415,7 @@ function initBarras(resultado){
     min: 0,
     max: initdesvmax,
     from: 0,
-    to: 2500,
+    to: initdesvmax,
     step: 50,
     postfix: "",
     onFinish:function(data){
@@ -542,9 +550,9 @@ function initTabla(){
       dom: "<'row'<'col-md-5'i><'col-md-7 pull-right'f>>" +"<'row'<'col-md-12'tr>>" +"<'row'<'col-md-6'B><'col-md-6 lst-dataciones'p>>",
       renderer: "bootstrap",
       language: {
-      "search": "Filter table: ",
-      "searchPlaceholder": "Type filter...",
-      "info": "<span class='caption'><strong> _TOTAL_ radiocarbon dates</strong> | Showing _START_ to _END_</span>"
+      "search": "Filtrar resultados por texto ",
+      "searchPlaceholder": "Escriba el filtro...",
+      "info": "<span class='caption'><strong> _TOTAL_ dataciones</strong> | Mostrando _START_ a _END_</span>"
     }
     });
     tabla.on('click', 'td.detalles-data', function () {
@@ -562,8 +570,6 @@ function initTabla(){
         }
     } );
 }
-
-
 
 function initMapa(){
   var iconoMapaLlave = document.createElement('i');
@@ -680,13 +686,9 @@ function buscaDatYaci(idyaci){
 }
 
 function recogePeticion(){
+  var datosreg = ($('#selprov').find(':selected').length > 0) ? $('#selprov').select2('data') : false;
   if (!tipoFilSelec.filtyac&&!tipoFilSelec.filtmat&&!tipoFilSelec.filtdat) {
     alert(noSelec);
-    return;
-  }
-  var datosreg = ($('#selprov').find(':selected').length > 0) ? $('#selprov').select2('data') : false;
-  if (!datosreg) {
-    alert(noReg);
     return;
   }
   else{
@@ -913,7 +915,7 @@ function resalta(iddiv){
 function ponDatosTabla(resultado){
   mapaMostrado = false;
   var arrids = [];
-  var datos = []
+  var datos = [];
   for (var i = 0; i < resultado.data.length; i++) {
     arrids.push(resultado.data[i].id_yaci);
     var obj = {};
@@ -935,6 +937,12 @@ function ponDatosTabla(resultado){
   window.location.href = '#fila-tabla';
   grafico(datos);
   $('#map').data('yacids',arrids);
+  if (resultado.data.length == 0){
+    tabla.buttons().disable();
+  }
+  else{
+    tabla.buttons().enable();
+  }
 }
 
 function muestraPuntos(ids){
@@ -1409,4 +1417,17 @@ function ordenaFechas(a,b) {
 
 function compareArrays(arr1, arr2) {
     return $(arr1).not(arr2).length == 0 && $(arr2).not(arr1).length == 0
+}
+
+function nuevaBsq(){
+  window.location.href = '#';
+  limpiaSelec();
+  $('#tit-filtrar').hide();
+  $('#panel-sel-filt').show();
+}
+
+function modifBsq(){
+  window.location.href = '#';
+  $('#tit-filtrar').hide();
+  $('#panel-sel-filt').show();
 }

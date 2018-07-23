@@ -30,21 +30,23 @@ var titDesc = '';
 var popYac = '';
 var titIrA = '';
 var titLimpFilt = '';
+var btnNueva = '';
+var btnModif = '';
 var verMapa = '';
 var ocultarMapa = '';
 var lnkCita = '';
 var cita = '';
-var alertCopiaCita = '';
+var titCita = '';
 
 function ponIdioma(ln){
   if (ln == 'es') {
-    titulo = 'IDEArq C<span class="align-top superindice">14</span>';
-    txtIntro = '<p class="p-idearq">Este portal da acceso al Archivo Antonio Gilman. Base de Datos de Dataciones Radiocarbónicas de la Prehistoria Reciente de la Península Ibérica (IDEArq C<span class="align-top superindice">14</span>).<br>Contiene información técnica y contextual de dataciones radiocarbónicas de la Península Ibérica desde el Epipaleolítico a la Edad del Hierro extraídas de las fuentes bibliográficas, recopiladas y revisadas críticamente por el Prof. Antonio Gilman y normalizadas para su publicación, bajo su dirección, por el equipo editorial de IDEArq. Mediante los formularios de consulta, el usuario puede obtener aquellas dataciones que se ajusten a los criterios seleccionados, relativos tanto al contexto arqueológico y al material datado como a las propias características de la datación.<br>En el <a href="http://www.idearqueologia.org/visualizador_idearq/">visualizador cartográfico IDEArq</a> se pueden consultar los mismos datos a partir de los yacimientos datados.</p>';
+    titulo = 'Archivo Antonio Gilman de Dataciones Radiocarbónicas de la Prehistoria Reciente de la Península Ibérica';
+    txtIntro = '<p class="p-idearq">Este portal da acceso al Archivo Antonio Gilman de Dataciones Radiocarbónicas de la Prehistoria Reciente de la Península Ibérica (IDEArq C<span class="align-top superindice">14</span>).<br>Contiene información técnica y contextual de dataciones radiocarbónicas de la Península Ibérica desde el Epipaleolítico a la Edad del Hierro extraídas de las fuentes bibliográficas, recopiladas y revisadas críticamente por el Prof. Antonio Gilman y normalizadas para su publicación, bajo su dirección, por el equipo editorial de IDEArq. Mediante los formularios de consulta, el usuario puede obtener aquellas dataciones que se ajusten a los criterios seleccionados, relativos tanto al contexto arqueológico y al material datado como a las propias características de la datación.<br>En el <a href="http://www.idearqueologia.org/visualizador_idearq/">visualizador cartográfico IDEArq</a> se pueden consultar los mismos datos a partir de los yacimientos datados.</p>';
     tituloBuscaYaci = 'Buscar un yacimiento';
     tituloFiltrar = 'Filtrar dataciones';
-    caracYac = 'Tipo de yacimientos';
-    caracMat = 'Tipo de materiales datados';
-    caracDat = 'Tipo de dataciones';
+    caracYac = 'Criterios sobre los yacimientos';
+    caracMat = 'Criterios sobre los materiales datados';
+    caracDat = 'Criterios sobre las dataciones';
     placeUnYac = 'Buscar por yacimiento';
     etiProv = 'Regiones geográficas';
     etiTipoYac = 'Tipologías de yacimiento';
@@ -70,14 +72,16 @@ function ponIdioma(ln){
     popYac = 'yacimientos';
     titIrA = 'Mostrar en mapa';
     titLimpFilt = 'Limpiar todos los filtros';
-    verMapa = 'Mostrar mapa';
-    ocultarMapa = 'Ocultar mapa';
+    btnNueva = 'Nueva búsqueda';
+    btnModif = 'Modificar búsqueda';
+    verMapa = 'Mostrar mapa y gráfico';
+    ocultarMapa = 'Ocultar mapa y gráfico';
     lnkCita = 'Cítanos';
     cita = 'IDEArq (n.d.). IDEArq-C14: Base de Datos de Dataciones Radiocarbónicas de la Península Ibérica (Archivo Antonio Gilman). IDEArq: Infraestructura de Datos Espaciales de Investigación Arqueológica. Madrid: CSIC. Disponible en: http://www.idearqueologia.org/idearq_c14/. ['+fechaHoy()+']';
-    alertCopiaCita = 'Cita copiada al portapapeles';
+    titCita = 'Cita';
   }
   else if (ln == 'en'){
-    titulo = 'IDEArq C<span class="align-top superindice">14</span>';
+    titulo = 'Archivo Antonio Gilman de Dataciones Radiocarbónicas de la Prehistoria Reciente de la Península Ibérica';//'IDEArq C<span class="align-top superindice">14</span>';
     txtIntro = '<p class="p-idearq">This portal web gives access to the Antonio Gilman Archive. Radiocarbon Dates Database of the Iberian Peninsula Recent Prehistory (IDEArq C<span class="align-top superindice">14</span>). It contains technical and contextual information about radiocarbon dates in the Iberian Peninsula since the Epipaleolithic to the Iron Age extracted from the bibliographical sources, collected and critically reviewed by Prof. Antonio Gilman and normalized for publication, under his direction, by the IDEArq editorial team. Users, through the query forms, can get those dates that meet selected criteria relating to the archaeological context, the dated object and the date characteristics itself. This information is also accessible, through related archaeological sites, in the <a href="http://www.idearqueologia.org/visualizador_idearq/">IDEArq cartographic viewer</a>.</p>'
     tituloBuscaYaci = 'Search for a site';
     tituloFiltrar = 'Filter radiocarbon dates';
@@ -109,11 +113,13 @@ function ponIdioma(ln){
     popYac = 'sites';
     titIrA = 'Show in map';
     titLimpFilt = 'Clear all filters';
-    verMapa = 'Show map';
-    ocultarMapa = 'Hide map';
+    btnNueva = 'New search';
+    btnModif = 'Modify search';
+    verMapa = 'Show map and graph';
+    ocultarMapa = 'Hide map and graph';
     lnkCita = 'Cite us';
     cita = 'IDEArq (n.d.). IDEArq-C14: Iberian Peninsula Radiocarbon Database (Antonio Gilman Archive). IDEArq: Infraestructura de Datos Espaciales de Investigación Arqueológica. Madrid: CSIC. Available at: http://www.idearqueologia.org/idearq_c14/. ['+fechaHoy()+']';
-    alertCopiaCita = 'Citation copied to clipboard';
+    titCita = 'Citation';
   }
   $('#titulo').html(titulo);
   $('#intro').html(txtIntro);
@@ -149,4 +155,7 @@ function ponIdioma(ln){
   $('#tira-mapa').html(verMapa);
   $('#cita').html(lnkCita);
   $('#cita').attr('data-content',cita);
+  $('#cita').attr('title',titCita);
+  $('#btn-nueva').html(btnNueva);
+  $('#btn-modif').html(btnModif);
 }

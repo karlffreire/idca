@@ -12,7 +12,7 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
    <head>
      <meta charset="utf-8">
      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-     <title>idearq-carbon</title>
+     <title>IDEArq C14</title>
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -182,12 +182,6 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
         <div id="fila-tabla" class="row justify-content-md-center" style="margin-top:5em;">
           <div id="ficha-selec" class="col-md-6">
           </div>
-          <div id="flechas" class="d-block collapse">
-            <div class="p-idearq text-center" style="font-size:3em;">
-              <a href="#"><i class="fas fa-arrow-alt-circle-up"></i></a>
-              <a href="#fila-mapa"><i class="fas fa-arrow-alt-circle-down"></i></a>
-            </div>
-          </div>
           <div class="panel-tabla col-md-12 ">
             <table id="tab-data" class="table table-hover tabla-dataciones w-100" cellspacing="0">
               <thead>
@@ -215,14 +209,16 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
           </div>
           <div class="col-md-4">
             <svg id="hst" width="500" height="600"></svg>
-            <div class="p-idearq text-center" style="font-size:3em;margin-top:0.75em;">
-              <a href="#"><i class="fas fa-arrow-alt-circle-up"></i></a>
-            </div>
+
           </div>
         </div>
-        <div class="row justify-content-center" >
-          <button id="muestra-mapa" class="btn btn-lg boton-flujo" data-toggle="collapse" href="#fila-mapa">
-            <i class="fas fa-map" style="margin-right:1em;"></i><span id="tira-mapa"></span>
+        <div class="row" style="margin-top:1em;">
+          <div id="flechas" class="col-md-3 collapse">
+            <button id="btn-nueva" type="button" class="boton-flujo" style="padding:5px;font-size:1.2em;" onclick="javascript:nuevaBsq();"></button>
+            <button id="btn-modif" type="button" class="boton-flujo" style="padding:5px;font-size:1.2em;" onclick="javascript:modifBsq();"></button>
+          </div>
+          <button id="muestra-mapa" class="offset-5 btn btn-lg boton-flujo" data-toggle="collapse" href="#fila-mapa">
+            <span id="tira-mapa"></span>
           </button>
         </div>
       </div>
@@ -240,7 +236,7 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
             <ul>
               <li><a href="#">Documentación</a></li>
               <li><a href="#">Créditos</a></li>
-              <li><a id="cita" role="button" tabindex="0" data-container="body" data-toggle="popover" data-placement="top" data-content="" style="cursor:pointer;"></a></li>
+              <li><a id="cita" role="button" tabindex="0" data-container="body" data-toggle="popover" data-placement="top" data-content="" title="" style="cursor:pointer;"></a></li>
             </ul>
             <ul>
               <li><a href="#">Inicio</a></li>
@@ -263,8 +259,6 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
   		</div>
   	</footer>
   	<!-- ./Footer -->
-
-
    </body>
  </html>
 

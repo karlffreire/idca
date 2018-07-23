@@ -68,6 +68,6 @@ GRANT EXECUTE ON FUNCTION c14.array_jerarq_tipo_material(integer) TO predimo_edi
 
 ALTER TABLE general.nut3 ADD COLUMN mostrar_pais character varying (250);
 
-UPDATE general.nut3 SET mostrar_pais = 'España. Provincias' WHERE paises = 'ES';
-UPDATE general.nut3 SET mostrar_pais = 'Portugal. Distritos' WHERE paises = 'PT';
+UPDATE general.nut3 SET mostrar_pais = 'Provincias (ES)' WHERE paises = 'ES';
+UPDATE general.nut3 SET mostrar_pais = 'Distritos (PT)' WHERE paises = 'PT';
 UPDATE general.nut3 SET mostrar_pais = 'Andorra' WHERE paises = 'AD';

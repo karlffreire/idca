@@ -12,7 +12,7 @@ h5{
 }
 
 #titulo{
-  font-size: 2em;
+  font-size: 1.8em;
 }
 
 .div-intro{
@@ -115,7 +115,7 @@ section {
   border-color: transparent transparent #f3f3f3;
   border-bottom: 4px solid !important;
   font-size: 1.4em;
-  font-weight: bold;
+
 }
 
 #panel-sel-filt .nav-tabs .nav-link {
@@ -123,7 +123,7 @@ section {
   border-top-left-radius: .25rem;
   border-top-right-radius: .25rem;
   color: #eee;
-  font-size: 1.2em;
+  font-size: 0.9em;
 }
 
 #panel-sel-filt .tab-content{
@@ -494,4 +494,19 @@ footer p{
   margin-left: 1em;
   height: 30px;
   float: right;
+}
+
+.cierra-pop{
+  float: right;
+  width: 25px;
+  height: 25px;
+  padding-top: 3px;
+  text-align: center;
+  font-size: 12px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  cursor: pointer;
+  color: #454545;
+  padding-top: 10px;
 }
