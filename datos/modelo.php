@@ -258,13 +258,19 @@ function selecDataciones($pideprov,$pidetipo,$pidecronos,$pidetmuestra,$pidetmat
   }
   if ($pideedadmin != '') {
     $edadmin  = filter_var($pideedadmin,FILTER_VALIDATE_INT);
+    $where .= " AND fecha >= $edadmin";
+  }
+	if ($pideedadmax != '') {
     $edadmax = filter_var($pideedadmax,FILTER_VALIDATE_INT);
-    $where .= " AND fecha >= $edadmin AND fecha <= $edadmax";
+    $where .= " AND fecha <= $edadmax";
   }
 	if ($pidestdevmin != '') {
     $stdevmin = filter_var($pidestdevmin,FILTER_VALIDATE_INT);
+    $where .= " AND stdev >= $stdevmin";
+  }
+	if ($pidestdevmax != '') {
     $stdevmax = filter_var($pidestdevmax,FILTER_VALIDATE_INT);
-    $where .= " AND stdev >= $stdevmin AND stdev <= $stdevmax";
+    $where .= " AND stdev <= $stdevmax";
   }
 
   $db = conectaBD();

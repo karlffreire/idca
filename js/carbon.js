@@ -465,7 +465,7 @@ function salvarDesv(data){
 
 function fechaHoy(){
   var d = new Date();
-return d.getDate()+'-'+(d.getMonth()+1)+'-'+d.getFullYear();
+  return d.getDate()+'-'+(d.getMonth()+1)+'-'+d.getFullYear();
 }
 
 function initTabla(){
@@ -795,9 +795,9 @@ function selecDataciones(prov,tipo,crono,tmuestra,tmat,metod,lab,callback){
       crono : crono,
       tmuestra : tmuestra,
       tmat : tmat,
-      edadmin : function (){ return fechamin ? fechamin : '';},
+      edadmin : function (){return fechamin ? fechamin : '';},
       edadmax : function (){ return fechamax ? fechamax : '';},
-      stdevmin : function (){ return desvmin ? desvmin : '';},
+      stdevmin : function (){return desvmin ? desvmin : '';},
       stdevmax : function (){ return desvmax ? desvmax : '';},
       metod : metod,
       lab : lab
