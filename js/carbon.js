@@ -259,7 +259,7 @@ function cierraCita(){
 function initPaneles(){
   $('#cita').popover(
      {
-       template : '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-header" style="color:#454545;padding-left:10px"></div><div onclick="javascript:cierraCita();" class="cierra-pop">X</div><div class="popover-body"></div></div>'
+       template : '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-header" style="color:#454545;padding-left:10px"></div><div onclick="javascript:cierraCita();" class="cierra-cita">X</div><div class="popover-body"></div></div>'
      }
   );
 
