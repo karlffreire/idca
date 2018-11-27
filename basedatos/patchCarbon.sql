@@ -102,6 +102,51 @@ $BODY$
   GRANT EXECUTE ON FUNCTION c14.get_array_taxones(integer) TO public;
   GRANT EXECUTE ON FUNCTION c14.get_array_taxones(integer) TO visualizador;
 
+  -- Function: c14.get_array_taxones_completo(integer)
+
+  -- DROP FUNCTION c14.get_array_taxones_completo(integer);
+
+  CREATE OR REPLACE FUNCTION c14.get_array_taxones_completo(id_material integer)
+    RETURNS integer[] AS
+  $BODY$
+  --función que devuelve un array de taxones para un material. Devuelve todos los elementos de la jerarquía de taxones, para todos los taxones, en el caso de que sea una muestra agregada.
+  DECLARE
+  i integer;
+  r record;
+  tax integer[];
+  tax_comp integer[];
+
+  BEGIN
+  	FOR r IN SELECT tipo_material_c14.id_tipo_material
+  		 from c14.tipo_material_material_c14 inner join c14.tipo_material_c14 on tipo_material_material_c14.id_tipo_material = tipo_material_c14.id_tipo_material
+  		 where id_material_c14 = id_material and id_esquemas_materiales_c14 = 2
+  	LOOP
+  		tax := array_append(tax, r.id_tipo_material);
+  	END LOOP;
+
+  	IF array_length(tax,1) > 0 THEN
+  		FOR i in 1..array_upper(tax,1)
+  		LOOP
+  			tax_comp := tax_comp || c14.id_tipo_material(tax[i]);
+  		END LOOP;
+  	END IF;
+
+  return array_sort_unique(tax_comp);
+
+  END;
+  $BODY$
+    LANGUAGE plpgsql IMMUTABLE STRICT
+    COST 100;
+  ALTER FUNCTION c14.get_array_taxones_completo(integer)
+    OWNER TO postgres;
+  GRANT EXECUTE ON FUNCTION c14.get_array_taxones_completo(integer) TO public;
+  GRANT EXECUTE ON FUNCTION c14.get_array_taxones_completo(integer) TO postgres;
+  GRANT EXECUTE ON FUNCTION c14.get_array_taxones_completo(integer) TO general_edit;
+  GRANT EXECUTE ON FUNCTION c14.get_array_taxones_completo(integer) TO c14_edit;
+  GRANT EXECUTE ON FUNCTION c14.get_array_taxones_completo(integer) TO predimo_edit WITH GRANT OPTION;
+  GRANT EXECUTE ON FUNCTION c14.get_array_taxones_completo(integer) TO visualizador;
+
+
   /*======================================================================================================================
 
   CREACIÓN DE DOS TABLAS PARA LAS CONSULTAS:

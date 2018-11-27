@@ -179,7 +179,7 @@ function colPorGrupo (data) {
     return $('<span style="color:#8A0808;font-size:1rem;">'+data.text+'</span>');
   }
   return $(
-      '<span>'+data.text+'</span>'
+      '<span>'+data.text+'</span>'//AQUÍ DEBERÍA LANZAR UNA BÚSQUEDA DE HIJOS. SI HAY RESULTADO LOS PONGO, SI NO, LO SELECCIONO
   );
 };
 
@@ -236,7 +236,8 @@ function initSelFiltMat(){
 }
 
 function initSelFiltDat(){
-  cargaLstRang(initBarras);
+  //cargaLstRang(initBarras);//Esto es para cargar los máximos y mínimos en función de los datos existentes
+  initBarrasPrefijado();
   cargaLstMetodos(initSelMetod);
   cargaLstLabos(initSelLab);
   $('.selfilt-dat').on('select2:select',function(){
@@ -417,6 +418,41 @@ function initBarras(resultado){
     from: 0,
     to: initdesvmax,
     step: 50,
+    postfix: "",
+    onFinish:function(data){
+      tipoFilSelec.filtdat = true;
+      salvarDesv(data);
+      habLimpia();
+    }
+  });
+}
+
+function initBarrasPrefijado(resultado){
+	$("#selfecha").ionRangeSlider({
+    type: "double",
+    grid: true,
+    grid_num: 9,
+    min: 100,
+    max: 10000,
+    from: 100,
+    to: 10000,
+    step: 100,
+    postfix: " BP",
+    onFinish:function(data){
+      tipoFilSelec.filtdat = true;
+      salvarFecha(data);
+      habLimpia();
+    }
+  });
+	$("#seldev").ionRangeSlider({
+    type: "double",
+    grid: true,
+    grid_num: 5,
+    min: 0,
+    max: 200,
+    from: 0,
+    to: 200,
+    step: 10,
     postfix: "",
     onFinish:function(data){
       tipoFilSelec.filtdat = true;
@@ -926,6 +962,7 @@ function ponDatosTabla(resultado){
   }
   var tabla = $('#tab-data').DataTable();
   tabla.clear().draw();
+  tabla.search( '' ).draw();
   tabla.rows.add(resultado.data );
   tabla.columns.adjust().draw();
   $('#piensa').removeClass('fa-spin');
