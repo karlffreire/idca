@@ -431,8 +431,8 @@ function initBarrasPrefijado(resultado){
 	$("#selfecha").ionRangeSlider({
     type: "double",
     grid: true,
-    grid_num: 9,
-    min: 100,
+    grid_num: 17,
+    min: 1500,
     max: 10000,
     from: 100,
     to: 10000,
@@ -614,17 +614,24 @@ function initMapa(){
             source: new ol.source.OSM(),
             attributions:'OL contributors'
           });
+  var teselas = new ol.layer.Tile({
+	      source: new ol.source.XYZ({
+	      	attributions: 'Teselas USIG',
+	        url: 'http://161.111.72.12:8080/styles/light/{z}/{x}/{y}.png'
+	      })
+	    });
+	teselas.set('name','mapabase');
   mapa = new ol.Map({
       controls: [
         new ol.control.ScaleLine(),
         new ol.control.OverviewMap({
-          layers:[osm],
+          layers:[teselas],
           className: 'ol-overviewmap ol-custom-overviewmap',
           label: iconoMapaLlave
         })
 
       ],
-	    layers: [osm],
+	    layers: [teselas],
 	    view: new ol.View({
 	      projection: 'EPSG:3857',
 	      center: [-288976.121475105, 4868797.98060151],

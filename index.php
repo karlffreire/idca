@@ -213,13 +213,15 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
           </div>
         </div>
         <div class="row" style="margin-top:1em;">
-          <div id="flechas" class="col-md-3 collapse">
-            <button id="btn-nueva" type="button" class="boton-flujo" style="padding:5px;font-size:1.2em;" onclick="javascript:nuevaBsq();"></button>
-            <button id="btn-modif" type="button" class="boton-flujo" style="padding:5px;font-size:1.2em;" onclick="javascript:modifBsq();"></button>
+          <div id="flechas" class="col-md-6 collapse">
+            <button id="btn-nueva" class=" boton-flujo" style="margin-right:1em;font-size:1.2em;" onclick="javascript:nuevaBsq();"></button>
+            <button id="btn-modif" class=" boton-flujo" style="margin-top:1em;font-size:1.2em;" onclick="javascript:modifBsq();"></button>
           </div>
-          <button id="muestra-mapa" class="offset-5 btn btn-lg boton-flujo" data-toggle="collapse" href="#fila-mapa">
-            <span id="tira-mapa"></span>
-          </button>
+          <div class="col-md-6">
+            <button id="muestra-mapa" class="float-right boton-flujo" data-toggle="collapse" href="#fila-mapa" style="margin-top:1em;">
+              <span id="tira-mapa"></span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
