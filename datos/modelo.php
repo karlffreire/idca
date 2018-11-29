@@ -121,6 +121,48 @@ function listaTiposMaterial(){
   return null;
 }
 
+function listaFamiliaMaterial(){
+  $db = conectaBD();
+ 	$prp = pg_prepare($db,"lst-familia","SELECT id_tipo_material,tipo_material as familia FROM c14.tipo_material_c14 WHERE tipo_primario = true and id_esquemas_materiales_c14 = 2 order by tipo_material");
+  $prp = pg_execute($db,"lst-familia",array());
+	while ($row=pg_fetch_assoc($prp)){
+		$fammaterial[] = $row;
+	}
+  pg_close($db);
+  if (isset($fammaterial)) {
+    return $fammaterial;
+  }
+  return null;
+}
+
+function listaGeneroMaterial(){
+  $db = conectaBD();
+ 	$prp = pg_prepare($db,"lst-genero","SELECT id_tipo_material,tipo_material as genero FROM c14.tipo_material_c14 WHERE c14.es_genero(id_tipo_material) = true and id_esquemas_materiales_c14 = 2 order by tipo_material");
+  $prp = pg_execute($db,"lst-genero",array());
+	while ($row=pg_fetch_assoc($prp)){
+		$genmaterial[] = $row;
+	}
+  pg_close($db);
+  if (isset($genmaterial)) {
+    return $genmaterial;
+  }
+  return null;
+}
+
+function listaEspecieMaterial(){
+  $db = conectaBD();
+ 	$prp = pg_prepare($db,"lst-especie","SELECT id_tipo_material,tipo_material as genero FROM c14.tipo_material_c14 WHERE c14.es_especie(id_tipo_material) = true and id_esquemas_materiales_c14 = 2 order by tipo_material");
+  $prp = pg_execute($db,"lst-especie",array());
+	while ($row=pg_fetch_assoc($prp)){
+		$espmaterial[] = $row;
+	}
+  pg_close($db);
+  if (isset($espmaterial)) {
+    return $espmaterial;
+  }
+  return null;
+}
+
 function listaRangos(){
   $db = conectaBD();
   $prp = pg_prepare($db,"lst-rangos","select min(edad_c14) as fechamininit, max(edad_c14) as fechamaxinit, min(desviacion) as desvmininit, max(desviacion) as desvmaxinit from c14.datacion_c14;");

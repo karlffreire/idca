@@ -147,6 +147,124 @@ $BODY$
   GRANT EXECUTE ON FUNCTION c14.get_array_taxones_completo(integer) TO visualizador;
 
 
+  -- Function: c14.es_genero(integer)
+
+  -- DROP FUNCTION c14.es_genero(integer);
+
+  CREATE OR REPLACE FUNCTION c14.es_genero(id_tipo integer)
+    RETURNS boolean AS
+  $BODY$
+
+  /* función que devuelve true si el id_tipo_material_c14 introducido es genero (nivel 2 de la jerarquia de taxones)
+  */
+
+  DECLARE
+  esquema integer;
+  primario_tipo boolean;
+  primario_padre boolean;
+  padre integer;
+
+
+  BEGIN
+  select id_esquemas_materiales_c14 INTO esquema from c14.tipo_material_c14 where id_tipo_material = id_tipo;
+
+  IF esquema = 2 THEN
+
+  	select tipo_primario INTO primario_tipo from c14.tipo_material_c14 where id_tipo_material = id_tipo;
+
+  	IF primario_tipo = TRUE THEN
+
+  	RETURN FALSE;
+
+  	ELSE
+  		SELECT orden1 INTO padre FROM c14.tipo_material_c14_jerarquia where orden2= id_tipo;
+  		select tipo_primario INTO primario_padre from c14.tipo_material_c14 where id_tipo_material = padre;
+
+  		IF primario_padre = TRUE THEN
+  			--Si el padre es de tipo primario, entonces es genero, porque su padre es familia
+  			RETURN TRUE;
+  		ELSE
+
+  			RETURN FALSE;
+  		END IF;
+  	END IF;
+  ELSE
+  	RETURN FALSE;
+  END IF;
+
+  END;
+  $BODY$
+    LANGUAGE plpgsql IMMUTABLE STRICT
+    COST 100;
+  ALTER FUNCTION c14.es_genero(integer)
+    OWNER TO c14;
+  GRANT EXECUTE ON FUNCTION c14.es_genero(integer) TO public;
+  GRANT EXECUTE ON FUNCTION c14.es_genero(integer) TO c14;
+  GRANT EXECUTE ON FUNCTION c14.es_genero(integer) TO general_edit;
+  GRANT EXECUTE ON FUNCTION c14.es_genero(integer) TO c14_edit;
+  GRANT EXECUTE ON FUNCTION c14.es_genero(integer) TO predimo_edit WITH GRANT OPTION;
+
+
+  -- Function: c14.es_especie(integer)
+
+  -- DROP FUNCTION c14.es_especie(integer);
+
+  CREATE OR REPLACE FUNCTION c14.es_especie(id_tipo integer)
+    RETURNS boolean AS
+  $BODY$
+
+  /* función que devuelve true si el id_tipo_material_c14 introducido es especie (nivel 3 de la jerarquia de taxones)
+   ASUME QUE SÓLO HAY TRES NIVELES DE TAXONES: FAMILIA - GENERO - ESPECIE. SI SE INCLUYERA UN CUARTO HABRÍA QUE REHACER LA FUNCIÓN
+  */
+
+  DECLARE
+  esquema integer;
+  primario_tipo boolean;
+  primario_padre boolean;
+  padre integer;
+
+
+  BEGIN
+  select id_esquemas_materiales_c14 INTO esquema from c14.tipo_material_c14 where id_tipo_material = id_tipo;
+
+  IF esquema = 2 THEN
+
+  	select tipo_primario INTO primario_tipo from c14.tipo_material_c14 where id_tipo_material = id_tipo;
+
+  	IF primario_tipo = TRUE THEN
+
+  	RETURN FALSE;
+
+  	ELSE
+  		SELECT orden1 INTO padre FROM c14.tipo_material_c14_jerarquia where orden2= id_tipo;
+  		select tipo_primario INTO primario_padre from c14.tipo_material_c14 where id_tipo_material = padre;
+
+  		IF primario_padre = FALSE THEN
+  			--Si el padre no es de tipo primario, entonces es especie, porque su padre es genero
+  			RETURN TRUE;
+  		ELSE
+
+  			RETURN FALSE;
+  		END IF;
+  	END IF;
+  ELSE
+  	RETURN FALSE;
+  END IF;
+
+  END;
+  $BODY$
+    LANGUAGE plpgsql IMMUTABLE STRICT
+    COST 100;
+  ALTER FUNCTION c14.es_especie(integer)
+    OWNER TO c14;
+  GRANT EXECUTE ON FUNCTION c14.es_especie(integer) TO public;
+  GRANT EXECUTE ON FUNCTION c14.es_especie(integer) TO c14;
+  GRANT EXECUTE ON FUNCTION c14.es_especie(integer) TO general_edit;
+  GRANT EXECUTE ON FUNCTION c14.es_especie(integer) TO c14_edit;
+  GRANT EXECUTE ON FUNCTION c14.es_especie(integer) TO predimo_edit WITH GRANT OPTION;
+
+
+
   /*======================================================================================================================
 
   CREACIÓN DE DOS TABLAS PARA LAS CONSULTAS:
