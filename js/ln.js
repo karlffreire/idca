@@ -11,6 +11,8 @@ var etiTipoYac = '';
 var etiCronoYac = '';
 var etiTipoMuest = '';
 var etiTipoMat = '';
+var opTaxones = '';
+var etiTax = '';
 var etiFecha = '';
 var etiDev = '';
 var etiMetodo = '';
@@ -53,6 +55,8 @@ function ponIdioma(ln){
     etiCronoYac = 'Períodos cronológicos';
     etiTipoMuest = 'Tipos de muestra';
     etiTipoMat = 'Tipologías de material';
+    etiTax= 'Taxones';
+    opTaxones = 'Filtrar por taxones';
     etiFecha = 'Edad C<span class="align-top superindice">14</span>';
     etiDev = 'Desviación estándar';
     etiMetodo = 'Métodos de datación';
@@ -94,6 +98,8 @@ function ponIdioma(ln){
     etiCronoYac = 'Chronological periods';
     etiTipoMuest = 'Kinds of sample';
     etiTipoMat = 'Material typologies';
+    etiTax = 'Taxon';
+    opTaxones = 'Taxon filtering';
     etiFecha = 'Radiocarbon date';
     etiDev = 'Standard deviation';
     etiMetodo = 'Dating methodologies';
@@ -138,6 +144,8 @@ function ponIdioma(ln){
   $('#tag-selcronoyac').html(etiCronoYac);
   $('#tag-seltipomuest').html(etiTipoMuest);
   $('#tag-seltipomat').html(etiTipoMat);
+  $('#tag-optax').html(opTaxones);
+  $('#tag-seltax').html(etiTax);
   $('#tag-fecha').html(etiFecha);
   $('#tag-dev').html(etiDev);
   $('#tag-selmetodo').html(etiMetodo);

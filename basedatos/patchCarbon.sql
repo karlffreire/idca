@@ -304,7 +304,7 @@ GRANT SELECT on public.yacis_carbon to visualizador_gis;
 
 --DROP TABLE public.data_carbon;
 
-SELECT material_c14.id_material_c14, datacion_c14.id_datacion_c14, material_c14.id_cultural_entity as id_yaci, material_c14.id_tipo_muestra_c14, c14.get_array_tipos_material(material_c14.id_material_c14)||c14.get_array_taxones(material_c14.id_material_c14) as arrtiptax,
+SELECT material_c14.id_material_c14, datacion_c14.id_datacion_c14, material_c14.id_cultural_entity as id_yaci, material_c14.id_tipo_muestra_c14, c14.get_array_tipos_material(material_c14.id_material_c14)||c14.get_array_taxones_completo(material_c14.id_material_c14) as arrtiptax,
 	array_agg(array_to_string(c14.array_jerarq_tipo_material(tipo_material_material_c14.id_tipo_material),' - ')) as mostrar_tipomat,
 	datacion_c14.edad_c14 as fecha, datacion_c14.desviacion as stdev,metodos_medida.id_metodos_medida, metodos_medida.metodos_medida, laboratorio.sigla, laboratorio.nombre_completo, laboratorio.id_laboratorio, initcap(tipo_muestra_c14.tipo_muestra_c14) as tipo_muestra_c14, datacion_c14.num_datacion as num_dat
 INTO public.data_carbon

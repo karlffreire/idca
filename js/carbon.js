@@ -92,6 +92,48 @@ function cargaLstTipMat(callback){
   });
 }
 
+function cargaLstTaxFam(callback){
+  $.ajax({
+    url: './datos/cargaTaxFamilia.php',
+    success: function(response){
+  			if (response) {
+  				callback(response);
+  			}
+  			else{
+  				alert('Error cargando los tipos de material');
+  			}
+  		}
+  });
+}
+
+function cargaLstTaxGen(callback){
+  $.ajax({
+    url: './datos/cargaTaxGenero.php',
+    success: function(response){
+  			if (response) {
+  				callback(response);
+  			}
+  			else{
+  				alert('Error cargando los tipos de material');
+  			}
+  		}
+  });
+}
+
+function cargaLstTaxEsp(callback){
+  $.ajax({
+    url: './datos/cargaTaxEspecie.php',
+    success: function(response){
+  			if (response) {
+  				callback(response);
+  			}
+  			else{
+  				alert('Error cargando los tipos de material');
+  			}
+  		}
+  });
+}
+
 function cargaLstRang(callback){
   $.ajax({
     url: './datos/cargaRangos.php',
@@ -222,6 +264,8 @@ function initSelFiltYac(){
 function initSelFiltMat(){
   cargaLstTipMuest(initSelTipMuest);
   cargaLstTipMat(initSelMat);
+  initSelTipTax();
+  initSelTax();
   $('.selfilt-mat').on('select2:select',function(){
     tipoFilSelec.filtmat = true;
     habLimpia();
@@ -379,14 +423,73 @@ function initSelTipMuest(resultado){
   });
 }
 
+function selTaxones(){
+  var chk = document.getElementById('chk-tax').checked;
+  if (chk) {
+    $('#seltipotax').prop("disabled",false);
+    $('#seltipomat').prop("disabled",true);
+    $('#seltipomat').val(null).trigger('change');
+    $('#seltipotax').select2('open');
+  }
+  else {
+    $('#seltipotax').val(null).trigger('change');
+    $('#seltax').val(null).trigger('change');
+    $('#seltipomat').prop("disabled",false);
+    $('#seltipotax').prop("disabled",true);
+    $('#seltax').prop("disabled",true);
+  }
+
+}
+
 function initSelMat(resultado){
-  var data = organizaOpciones(resultado);
+  var data = resultado;
   $('#seltipomat').select2({
     data:data,
     placeholder: '*',
     allowClear: true,
-    theme: "bootstrap",
-    templateResult: colPorGrupo
+    theme: "bootstrap"
+  });
+}
+
+function initSelTipTax(){
+  var data = [{id:1,text:"Familia"},{id:2,text:"Género"},{id:3,text:"Especie"}];
+  $('#seltipotax').select2({
+    disabled: true,
+    data:data,
+    placeholder: '1',
+    allowClear: true,
+    theme: "bootstrap"
+  })
+  .on('select2:select',function(e){
+    $('#seltax').prop("disabled",false);
+    var data = e.params.data;
+    if (data.id == 1) {
+      cargaLstTaxFam(ponDatosTax);
+    }
+    else if (data.id == 2) {
+      cargaLstTaxGen(ponDatosTax);
+    }
+    else if (data.id == 3) {
+      cargaLstTaxEsp(ponDatosTax);
+    }
+  });
+}
+
+function ponDatosTax(resultado){
+  $('#seltax').empty();
+  for (var i = 0; i < resultado.length; i++) {
+    var nuevaOpcion = new Option(resultado[i].text, resultado[i].id, false, false);
+    $('#seltax').append(nuevaOpcion);
+  }
+  $('#seltax').trigger('change');
+}
+
+function initSelTax(){
+  $('#seltax').select2({
+    disabled: true,
+    placeholder: '*',
+    allowClear: true,
+    theme: "bootstrap"
   });
 }
 
@@ -686,6 +789,8 @@ function limpiaSelec(){
     $('.selfilt-mat').trigger({
         type: 'select2:unselect'
     });
+    $('#seltipotax').prop("disabled",true);
+    $('#seltax').prop("disabled",true);
     tipoFilSelec.filtmat = false;
   }
   if (tipoFilSelec.filtdat) {
@@ -760,10 +865,12 @@ function recogePeticion(){
     if (initmat) {
       var datosmuest = ($('#seltipomuest').find(':selected').length > 0) ? $('#seltipomuest').select2('data') : false;
       var datosmat = ($('#seltipomat').find(':selected').length > 0) ? $('#seltipomat').select2('data') : false;
+      var datostax = ($('#seltax').find(':selected').length > 0) ? $('#seltax').select2('data') : false;
     }
     else if (!initmat) {
       var datosmuest = false;
       var datosmat = false;
+      var datostax = false;
     }
     if (initdat) {
       var datosmetodo = ($('#selmetodo').find(':selected').length > 0) ? $('#selmetodo').select2('data') : false;
@@ -804,6 +911,12 @@ function recogePeticion(){
       }
       pidemat = pidemat.substring('-',pidemat.length - 1);
     }
+    if (datostax) {
+      for (var i = 0; i < datostax.length; i++) {
+        pidemat += datostax[i].id+'-';
+      }
+      pidemat = pidemat.substring('-',pidemat.length - 1);
+    }
     if (datosmetodo) {
       for (var i = 0; i < datosmetodo.length; i++) {
         pidemetodo += datosmetodo[i].id+'-';
@@ -816,7 +929,7 @@ function recogePeticion(){
       }
       pidelab = pidelab.substring('-',pidelab.length - 1);
     }
-    fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, datosmetodo, datoslab);
+    fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, datostax, datosmetodo, datoslab);
     selecDataciones(pidereg,pidetipo,pidecrono,pidemuest,pidemat,pidemetodo,pidelab,ponDatosTabla);
   }
 }
@@ -866,7 +979,7 @@ function selYaci(yaci,callback){
 
 ===========================================*/
 
-function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, datosmetodo, datoslab){
+function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, datostax, datosmetodo, datoslab){
   $('#ficha-selec').empty();
   var divficha = document.createElement('div');
     divficha.setAttribute('class','lst-flt-selec');
@@ -913,6 +1026,15 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, datos
       txt += datosmat[i].text+', ';
     }
     p.innerHTML = '<em>'+etiTipoMat+'</em>:<br>' + txt.replace(/,\s*$/, "");
+    divficha.appendChild(p);
+  }
+  if (datostax) {
+    var p = document.createElement('p');
+    var txt = '';
+    for (var i = 0; i < datostax.length; i++) {
+      txt += datostax[i].text+', ';
+    }
+    p.innerHTML = '<em>'+etiTax+'</em>:<br>' + txt.replace(/,\s*$/, "");
     divficha.appendChild(p);
   }
   var pfechas = document.createElement('p');

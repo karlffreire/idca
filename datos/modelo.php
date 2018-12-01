@@ -109,7 +109,7 @@ function listaTiposMuestra(){
 
 function listaTiposMaterial(){
   $db = conectaBD();
- 	$prp = pg_prepare($db,"lst-material","SELECT id_tipo_material as id, tipo_material as text, CASE WHEN nombre_esquema = 'Taxones' THEN 'Taxones (Familia)' ELSE nombre_esquema END as grupo from c14.tipo_material_c14 inner join c14.esquemas_material_c14 on tipo_material_c14.id_esquemas_materiales_c14 = esquemas_material_c14.id_esquemas_material_c14 WHERE tipo_primario is true ORDER BY grupo,text");
+ 	$prp = pg_prepare($db,"lst-material","SELECT id_tipo_material as id, tipo_material as text from c14.tipo_material_c14 WHERE tipo_primario is true and id_esquemas_materiales_c14 = 1 ORDER BY text;");
   $prp = pg_execute($db,"lst-material",array());
 	while ($row=pg_fetch_assoc($prp)){
 		$tipmaterial[] = $row;
@@ -123,7 +123,7 @@ function listaTiposMaterial(){
 
 function listaFamiliaMaterial(){
   $db = conectaBD();
- 	$prp = pg_prepare($db,"lst-familia","SELECT id_tipo_material,tipo_material as familia FROM c14.tipo_material_c14 WHERE tipo_primario = true and id_esquemas_materiales_c14 = 2 order by tipo_material");
+ 	$prp = pg_prepare($db,"lst-familia","SELECT id_tipo_material as id,tipo_material as text FROM c14.tipo_material_c14 WHERE tipo_primario = true and id_esquemas_materiales_c14 = 2 order by tipo_material;");
   $prp = pg_execute($db,"lst-familia",array());
 	while ($row=pg_fetch_assoc($prp)){
 		$fammaterial[] = $row;
@@ -137,7 +137,7 @@ function listaFamiliaMaterial(){
 
 function listaGeneroMaterial(){
   $db = conectaBD();
- 	$prp = pg_prepare($db,"lst-genero","SELECT id_tipo_material,tipo_material as genero FROM c14.tipo_material_c14 WHERE c14.es_genero(id_tipo_material) = true and id_esquemas_materiales_c14 = 2 order by tipo_material");
+ 	$prp = pg_prepare($db,"lst-genero","SELECT id_tipo_material as id,tipo_material as text FROM c14.tipo_material_c14 WHERE c14.es_genero(id_tipo_material) = true and id_esquemas_materiales_c14 = 2 order by tipo_material;");
   $prp = pg_execute($db,"lst-genero",array());
 	while ($row=pg_fetch_assoc($prp)){
 		$genmaterial[] = $row;
@@ -151,7 +151,7 @@ function listaGeneroMaterial(){
 
 function listaEspecieMaterial(){
   $db = conectaBD();
- 	$prp = pg_prepare($db,"lst-especie","SELECT id_tipo_material,tipo_material as genero FROM c14.tipo_material_c14 WHERE c14.es_especie(id_tipo_material) = true and id_esquemas_materiales_c14 = 2 order by tipo_material");
+ 	$prp = pg_prepare($db,"lst-especie","SELECT id_tipo_material as id,tipo_material as text FROM c14.tipo_material_c14 WHERE c14.es_especie(id_tipo_material) = true and id_esquemas_materiales_c14 = 2 order by tipo_material;");
   $prp = pg_execute($db,"lst-especie",array());
 	while ($row=pg_fetch_assoc($prp)){
 		$espmaterial[] = $row;

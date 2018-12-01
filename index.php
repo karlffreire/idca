@@ -125,13 +125,30 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
         					</div>
         					<div class="w-100 tab-pane fade " id="nav-mat" role="tabpanel" aria-labelledby="nav-mat-tab">
                     <form>
-                      <div class="form-group">
-                        <label for="seltipomuest" id="tag-seltipomuest"></label>
-                        <select class="w-100 selfilt-mat filt" name="tipomuest[]" multiple="multiple" id="seltipomuest"></select>
+                      <div class="form-row">
+                        <div class="form-group col-md-5">
+                          <label for="seltipomuest" id="tag-seltipomuest"></label>
+                          <select class="w-100 selfilt-mat filt" name="tipomuest[]" multiple="multiple" id="seltipomuest"></select>
+                        </div>
+                        <div class="form-group col-md-5 offset-2">
+                          <div class="form-check form-check-inline">
+                            <input id="chk-tax" type="checkbox" class="form-check-input" onclick="javascript:selTaxones(this);">
+                            <label for="seltipotax" id="tag-optax"></label>
+                          </div>
+                          <select class="w-100 selfilt-mat filt" name="" id="seltipotax">
+                            <option value=""></option>
+                          </select>
+                        </div>
                       </div>
-                      <div class="form-group">
-                        <label for="seltipomat" id="tag-seltipomat"></label>
-                        <select class="w-100 selfilt-mat filt" name="tipomat[]" multiple="multiple" id="seltipomat"></select>
+                      <div class="form-row">
+                        <div class="form-group col-md-5">
+                          <label for="seltipomat" id="tag-seltipomat"></label>
+                          <select class="w-100 selfilt-mat filt" name="tipomat[]" multiple="multiple" id="seltipomat"></select>
+                        </div>
+                        <div class="form-group col-md-5 offset-2">
+                          <label for="seltax" id="tag-seltax"></label>
+                          <select class="w-100 selfilt-mat filt" name="taxones[]" multiple="multiple" id="seltax"></select>
+                        </div>
                       </div>
                     </form>
         					</div>
