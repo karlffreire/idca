@@ -426,19 +426,26 @@ function initSelTipMuest(resultado){
 function selTaxones(){
   var chk = document.getElementById('chk-tax').checked;
   if (chk) {
-    $('#seltipotax').prop("disabled",false);
-    $('#seltipomat').prop("disabled",true);
-    $('#seltipomat').val(null).trigger('change');
-    $('#seltipotax').select2('open');
+    habilitaTax();
   }
   else {
-    $('#seltipotax').val(null).trigger('change');
-    $('#seltax').val(null).trigger('change');
-    $('#seltipomat').prop("disabled",false);
-    $('#seltipotax').prop("disabled",true);
-    $('#seltax').prop("disabled",true);
+    deshabTax();
   }
+}
 
+function habilitaTax(){
+  $('#seltipotax').prop("disabled",false);
+  $('#seltipomat').prop("disabled",true);
+  $('#seltipomat').val(null).trigger('change');
+  $('#seltipotax').select2('open');
+}
+
+function deshabTax(){
+  $('#seltipotax').val(null).trigger('change');
+  $('#seltax').val(null).trigger('change');
+  $('#seltipomat').prop("disabled",false);
+  $('#seltipotax').prop("disabled",true);
+  $('#seltax').prop("disabled",true);
 }
 
 function initSelMat(resultado){
@@ -789,8 +796,8 @@ function limpiaSelec(){
     $('.selfilt-mat').trigger({
         type: 'select2:unselect'
     });
-    $('#seltipotax').prop("disabled",true);
-    $('#seltax').prop("disabled",true);
+    deshabTax();
+    document.getElementById('chk-tax').checked = false;
     tipoFilSelec.filtmat = false;
   }
   if (tipoFilSelec.filtdat) {
