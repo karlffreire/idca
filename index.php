@@ -130,13 +130,12 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
                           <label for="seltipomuest" id="tag-seltipomuest"></label>
                           <select class="w-100 selfilt-mat filt" name="tipomuest[]" multiple="multiple" id="seltipomuest"></select>
                         </div>
-                        <div class="form-group col-md-5 offset-2">
+                        <div class="form-group col-md-6 offset-1">
                           <div class="form-check form-check-inline">
                             <input id="chk-tax" type="checkbox" class="form-check-input" onclick="javascript:selTaxones(this);">
-                            <label for="seltipotax" id="tag-optax"></label>
+                            <label for="chk-tax" class="form-check-label" id="tag-optax"></label>
                           </div>
                           <select class="w-100 selfilt-mat filt" name="" id="seltipotax">
-                            <option value=""></option>
                           </select>
                         </div>
                       </div>
@@ -145,7 +144,7 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
                           <label for="seltipomat" id="tag-seltipomat"></label>
                           <select class="w-100 selfilt-mat filt" name="tipomat[]" multiple="multiple" id="seltipomat"></select>
                         </div>
-                        <div class="form-group col-md-5 offset-2">
+                        <div class="form-group col-md-6 offset-1">
                           <label for="seltax" id="tag-seltax"></label>
                           <select class="w-100 selfilt-mat filt" name="taxones[]" multiple="multiple" id="seltax"></select>
                         </div>
@@ -184,7 +183,7 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
                     <i id="piensa" class="fas fa-cog"></i>
                     <span id="filtra-ya" style="margin-left:1em;"></span>
                   </button>
-                  <button id="limp-filt" onclick="javascript:limpiaSelec();" class="btn btn-lg boton-flujo" title = "" style="margin-left:1em;" disabled = "disabled">
+                  <button id="limp-filt" onclick="javascript:limpiaSelec();" class="btn btn-lg boton-flujo" title = "" style="margin-left:1em;padding-left:1em;padding-right:1em;" disabled = "disabled">
                     <i class="fas fa-eraser"></i>
                     <span id="tit-limpiar"></span>
                   </button>

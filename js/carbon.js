@@ -6,7 +6,9 @@
 
            CARGA DE LISTADOS
 
+//NOTA: Cacheado HTTP habilitado en el archivo de configuración de PHP (/opt/lampp/etc/php.ini), línea 1641. Poner en nocache para volver a la configuración original
 ===========================================*/
+
 
 function cargaYacis(callback){
   $.ajax({
@@ -459,7 +461,7 @@ function initSelMat(resultado){
 }
 
 function initSelTipTax(){
-  var data = [{id:1,text:"Familia"},{id:2,text:"Género"},{id:3,text:"Especie"}];
+  var data = [{id:0,text:""},{id:1,text:"Familia"},{id:2,text:"Género"},{id:3,text:"Especie"}];
   $('#seltipotax').select2({
     disabled: true,
     data:data,
@@ -478,6 +480,9 @@ function initSelTipTax(){
     }
     else if (data.id == 3) {
       cargaLstTaxEsp(ponDatosTax);
+    }
+    else {
+        $('#seltax').empty();
     }
   });
 }
