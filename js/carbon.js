@@ -52,6 +52,23 @@ function cargaLstTipYac(callback){
   });
 }
 
+function cargaLstSubtipYac(callback){
+  $.ajax({
+    url: './datos/cargaSubtiposYac.php',
+    // data:{
+    //   tipos : tipos
+    // },
+    success: function(response){
+  			if (response) {
+  				callback(response);
+  			}
+  			else{
+  				alert('Error cargando los tipos de yacimientos');
+  			}
+  		}
+  });
+}
+
 function cargaLstCrono(callback){
   $.ajax({
     url: './datos/cargaCronos.php',
@@ -249,6 +266,7 @@ var tipoFilSelec = {"filtyac":false,"filtmat":false,"filtdat":false};
 function initSelFiltYac(){
   cargaLstReg(initSelReg);
   cargaLstTipYac(initSelTipYac);
+  cargaLstSubtipYac(initSelSubtipYac);
   cargaLstCrono(initSelCronYac);
   $('.selfilt-yac').on('select2:select',function(){//si se selecciona alguna tipo de yacimiento
     tipoFilSelec.filtyac = true;
@@ -398,6 +416,61 @@ function initSelTipYac(resultado){
   var data = organizaOpciones(resultado);
   $('#seltipoyac').select2({
     data:data,
+    placeholder: '*',
+    allowClear: true,
+    theme: "bootstrap",
+    templateResult: colPorGrupo
+  })
+  .on('select2:unselect',function(e){
+    filtraSubtipos();
+  })
+  .on('select2:select',function(e){
+    filtraSubtipos();
+  });
+}
+
+function filtraSubtipos(){
+  var tipos = ($('#seltipoyac').find(':selected').length > 0) ? $('#seltipoyac').select2('data') : false;
+  if (tipos) {//CONDICIÓN: TIPOS POR FUNCIÓN
+    ponSubtipYac();
+    // var pidesubtip = '';
+    // for (var i = 0; i < tipos.length; i++) {
+    //   pidesubtip += tipos[i].id+'-';
+    // }
+    // pidesubtip = pidesubtip.substring('-',pidesubtip.length - 1);
+    //cargaLstSubtipYac(pidesubtip,ponSubtipYac);
+  }
+  else {
+    $('#selsubtipoyac').empty();
+  }
+}
+
+function ponSubtipYac(){
+  var tipos = [];
+  var tiposSelec = ($('#seltipoyac').find(':selected').length > 0) ? $('#seltipoyac').select2('data') : false;
+  for (var i = 0; i < tiposSelec.length; i++) {
+    tipos.push(tiposSelec[i].id);
+  }
+  if (tiposSelec) {
+    var listaSubtipSelec = $.grep(listaSubtiposYac,function(subtip){return tipos.indexOf(subtip.padre) != -1;})
+    $('#selsubtipoyac').empty();
+    $('#selsubtipoyac').select2('destroy');//Me parece una chapuza, pero no veo cómo hacerlo bien con el puto select2
+    $('#selsubtipoyac').select2({
+      data: organizaOpciones(listaSubtipSelec),
+      placeholder: '*',
+      allowClear: true,
+      theme: "bootstrap",
+      templateResult: colPorGrupo
+    });
+  }
+  else {
+    $('#selsubtipoyac').empty();
+  }
+}
+
+function initSelSubtipYac(resultado){
+  listaSubtiposYac = resultado;
+  $('#selsubtipoyac').select2({
     placeholder: '*',
     allowClear: true,
     theme: "bootstrap",

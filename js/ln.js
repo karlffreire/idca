@@ -8,6 +8,7 @@ var caracDat = '';
 var placeUnYac = '';
 var etiProv = '';
 var etiTipoYac = '';
+var etiSubtipoYac = '';
 var etiCronoYac = '';
 var etiTipoMuest = '';
 var etiTipoMat = '';
@@ -52,6 +53,7 @@ function ponIdioma(ln){
     placeUnYac = 'Buscar por yacimiento';
     etiProv = 'Regiones geográficas';
     etiTipoYac = 'Tipologías de yacimiento';
+    etiSubtipoYac = 'Subtipos por función';
     etiCronoYac = 'Períodos cronológicos';
     etiTipoMuest = 'Tipos de muestra';
     etiTipoMat = 'Tipologías de material';
@@ -95,6 +97,7 @@ function ponIdioma(ln){
     placeUnYac = 'Search for a site';
     etiProv = 'Geographical regions';
     etiTipoYac = 'Site typologies';
+    etiSubtipoYac = 'Functional subtypologies';
     etiCronoYac = 'Chronological periods';
     etiTipoMuest = 'Kinds of sample';
     etiTipoMat = 'Material typologies';
@@ -141,6 +144,7 @@ function ponIdioma(ln){
   $('#carac-data').html(caracDat);
   $('#tag-selprov').html(etiProv);
   $('#tag-seltipoyac').html(etiTipoYac);
+  $('#tag-selsubtipoyac').html(etiSubtipoYac);
   $('#tag-selcronoyac').html(etiCronoYac);
   $('#tag-seltipomuest').html(etiTipoMuest);
   $('#tag-seltipomat').html(etiTipoMat);

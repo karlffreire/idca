@@ -109,17 +109,25 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
         				<div class="col-md-10 offset-1 tab-content" id="nav-tabContent">
         					<div class="w-100 tab-pane fade show active" id="nav-yac" role="tabpanel" aria-labelledby="nav-home-tab">
                     <form>
-                      <div class="form-group">
-                        <label for="selprov" id="tag-selprov"></label>
-                        <select class="form-control w-100 selfilt-yac" name="prov[]" multiple="multiple" id="selprov" ></select>
+                      <div class="form-row">
+                        <div class="form-group col-md-5">
+                          <label for="selprov" id="tag-selprov"></label>
+                          <select class="w-100 selfilt-yac" name="prov[]" multiple="multiple" id="selprov" ></select>
+                        </div>
+                        <div class="form-group col-md-6 offset-1">
+                          <label for="seltipoyac" id="tag-seltipoyac"></label>
+                          <select class="w-100 selfilt-yac" name="tipoyac[]" multiple="multiple" id="seltipoyac"></select>
+                        </div>
                       </div>
-                      <div class="form-group">
-                        <label for="seltipoyac" id="tag-seltipoyac"></label>
-                        <select class="w-100 selfilt-yac" name="tipoyac[]" multiple="multiple" id="seltipoyac"></select>
-                      </div>
-                      <div class="form-group">
-                        <label for="selcronoyac" id="tag-selcronoyac"></label>
-                        <select class="w-100 selfilt-yac" name="cronoyac[]" multiple="multiple" id="selcronoyac"></select>
+                      <div class="form-row">
+                        <div class="form-group col-md-5">
+                          <label for="selcronoyac" id="tag-selcronoyac"></label>
+                          <select class="w-100 selfilt-yac" name="cronoyac[]" multiple="multiple" id="selcronoyac"></select>
+                        </div>
+                        <div class="form-group col-md-6 offset-1">
+                          <label for="selsubtipoyac" id="tag-selsubtipoyac"></label>
+                          <select class="w-100 selfilt-yac" name="subtipoyac[]" multiple="multiple" id="selsubtipoyac"></select>
+                        </div>
                       </div>
                     </form>
         					</div>
