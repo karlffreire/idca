@@ -228,9 +228,9 @@ function organizaOpciones(arrObjt){
   }
   for (var i = 0; i < gruposOpciones.length; i++) {
     var hijos = gruposOpciones[i].children;
-    for (var j = 0; j < hijos.length; j++) {
-      delete hijos[j].grupo;
-    }
+    // for (var j = 0; j < hijos.length; j++) {
+    //   delete hijos[j].grupo;
+    // }
   }
   return gruposOpciones;
 }
@@ -422,23 +422,19 @@ function initSelTipYac(resultado){
     templateResult: colPorGrupo
   })
   .on('select2:unselect',function(e){
-    filtraSubtipos();
+    filtraSubtipos(e.params.data);
   })
   .on('select2:select',function(e){
-    filtraSubtipos();
+    filtraSubtipos(e.params.data);
   });
 }
 
-function filtraSubtipos(){
+function filtraSubtipos(datEv){
   var tipos = ($('#seltipoyac').find(':selected').length > 0) ? $('#seltipoyac').select2('data') : false;
-  if (tipos) {//CONDICIÓN: TIPOS POR FUNCIÓN
-    ponSubtipYac();
-    // var pidesubtip = '';
-    // for (var i = 0; i < tipos.length; i++) {
-    //   pidesubtip += tipos[i].id+'-';
-    // }
-    // pidesubtip = pidesubtip.substring('-',pidesubtip.length - 1);
-    //cargaLstSubtipYac(pidesubtip,ponSubtipYac);
+  if (tipos) {
+    if (datEv.grupo == 'Yacimientos por función') {
+      ponSubtipYac();
+    }
   }
   else {
     $('#selsubtipoyac').empty();
@@ -940,6 +936,7 @@ function recogePeticion(){
     //Recogemos los datos, y si no hay, false
     if (inityac) {
       var datostipo = ($('#seltipoyac').find(':selected').length > 0) ? $('#seltipoyac').select2('data') : false;
+      var datossubtipo = ($('#selsubtipoyac').find(':selected').length > 0) ? $('#selsubtipoyac').select2('data') : false;
       var datoscrono = ($('#selcronoyac').find(':selected').length > 0) ? $('#selcronoyac').select2('data') : false;
     }
     else if (!inityac) {
@@ -973,8 +970,21 @@ function recogePeticion(){
       pidereg = pidereg.substring('-',pidereg.length - 1);
     }
     if (datostipo) {
-      for (var i = 0; i < datostipo.length; i++) {
-        pidetipo += datostipo[i].id+'-';
+      for (var i = 0; i < datostipo.length; i++) {//buscar si hay seleccionados hijos para ponerlos. Si no, el padre
+        if (datossubtipo) {
+          var subtipos = $.grep(datossubtipo,function(subtipo){return subtipo.padre == datostipo[i].id;})
+          if (subtipos.length > 0) {
+            for (var j = 0; j < subtipos.length; j++) {
+              pidetipo += subtipos[j].id+'-';
+            }
+          }
+          else {
+            pidetipo += datostipo[i].id+'-';
+          }
+        }
+        else {
+          pidetipo += datostipo[i].id+'-';
+        }
       }
       pidetipo = pidetipo.substring('-',pidetipo.length - 1);
     }
@@ -1014,7 +1024,7 @@ function recogePeticion(){
       }
       pidelab = pidelab.substring('-',pidelab.length - 1);
     }
-    fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, datostax, datosmetodo, datoslab);
+    fichaSelec(datosreg, datostipo, datossubtipo, datoscrono, datosmuest, datosmat, datostax, datosmetodo, datoslab);
     selecDataciones(pidereg,pidetipo,pidecrono,pidemuest,pidemat,pidemetodo,pidelab,ponDatosTabla);
   }
 }
@@ -1064,7 +1074,7 @@ function selYaci(yaci,callback){
 
 ===========================================*/
 
-function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, datostax, datosmetodo, datoslab){
+function fichaSelec(datosreg, datostipo,datossubtipo, datoscrono, datosmuest, datosmat, datostax, datosmetodo, datoslab){
   $('#ficha-selec').empty();
   var divficha = document.createElement('div');
     divficha.setAttribute('class','lst-flt-selec');
@@ -1081,11 +1091,44 @@ function fichaSelec(datosreg, datostipo, datoscrono, datosmuest, datosmat, datos
     var p = document.createElement('p');
     var txt = '';
     for (var i = 0; i < datostipo.length; i++) {
-      txt += datostipo[i].text+', ';
+      if (datossubtipo) {
+        var subtipos = $.grep(datossubtipo,function(subtipo){return subtipo.padre == datostipo[i].id;})
+        console.log(subtipos);//Esto va bien, no sé por qué falla cuando hay subtipos de dos tipos distintos
+        if (subtipos.length > 0) {
+          for (var j = 0; j < subtipos.length; j++) {
+            txt += datossubtipo[j].text+', ';
+          }
+          txt += '('+datostipo[i].text+')';
+        }
+        else {
+          txt += datostipo[i].text+', ';
+        }
+      }
+      else {
+        txt += datostipo[i].text+', ';
+      }
     }
     p.innerHTML = '<em>'+etiTipoYac+'</em>:<br>' + txt.replace(/,\s*$/, "");
     divficha.appendChild(p);
   }
+  // if (datostipo) {
+  //   var p = document.createElement('p');
+  //   var txt = '';
+  //   for (var i = 0; i < datostipo.length; i++) {
+  //     txt += datostipo[i].text+', ';
+  //   }
+  //   p.innerHTML = '<em>'+etiTipoYac+'</em>:<br>' + txt.replace(/,\s*$/, "");
+  //   divficha.appendChild(p);
+  // }
+  // if (datossubtipo) {
+  //   var p = document.createElement('p');
+  //   var txt = '';
+  //   for (var i = 0; i < datossubtipo.length; i++) {
+  //     txt += datossubtipo[i].text+', ';
+  //   }
+  //   p.innerHTML = '<em>'+etiSubtipoYac+'</em>:<br>' + txt.replace(/,\s*$/, "");
+  //   divficha.appendChild(p);
+  // }
   if (datoscrono) {
     var p = document.createElement('p');
     var txt = '';
