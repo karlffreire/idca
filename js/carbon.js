@@ -413,7 +413,7 @@ function initSelReg(resultado){
 }
 
 function initSelTipYac(resultado){
-  var data = organizaOpciones(resultado);
+  var data = resultado;
   $('#seltipoyac').select2({
     data:data,
     placeholder: '*',
@@ -427,14 +427,14 @@ function initSelTipYac(resultado){
   .on('select2:select',function(e){
     filtraSubtipos(e.params.data);
   });
+  var tipReg = new Option('Tipos regionales', 9999, false, false);
+  $('#seltipoyac').append(tipReg).trigger('change');
 }
 
 function filtraSubtipos(datEv){
   var tipos = ($('#seltipoyac').find(':selected').length > 0) ? $('#seltipoyac').select2('data') : false;
   if (tipos) {
-    if (datEv.grupo == 'Yacimientos por función') {
-      ponSubtipYac();
-    }
+    ponSubtipYac();
   }
   else {
     $('#selsubtipoyac').empty();
@@ -1093,12 +1093,11 @@ function fichaSelec(datosreg, datostipo,datossubtipo, datoscrono, datosmuest, da
     for (var i = 0; i < datostipo.length; i++) {
       if (datossubtipo) {
         var subtipos = $.grep(datossubtipo,function(subtipo){return subtipo.padre == datostipo[i].id;})
-        console.log(subtipos);//Esto va bien, no sé por qué falla cuando hay subtipos de dos tipos distintos
         if (subtipos.length > 0) {
           for (var j = 0; j < subtipos.length; j++) {
-            txt += datossubtipo[j].text+', ';
+            txt += subtipos[j].text+', ';
           }
-          txt += '('+datostipo[i].text+')';
+          txt = txt.replace(/,\s*$/, "") + ' ('+datostipo[i].text+') ';
         }
         else {
           txt += datostipo[i].text+', ';
@@ -1111,24 +1110,6 @@ function fichaSelec(datosreg, datostipo,datossubtipo, datoscrono, datosmuest, da
     p.innerHTML = '<em>'+etiTipoYac+'</em>:<br>' + txt.replace(/,\s*$/, "");
     divficha.appendChild(p);
   }
-  // if (datostipo) {
-  //   var p = document.createElement('p');
-  //   var txt = '';
-  //   for (var i = 0; i < datostipo.length; i++) {
-  //     txt += datostipo[i].text+', ';
-  //   }
-  //   p.innerHTML = '<em>'+etiTipoYac+'</em>:<br>' + txt.replace(/,\s*$/, "");
-  //   divficha.appendChild(p);
-  // }
-  // if (datossubtipo) {
-  //   var p = document.createElement('p');
-  //   var txt = '';
-  //   for (var i = 0; i < datossubtipo.length; i++) {
-  //     txt += datossubtipo[i].text+', ';
-  //   }
-  //   p.innerHTML = '<em>'+etiSubtipoYac+'</em>:<br>' + txt.replace(/,\s*$/, "");
-  //   divficha.appendChild(p);
-  // }
   if (datoscrono) {
     var p = document.createElement('p');
     var txt = '';

@@ -67,7 +67,7 @@ function listaRegiones(){
 
 function listaTiposYac(){
   $db = conectaBD();
- 	$prp = pg_prepare($db,"lst-tipyac","SELECT id_cultural_entity_type as id, cultural_entity_type_value as text, entity_type_schema as grupo FROM general.cultural_entity_type inner join general.cultural_entity_type_schema on cultural_entity_type.id_cultural_entity_type_schema = cultural_entity_type_schema.id_cultural_entity_type_schema WHERE (cultural_entity_type_schema.id_cultural_entity_type_schema = 3 and cultural_entity_type.tipo_primario = true) or cultural_entity_type_schema.id_cultural_entity_type_schema = 4 ORDER BY grupo,text;");
+ 	$prp = pg_prepare($db,"lst-tipyac","SELECT id_cultural_entity_type as id, cultural_entity_type_value as text, entity_type_schema as grupo FROM general.cultural_entity_type inner join general.cultural_entity_type_schema on cultural_entity_type.id_cultural_entity_type_schema = cultural_entity_type_schema.id_cultural_entity_type_schema WHERE (cultural_entity_type_schema.id_cultural_entity_type_schema = 3 and cultural_entity_type.tipo_primario = true) ORDER BY grupo,text;");
   $prp = pg_execute($db,"lst-tipyac",array());
 	while ($row=pg_fetch_assoc($prp)){
 		$tiposyac[] = $row;
@@ -81,7 +81,7 @@ function listaTiposYac(){
 
 function listaSubtiposYacTodo(){
   $db = conectaBD();
- 	$prp = pg_prepare($db,"lst-tipyac","with prev as (SELECT general.id_type(id_cultural_entity_type) as id FROM general.cultural_entity_type inner join general.cultural_entity_type_schema on cultural_entity_type.id_cultural_entity_type_schema = cultural_entity_type_schema.id_cultural_entity_type_schema WHERE cultural_entity_type_schema.id_cultural_entity_type_schema = 3 and tipo_primario is not true) select id[2] as id, id[1] as padre, general.get_cultural_entity_type_value(id[1]) as grupo,general.get_cultural_entity_type_value(id[2]) as text from prev GROUP BY 1,2,3,4 ORDER BY grupo,text;");
+ 	$prp = pg_prepare($db,"lst-tipyac","with prev as (SELECT general.id_type(id_cultural_entity_type) as id FROM general.cultural_entity_type inner join general.cultural_entity_type_schema on cultural_entity_type.id_cultural_entity_type_schema = cultural_entity_type_schema.id_cultural_entity_type_schema WHERE cultural_entity_type_schema.id_cultural_entity_type_schema = 3 and tipo_primario is not true) select id[2] as id, id[1] as padre, general.get_cultural_entity_type_value(id[1]) as grupo, general.get_cultural_entity_type_value(id[2]) as text from prev GROUP BY 1,2,3,4 UNION SELECT id_cultural_entity_type as id,9999 as padre,entity_type_schema as grupo,  cultural_entity_type_value as text FROM general.cultural_entity_type inner join general.cultural_entity_type_schema on cultural_entity_type.id_cultural_entity_type_schema = cultural_entity_type_schema.id_cultural_entity_type_schema WHERE (cultural_entity_type_schema.id_cultural_entity_type_schema = 4 and cultural_entity_type.tipo_primario = true) ORDER BY grupo,text;");
   $prp = pg_execute($db,"lst-tipyac",array());
 	while ($row=pg_fetch_assoc($prp)){
 		$tiposyac[] = $row;
@@ -92,31 +92,6 @@ function listaSubtiposYacTodo(){
   }
   return null;
 }
-//
-// function listaSubtiposYac($tipos){
-//  	$select = "with prev as (SELECT general.id_type(id_cultural_entity_type) as id FROM general.cultural_entity_type inner join general.cultural_entity_type_schema on cultural_entity_type.id_cultural_entity_type_schema = cultural_entity_type_schema.id_cultural_entity_type_schema WHERE cultural_entity_type_schema.id_cultural_entity_type_schema = 3 and tipo_primario is not true) select id[2] as id, id[1] as padre, general.get_cultural_entity_type_value(id[1]) as grupo,general.get_cultural_entity_type_value(id[2]) as text from prev WHERE id[1]";
-// 	$arrtipos = explode('-',$tipos);
-// 	$txtfilt = '';
-// 	foreach ($arrtipos as $key => $value) {
-// 		if (filter_var($value,FILTER_VALIDATE_INT)) {
-// 			$txtfilt .= $value.',';
-// 		}
-// 	}
-// 	$where = " IN (".rtrim($txtfilt,',').") GROUP BY 1,2,3,4 ORDER BY grupo,text;";
-// 	$db = conectaBD();
-// 	$resultado = pg_query($db,$select.pg_escape_string($where));
-// 	if (!$resultado) {
-//     return pg_last_error($db);
-//   }
-//   while ($row=pg_fetch_assoc($resultado)){
-// 		$subtipos[] = $row;
-// 	}
-//   pg_close($db);
-//   if (isset($subtipos)) {
-//     return $subtipos;
-//   }
-//   return null;
-// }
 
 function listaCronos(){
   $db = conectaBD();
