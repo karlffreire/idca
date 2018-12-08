@@ -156,14 +156,14 @@ section {
 
 /*Resultados*/
 .lst-flt-selec{
+  float: left;
   color: #454545;
   background-color: white;
   padding: 0.5em;
   margin-bottom: 1px;
   transition:background-color 1.5s ease;
-  columns: 3;
-  -webkit-columns: 3;
-  -moz-columns: 3;
+  border-left: solid 1px #454545;
+  max-width: 300px;
 }
 
 .descargas{

@@ -204,7 +204,7 @@ if ((!isset($_SESSION['usidca']) ||  !isset($_SESSION['pssidca']) || $_SESSION['
       <div id="resultados" class="panel-resultados collapse">
 
         <div id="fila-tabla" class="row justify-content-md-center" style="margin-top:5em;">
-          <div id="ficha-selec" class="col-md-6">
+          <div id="ficha-selec" class="col-md-12">
           </div>
           <div class="panel-tabla col-md-12 ">
             <table id="tab-data" class="table table-hover tabla-dataciones w-100" cellspacing="0">

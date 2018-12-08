@@ -1076,18 +1076,21 @@ function selYaci(yaci,callback){
 
 function fichaSelec(datosreg, datostipo,datossubtipo, datoscrono, datosmuest, datosmat, datostax, datosmetodo, datoslab){
   $('#ficha-selec').empty();
-  var divficha = document.createElement('div');
-    divficha.setAttribute('class','lst-flt-selec');
   if (datosreg) {
+    var divdr = document.createElement('div');
+    divdr.setAttribute('class','lst-flt-selec');
     var p = document.createElement('p');
     var txt = '';
     for (var i = 0; i < datosreg.length; i++) {
       txt += datosreg[i].text+', ';
     }
     p.innerHTML = '<em>'+etiProv+'</em>:<br>' + txt.replace(/,\s*$/, "");
-    divficha.appendChild(p);
+    divdr.appendChild(p);
+    $('#ficha-selec').append(divdr);
   }
   if (datostipo) {
+    var divdt = document.createElement('div');
+    divdt.setAttribute('class','lst-flt-selec');
     var p = document.createElement('p');
     var txt = '';
     for (var i = 0; i < datostipo.length; i++) {
@@ -1108,44 +1111,59 @@ function fichaSelec(datosreg, datostipo,datossubtipo, datoscrono, datosmuest, da
       }
     }
     p.innerHTML = '<em>'+etiTipoYac+'</em>:<br>' + txt.replace(/,\s*$/, "");
-    divficha.appendChild(p);
+    divdt.appendChild(p);
+    $('#ficha-selec').append(divdt);
   }
   if (datoscrono) {
+    var divdc = document.createElement('div');
+    divdc.setAttribute('class','lst-flt-selec');
     var p = document.createElement('p');
     var txt = '';
     for (var i = 0; i < datoscrono.length; i++) {
       txt += datoscrono[i].text+', ';
     }
     p.innerHTML = '<em>'+etiCronoYac+'</em>:<br>' + txt.replace(/,\s*$/, "");
-    divficha.appendChild(p);
+    divdc.appendChild(p);
+    $('#ficha-selec').append(divdc);
   }
   if (datosmuest) {
+    var divdm = document.createElement('div');
+    divdm.setAttribute('class','lst-flt-selec');
     var p = document.createElement('p');
     var txt = '';
     for (var i = 0; i < datosmuest.length; i++) {
       txt += datosmuest[i].text+', ';
     }
     p.innerHTML = '<em>'+etiTipoMuest+'</em>:<br>' + txt.replace(/,\s*$/, "");
-    divficha.appendChild(p);
+    divdm.appendChild(p);
+    $('#ficha-selec').append(divdm);
   }
   if (datosmat) {
+    var divdm = document.createElement('div');
+    divdm.setAttribute('class','lst-flt-selec');
     var p = document.createElement('p');
     var txt = '';
     for (var i = 0; i < datosmat.length; i++) {
       txt += datosmat[i].text+', ';
     }
     p.innerHTML = '<em>'+etiTipoMat+'</em>:<br>' + txt.replace(/,\s*$/, "");
-    divficha.appendChild(p);
+    divdm.appendChild(p);
+    $('#ficha-selec').append(divdm);
   }
   if (datostax) {
+    var divdt = document.createElement('div');
+    divdt.setAttribute('class','lst-flt-selec');
     var p = document.createElement('p');
     var txt = '';
     for (var i = 0; i < datostax.length; i++) {
       txt += datostax[i].text+', ';
     }
     p.innerHTML = '<em>'+etiTax+'</em>:<br>' + txt.replace(/,\s*$/, "");
-    divficha.appendChild(p);
+    divdt.appendChild(p);
+    $('#ficha-selec').append(divdt);
   }
+  var divfd = document.createElement('div');
+  divfd.setAttribute('class','lst-flt-selec');
   var pfechas = document.createElement('p');
   //if ((fechamin != '') || (fechamax != '')) {
   if (fechamin|| fechamax){
@@ -1154,26 +1172,32 @@ function fichaSelec(datosreg, datostipo,datossubtipo, datoscrono, datosmuest, da
   if (desvmin || desvmax) {
     pfechas.innerHTML += '| σ: '+desvmin+'-'+desvmax;
   }
-  divficha.appendChild(pfechas);
+  divfd.appendChild(pfechas);
+  $('#ficha-selec').append(divfd);
   if (datosmetodo) {
+    var divdm = document.createElement('div');
+    divdm.setAttribute('class','lst-flt-selec');
     var p = document.createElement('p');
     var txt = '';
     for (var i = 0; i < datosmetodo.length; i++) {
       txt += datosmetodo[i].text+', ';
     }
     p.innerHTML = '<em>'+etiMetodo+'</em>:<br>' + txt.replace(/,\s*$/, "");
-    divficha.appendChild(p);
+    divdm.appendChild(p);
+    $('#ficha-selec').append(divdm);
   }
   if (datoslab) {
+    var divdl = document.createElement('div');
+    divdl.setAttribute('class','lst-flt-selec');
     var p = document.createElement('p');
     var txt = '';
     for (var i = 0; i < datoslab.length; i++) {
       txt += datoslab[i].text+', ';
     }
     p.innerHTML = '<em>'+etiLab+'</em>:<br>' + txt.replace(/,\s*$/, "");
-    divficha.appendChild(p);
+    divdl.appendChild(p);
+    $('#ficha-selec').append(divdl);
   }
-  $('#ficha-selec').append(divficha);
   ponFlechas();
 }
 
